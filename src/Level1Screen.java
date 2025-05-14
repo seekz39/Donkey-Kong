@@ -1,4 +1,3 @@
-import bagel.*;
 import bagel.Input;
 import java.util.Properties;
 

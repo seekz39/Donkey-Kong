@@ -9,10 +9,10 @@ import bagel.util.Rectangle;
  * The hammer can be collected by the player, at which point it disappears from the screen.
  */
 public class Hammer {
-    private final Image HAMMER_IMAGE;
     private final double WIDTH, HEIGHT;
     private final double X, Y;
     private boolean isCollected = false;
+    private static final Image HAMMER_IMAGE = new Image("res/hammer.png");
 
     /**
      * Constructs a Hammer at the specified position.
@@ -21,7 +21,6 @@ public class Hammer {
      * @param startY The initial y-coordinate of the hammer.
      */
     public Hammer(double startX, double startY) {
-        this.HAMMER_IMAGE = new Image("res/hammer.png");
         this.X = startX;
         this.Y = startY;
         this.WIDTH = HAMMER_IMAGE.getWidth();

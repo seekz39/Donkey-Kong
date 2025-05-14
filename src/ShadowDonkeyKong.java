@@ -14,7 +14,7 @@ public class ShadowDonkeyKong extends AbstractGame {
     private final Properties GAME_PROPS;
     private final Properties MESSAGE_PROPS;
 
-    private HomeScreen homeScreen;
+    private GameEndScreen.HomeScreen homeScreen;
     private GamePlayScreen gamePlayScreen;
     private GameEndScreen gameEndScreen;
 
@@ -41,7 +41,7 @@ public class ShadowDonkeyKong extends AbstractGame {
         this.screenWidth = Integer.parseInt(gameProps.getProperty("window.width"));
         this.screenHeight = Integer.parseInt(gameProps.getProperty("window.height"));
 
-        homeScreen = new HomeScreen(GAME_PROPS, MESSAGE_PROPS);
+        homeScreen = new GameEndScreen.HomeScreen(GAME_PROPS, MESSAGE_PROPS);
     }
 
 

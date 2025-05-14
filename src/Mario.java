@@ -409,5 +409,4 @@ public class Mario {
                 && ((this.y + height / 2) >= (barrel.getY() + barrel.getBarrelImage().getHeight() / 2
                 - (JUMP_STRENGTH * JUMP_STRENGTH) / (2 * Physics.MARIO_GRAVITY) - height / 2));
     }
-
 }

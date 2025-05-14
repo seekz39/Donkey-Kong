@@ -1,9 +1,19 @@
+import bagel.DrawOptions;
+import bagel.Drawing;
+import bagel.Image;
+import bagel.util.Colour;
+import bagel.util.Rectangle;
+
 public class Blaster {
     private boolean isPicked;
+    private final Image BLASTER_IMAGE = new Image("res/blaster.png");
     private final int totalBullets = 5;
+    private double x, y;
+    private boolean isCollected = false;
 
-    public Blaster(){
-
+    public Blaster(double x, double y){
+        this.x = x;
+        this.y = y;
     }
 
     public boolean isPicked() {
@@ -20,6 +30,26 @@ public class Blaster {
 
     public int getTotalBullets() {
         return totalBullets;
+    }
+
+    public void draw() {
+        if (!isCollected) {
+            BLASTER_IMAGE.draw(x, y); // Bagel centers images automatically
+//            drawBoundingBox(); // Uncomment for debugging
+        }
+    }
+
+    public void collect() {
+        isCollected = true;
+    }
+
+    /**
+     * Checks if the hammer has been collected.
+     *
+     * @return {@code true} if the hammer is collected, {@code false} otherwise.
+     */
+    public boolean isCollected() {
+        return isCollected;
     }
 
 }

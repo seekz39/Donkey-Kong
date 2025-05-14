@@ -1,4 +1,3 @@
-import bagel.*;
 import bagel.Input;
 import java.util.Properties;
 
@@ -12,6 +11,9 @@ public class Level2Screen extends GamePlayScreen {
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
+    private NormalMonkey[] normalMonkeys;
+    private IntelligentMonkey[] intelligentMonkeys;
+    private Blaster[] blasters;
 //    private Image background;
     private int currFrame = 0;
     private boolean isGameOver = false;
@@ -25,31 +27,31 @@ public class Level2Screen extends GamePlayScreen {
         super(gameProps);
 
         // === Mario ===
-        String[] marioPos = gameProps.getProperty("mario.level1").split(",");
+        String[] marioPos = gameProps.getProperty("mario.level2").split(",");
         mario = new Mario(Double.parseDouble(marioPos[0]), Double.parseDouble(marioPos[1]));
 
         // === Donkey ===
-        String[] donkeyPos = gameProps.getProperty("donkey.level1").split(",");
+        String[] donkeyPos = gameProps.getProperty("donkey.level2").split(",");
         donkey = new Donkey(Double.parseDouble(donkeyPos[0]), Double.parseDouble(donkeyPos[1]));
 
         // === Barrels ===
-        int barrelCount = Integer.parseInt(gameProps.getProperty("barrel.level1.count"));
+        int barrelCount = Integer.parseInt(gameProps.getProperty("barrel.level2.count"));
         barrels = new Barrel[barrelCount];
         for (int i = 1; i <= barrelCount; i++) {
-            String[] coords = gameProps.getProperty("barrel.level1." + i).split(",");
+            String[] coords = gameProps.getProperty("barrel.level2." + i).split(",");
             barrels[i - 1] = new Barrel(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
         }
 
         // === Ladders ===
-        int ladderCount = Integer.parseInt(gameProps.getProperty("ladder.level1.count"));
+        int ladderCount = Integer.parseInt(gameProps.getProperty("ladder.level2.count"));
         ladders = new Ladder[ladderCount];
         for (int i = 1; i <= ladderCount; i++) {
-            String[] coords = gameProps.getProperty("ladder.level1." + i).split(",");
+            String[] coords = gameProps.getProperty("ladder.level2." + i).split(",");
             ladders[i - 1] = new Ladder(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
         }
 
         // === Platforms ===
-        String[] platformEntries = gameProps.getProperty("platforms.level1").split(";");
+        String[] platformEntries = gameProps.getProperty("platforms.level2").split(";");
         platforms = new Platform[platformEntries.length];
         for (int i = 0; i < platformEntries.length; i++) {
             String[] coords = platformEntries[i].trim().split(",");
@@ -57,14 +59,20 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         // === Hammer ===
-        String[] hammerCoords = gameProps.getProperty("hammer.level1.1").split(",");
+        String[] hammerCoords = gameProps.getProperty("hammer.level2.1").split(",");
         hammer = new Hammer(Double.parseDouble(hammerCoords[0]), Double.parseDouble(hammerCoords[1]));
-    }
 
-//    @Override
-//    protected void initializeGameObjects() {
-//        // No-op: Level1-specific initialization is done in constructor
-//    }
+        // 9) Create Blasters
+        int blasterCount = Integer.parseInt(GAME_PROPS.getProperty("blaster.level2.count"));
+        blasters = new Blaster[blasterCount];
+        for (int i = 1; i <= blasterCount; i++) {
+            String[] coords = GAME_PROPS.getProperty("blaster.level2." + i).split(",");
+            double x = Double.parseDouble(coords[0]);
+            double y = Double.parseDouble(coords[1]);
+            blasters[i - 1] = new Blaster(x, y);
+        }
+
+    }
 
 
     @Override
@@ -105,6 +113,14 @@ public class Level2Screen extends GamePlayScreen {
             barrel.update(platforms);
         }
 
+        for (IntelligentMonkey monkey : intelligentMonkeys) {
+            monkey.draw();
+        }
+
+        for (NormalMonkey monkey : normalMonkeys) {
+            monkey.draw();
+        }
+
         // 4) Check game time and donkey status
         if (checkingGameTime()) {
             isGameOver = true;
@@ -114,6 +130,10 @@ public class Level2Screen extends GamePlayScreen {
         // 5) Draw hammer and donkey
         hammer.draw();
         donkey.draw();
+        for (Blaster b : blasters) {
+            b.draw();
+        }
+
 
         // 6) Update Mario
         mario.update(input, ladders, platforms, hammer);
@@ -216,6 +236,92 @@ public class Level2Screen extends GamePlayScreen {
         double hammerX = Double.parseDouble(hammerCoords[0]);
         double hammerY = Double.parseDouble(hammerCoords[1]);
         this.hammer = new Hammer(hammerX, hammerY);
+
+        // 9) Create the Blasters array
+        int blasterCount = Integer.parseInt(GAME_PROPS.getProperty("blaster.level2.count"));
+        this.blasters = new Blaster[blasterCount];
+        int blasterIndex = 0;
+        for (int i = 1; i <= blasterCount; i++) {
+            String blasterData = GAME_PROPS.getProperty("blaster.level2." + i);
+            if (blasterData != null) {
+                String[] coords = blasterData.split(",");
+                if (coords.length < 2) {
+                    System.out.println("Warning: Incomplete data for blaster." + i);
+                    continue; // Skip invalid entries
+                }
+                double blasterX = Double.parseDouble(coords[0]);
+                double blasterY = Double.parseDouble(coords[1]);
+                if (blasterIndex < blasterCount) {
+                    blasters[blasterIndex] = new Blaster(blasterX, blasterY);
+                    blasterIndex++;
+                }
+            }
+        }
+
+        int intelligentCount = Integer.parseInt(GAME_PROPS.getProperty("intelligentMonkey.level2.count"));
+        this.intelligentMonkeys = new IntelligentMonkey[intelligentCount];
+        int intelligentIndex = 0;
+        for (int i = 1; i <= intelligentCount; i++) {
+            String monkeyData = GAME_PROPS.getProperty("intelligentMonkey.level2." + i);
+            if (monkeyData != null) {
+                String[] parts = monkeyData.split(";");
+                if (parts.length < 3) {
+                    System.out.println("Warning: Incomplete data for intelligentMonkey." + i);
+                    continue;
+                }
+
+                String[] coords = parts[0].split(",");
+                double x = Double.parseDouble(coords[0]);
+                double y = Double.parseDouble(coords[1]);
+
+                String direction = parts[1];
+
+                String[] routeStr = parts[2].split(",");
+                int[] patrolPath = new int[routeStr.length];
+                for (int j = 0; j < routeStr.length; j++) {
+                    patrolPath[j] = Integer.parseInt(routeStr[j]);
+                }
+
+                if (intelligentIndex < intelligentCount) {
+                    intelligentMonkeys[intelligentIndex] = new IntelligentMonkey(x, y, direction, patrolPath);
+                    intelligentIndex++;
+                }
+            }
+        }
+
+        int normalCount = Integer.parseInt(GAME_PROPS.getProperty("normalMonkey.level2.count"));
+        this.normalMonkeys = new NormalMonkey[normalCount];
+        int normalIndex = 0;
+        for (int i = 1; i <= normalCount; i++) {
+            String monkeyData = GAME_PROPS.getProperty("normalMonkey.level2." + i);
+            if (monkeyData != null) {
+                String[] parts = monkeyData.split(";");
+                if (parts.length < 3) {
+                    System.out.println("Warning: Incomplete data for normalMonkey." + i);
+                    continue;
+                }
+
+                String[] coords = parts[0].split(",");
+                double x = Double.parseDouble(coords[0]);
+                double y = Double.parseDouble(coords[1]);
+
+                String direction = parts[1];
+
+                String[] routeStr = parts[2].split(",");
+                int[] patrolPath = new int[routeStr.length];
+                for (int j = 0; j < routeStr.length; j++) {
+                    patrolPath[j] = Integer.parseInt(routeStr[j]);
+                }
+                if (normalIndex < normalCount) {
+                    normalMonkeys[normalIndex] = new NormalMonkey(x, y, direction, patrolPath);
+                    normalIndex++;
+                }
+            }
+        }
+
+
+
+
     }
 
     @Override
