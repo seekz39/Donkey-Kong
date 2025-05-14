@@ -58,7 +58,14 @@ public class ShadowDonkeyKong extends AbstractGame {
         // Home Screen
         if (gamePlayScreen == null && gameEndScreen == null) {
             if (homeScreen.update(input)) {
-                gamePlayScreen = new GamePlayScreen(GAME_PROPS);
+//                gamePlayScreen = new GamePlayScreen(GAME_PROPS);
+                int selectedLevel = homeScreen.getSelectedLevel();
+                if (selectedLevel == 1) {
+                    gamePlayScreen = new Level1Screen(GAME_PROPS);
+                }else if (selectedLevel == 2) {
+                    gamePlayScreen = new Level2Screen(GAME_PROPS);
+                }
+
             }
         }
         // Gameplay Screen

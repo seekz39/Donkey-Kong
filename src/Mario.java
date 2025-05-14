@@ -21,7 +21,6 @@ public class Mario {
     private final Image MARIO_HAMMER_LEFT_IMAGE;
     private final Image MARIO_HAMMER_RIGHT_IMAGE;
 
-
     // Movement physics constants
     private static final double JUMP_STRENGTH = -5;
     private static final double MOVE_SPEED = 3.5;

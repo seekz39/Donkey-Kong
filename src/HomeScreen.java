@@ -17,6 +17,8 @@ public class HomeScreen {
     private final int TITLE_Y;             // Vertical position of the title
     private final int PROMPT_Y;            // Vertical position of the prompt
 
+    private int selectedLevel = 0;
+
     /**
      * Constructs the HomeScreen, loading images, fonts, and text properties.
      *
@@ -46,6 +48,11 @@ public class HomeScreen {
         PROMPT_Y = Integer.parseInt(gameProps.getProperty("home.prompt.y"));
     }
 
+    public int getSelectedLevel() {
+        return selectedLevel;
+    }
+
+
     /**
      * Displays the home screen with the title and background.
      * Waits for the player to press ENTER to proceed.
@@ -67,10 +74,18 @@ public class HomeScreen {
 
         // 4) If ENTER is pressed, transition from the home screen to the game
         if (input.wasPressed(Keys.ENTER)) {
+            selectedLevel = 1;
+            return true;
+        }
+
+        if (input.wasPressed(Keys.NUM_2)) {
+            selectedLevel = 2;
             return true;
         }
 
         // 5) Otherwise, remain on the home screen
         return false;
     }
+
+
 }

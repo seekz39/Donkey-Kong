@@ -11,6 +11,8 @@ public class Donkey {
     private final double X; // constant because x does not change, only relying on falling
     private double y;
     private double velocityY = 0;
+    //private int health;
+    //private final int MAX_HEALTH = 5
 
     /**
      * Constructs a new Donkey at the specified starting position.
@@ -84,5 +86,9 @@ public class Donkey {
                 DONKEY_IMAGE.getHeight()
         );
     }
+
+
+    public void renderHealth(int health){}
+
 
 }
