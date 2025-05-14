@@ -114,10 +114,12 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         for (IntelligentMonkey monkey : intelligentMonkeys) {
+            monkey.update(platforms);
             monkey.draw();
         }
 
         for (NormalMonkey monkey : normalMonkeys) {
+            monkey.update(platforms);
             monkey.draw();
         }
 
@@ -318,10 +320,6 @@ public class Level2Screen extends GamePlayScreen {
                 }
             }
         }
-
-
-
-
     }
 
     @Override

@@ -25,10 +25,14 @@ public class Physics {
      */
     public static final double BARREL_GRAVITY = 0.4;
 
+    public static final double MONKEY_GRAVITY = 0.4;
+
     /**
      * The maximum falling speed (terminal velocity) that Mario can reach.
      */
     public static final double MARIO_TERMINAL_VELOCITY = 10.0;
+
+    public static final double TERMINAL_VELOCITY = 10.0;
 
     /**
      * The maximum falling speed (terminal velocity) for barrels.

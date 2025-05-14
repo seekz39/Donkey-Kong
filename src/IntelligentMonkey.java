@@ -5,8 +5,8 @@ import java.util.ArrayList;
  * Represents an intelligent monkey that follows a specified patrol path and shoots bananas.
  */
 public class IntelligentMonkey extends Monkey {
-    private static final Image imageLeft = new Image("res/intelli_monkey_left.png");
-    private static final Image imageRight = new Image("res/intelli_monkey_right.png");
+//    private static final Image imageLeft = new Image("res/intelli_monkey_left.png");
+//    private static final Image imageRight = new Image("res/intelli_monkey_right.png");
     private final ArrayList<Banana> bananas = new ArrayList<>();
 
     private int shootTimer = 0;
@@ -14,6 +14,8 @@ public class IntelligentMonkey extends Monkey {
 
     public IntelligentMonkey(double x, double y, String direction, int[] patrolPath) {
         super(x, y, direction, joinPath(patrolPath));
+        this.imageLeft = new Image("res/intelli_monkey_left.png");
+        this.imageRight = new Image("res/intelli_monkey_right.png");
     }
 
     private static String joinPath(int[] path) {
@@ -31,12 +33,12 @@ public class IntelligentMonkey extends Monkey {
 
     @Override
     public void update(Platform[] platforms) {
+        super.update(platforms);
         shootTimer++;
         if (shootTimer / 60 >= SHOOT_FREQ) {
             shootBanana();
             shootTimer = 0;
         }
-
 
         // Update bananas
         for (Banana banana : bananas) {
@@ -60,4 +62,20 @@ public class IntelligentMonkey extends Monkey {
             banana.draw();
         }
     }
+
+    @Override
+    protected String getImagePathLeft() {
+        return "res/intelli_monkey_left.png";
+    }
+
+    @Override
+    protected String getImagePathRight() {
+        return "res/intelli_monkey_right.png";
+    }
+
+//    @Override
+//    public Image getImage() {
+//        return faceRight ? imageRight : imageLeft;
+//    }
+
 }

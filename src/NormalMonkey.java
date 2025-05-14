@@ -4,11 +4,13 @@ import bagel.Image;
  * Represents an intelligent monkey that follows a specified patrol path.
  */
 public class NormalMonkey extends Monkey {
-    private final Image imageLeft = new Image("res/normal_monkey_left.png");
-    private final Image imageRight = new Image("res/normal_monkey_right.png");
+    private final Image imageLeft;
+    private final Image imageRight;
 
     public NormalMonkey(double x, double y, String direction, int[] patrolPath) {
         super(x, y, direction, joinPath(patrolPath));
+        this.imageLeft = new Image("res/normal_monkey_left.png");
+        this.imageRight = new Image("res/normal_monkey_right.png");
     }
 
     private static String joinPath(int[] path) {
@@ -20,16 +22,32 @@ public class NormalMonkey extends Monkey {
         return sb.toString();
     }
 
+//    @Override
+//    public void update(Platform[] platforms) {
+//    }
+
+//    @Override
+//    public void draw() {
+//        if (faceRight) {
+//            imageRight.draw(x, y);
+//        } else {
+//            imageLeft.draw(x, y);
+//        }
+//    }
+//
     @Override
-    public void update(Platform[] platforms) {
+    protected String getImagePathLeft() {
+        return "res/normal_monkey_left.png";
     }
 
     @Override
-    public void draw() {
-        if (faceRight) {
-            imageRight.draw(x, y);
-        } else {
-            imageLeft.draw(x, y);
-        }
+    protected String getImagePathRight() {
+        return "res/normal_monkey_right.png";
     }
+
+
+//    @Override
+//    public Image getImage() {
+//        return faceRight ? imageRight : imageLeft;
+//    }
 }
