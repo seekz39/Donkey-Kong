@@ -6,10 +6,8 @@ import bagel.util.Rectangle;
  * Represents a ladder in the game.
  * The ladder falls under gravity until it lands on a platform.
  */
-public class Ladder {
+public class Ladder extends GravityEntity {
     private final Image LADDER_IMAGE;
-    private final double X; // constant because x does not change, only relying on falling
-    private double y;
     public static double width;
     public static double height;
 
@@ -23,7 +21,7 @@ public class Ladder {
      */
     public Ladder(double startX, double startY) {
         this.LADDER_IMAGE = new Image("res/ladder.png");
-        this.X = startX;
+        this.x = startX;
         this.y = startY;
         width = LADDER_IMAGE.getWidth();
         height = LADDER_IMAGE.getHeight();
@@ -32,10 +30,6 @@ public class Ladder {
     /**
      * Draws the ladder on the screen.
      */
-    public void draw() {
-        LADDER_IMAGE.draw(X, y);
-//        drawBoundingBox(); // Uncomment for debugging
-    }
 
     /**
      * Updates the ladder's position by applying gravity and checking for platform collisions.
@@ -45,30 +39,8 @@ public class Ladder {
      */
     public void update(Platform[] platforms) {
         // 1) Apply gravity
-        velocityY += Physics.LADDER_GRAVITY;
-
-        // 2) Limit falling speed to terminal velocity
-        if (velocityY > Physics.LADDER_TERMINAL_VELOCITY) {
-            velocityY = Physics.LADDER_TERMINAL_VELOCITY;
-        }
-
-        // 3) Move the ladder downward
-        y += velocityY;
-
-        // 4) Check for collision with platforms
-        for (Platform platform : platforms) {
-            if (getBoundingBox().intersects(platform.getBoundingBox())) {
-                // Position the ladder on top of the platform
-                y = platform.getY()
-                        - (platform.getHeight() / 2)  // Platform top edge
-                        - (this.getHeight() / 2);     // Ladder height offset
-
-                velocityY = 0; // Stop falling
-                break; // Stop checking further once the ladder lands
-            }
-        }
-
-        // 5) Draw the ladder after updating position
+        super.update(platforms);
+        // 2) Draw the ladder after updating position
         draw();
     }
 
@@ -79,11 +51,21 @@ public class Ladder {
      */
     public Rectangle getBoundingBox() {
         return new Rectangle(
-                X - (LADDER_IMAGE.getWidth() / 2),
+                x - (LADDER_IMAGE.getWidth() / 2),
                 y - (LADDER_IMAGE.getHeight() / 2),
                 LADDER_IMAGE.getWidth(),
                 LADDER_IMAGE.getHeight()
         );
+    }
+
+    /**
+     * Retrieves the ladder's image.
+     *
+     * @return An {@link Image} representing the barrel.
+     */
+    @Override
+    protected Image getImage() {
+        return this.LADDER_IMAGE;
     }
 
 
@@ -93,7 +75,7 @@ public class Ladder {
      * @return The current x-coordinate of the ladder.
      */
     public double getX() {
-        return X;
+        return x;
     }
 
     /**

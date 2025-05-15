@@ -6,11 +6,11 @@ import bagel.util.Rectangle;
  * Represents a barrel in the game, affected by gravity and platform collisions.
  * The barrel can be destroyed, at which point it will no longer be drawn or interact with the environment.
  */
-public class Barrel {
+public class Barrel extends GravityEntity {
     private final Image BARREL_IMAGE;
     private final double X; // constant because x does not change, only relying on falling
-    private double y;
-    private double velocityY = 0;
+//    private double y;
+//    private double velocityY = 0;
     private boolean isDestroyed = false;
 
     /**
@@ -33,37 +33,31 @@ public class Barrel {
      */
     public void update(Platform[] platforms) {
         if (!isDestroyed) {
-            // 1) Apply gravity
-            velocityY += Physics.BARREL_GRAVITY;
-            if (velocityY > Physics.BARREL_TERMINAL_VELOCITY) {
-                velocityY = Physics.BARREL_TERMINAL_VELOCITY;
-            }
-            y += velocityY;
-
-            // 2) Check for platform collisions
-            for (Platform platform : platforms) {
-                if (this.getBoundingBox().intersects(platform.getBoundingBox())) {
-                    // Position the barrel on top of the platform
-                    y = platform.getY() - (platform.getHeight() / 2) - (BARREL_IMAGE.getHeight() / 2);
-                    velocityY = 0; // Stop falling
-                    break;
-                }
-            }
-
-            // 3) Draw the barrel
+            super.update(platforms); // 使用 GravityEntity 的 gravity + collision
             draw();
         }
     }
 
-
     /**
      * Draws the barrel on the screen if it is not destroyed.
      */
+
+    @Override
     public void draw() {
         if (!isDestroyed) {
             BARREL_IMAGE.draw(X, y);
 //            drawBoundingBox(); // Uncomment for debugging
         }
+    }
+
+    /**
+     * Retrieves the barrel's image.
+     *
+     * @return An {@link Image} representing the barrel.
+     */
+    @Override
+    protected Image getImage() {
+        return this.BARREL_IMAGE;
     }
 
     /**
@@ -102,15 +96,6 @@ public class Barrel {
     }
 
     /**
-     * Retrieves the barrel's image.
-     *
-     * @return An {@link Image} representing the barrel.
-     */
-    public Image getBarrelImage() {
-        return this.BARREL_IMAGE;
-    }
-
-    /**
      * Gets the x-coordinate of the barrel.
      *
      * @return The current x-coordinate of the barrel.
@@ -123,5 +108,7 @@ public class Barrel {
      * @return The current y-coordinate of the barrel.
      */
     public double getY() { return y; }
+
+
 
 }

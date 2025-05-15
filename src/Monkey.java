@@ -13,20 +13,67 @@ public abstract class Monkey extends GravityEntity {
     protected boolean faceRight;
     protected ArrayList<Integer> route = new ArrayList<>();
     protected double speed;
-    protected double moveThisStep = 0;
+    protected int routeIndex = 0;
+    private int directionSign = 1;
+    private double distanceTravel = 0;
     protected double velocityY = 0;
-
     private static final double DEFAULT_SPEED = 0.5;
 
-    public Monkey(double x, double y, String direction, String routeStr) {
+    public Monkey(double x, double y, String direction, String routeStr, Image imageLeft, Image imageRight) {
         this.x = x;
         this.y = y;
-        this.imageLeft = new Image(getImagePathLeft());
-        this.imageRight = new Image(getImagePathRight());
+        this.imageLeft = imageLeft;
+        this.imageRight = imageRight;
         this.faceRight = direction.equals("right");
+        this.directionSign = faceRight ? 1 : -1;
         this.speed = DEFAULT_SPEED;
         for (String part : routeStr.split(",")) {
             this.route.add(Integer.parseInt(part));
+        }
+    }
+
+    private void updateMovement(Platform[] platforms) {
+        if (route.isEmpty()) return;
+
+        // when monkey reach the edge of the window, flip direction
+        if (x <= 0 || x >= ShadowDonkeyKong.getScreenWidth()) {
+            flipDirection();
+            directionSign *= -1;
+            distanceTravel = 0;
+            x += directionSign * speed;
+            return;
+        }
+
+
+        Platform currentPlatform = getCurrentPlatform(platforms);
+        if (currentPlatform != null) {
+            double platformLeft = currentPlatform.getBoundingBox().left();
+            double platformRight = currentPlatform.getBoundingBox().right();
+
+            // let monkey walk only in the current platform
+            if ((x >= platformRight) || (x <= platformLeft)) {
+                flipDirection();
+                directionSign *= -1;
+                distanceTravel = 0;
+                x += directionSign * speed;
+                return;
+            }
+        }
+
+        x += directionSign * speed;
+        distanceTravel += speed;
+
+        if (distanceTravel >= route.get(routeIndex)) {
+            distanceTravel = 0;
+            routeIndex++;
+
+            if (routeIndex >= route.size()) {
+                routeIndex = 0;
+            }
+
+            flipDirection();
+            directionSign *= -1;
+            faceRight = directionSign > 0;
         }
     }
 
@@ -41,8 +88,6 @@ public abstract class Monkey extends GravityEntity {
     public boolean isFacingRight() {
         return faceRight;
     }
-    protected abstract String getImagePathLeft();
-    protected abstract String getImagePathRight();
 
     public ArrayList<Integer> getRoute() {
         return route;
@@ -52,9 +97,15 @@ public abstract class Monkey extends GravityEntity {
         faceRight = !faceRight;
     }
 
+    private void flip() {
+        directionSign *= -1;
+        faceRight = directionSign > 0;
+    }
+
     @Override
     public void update(Platform[] platforms) {
         super.update(platforms); // apply gravity
+        updateMovement(platforms);
 
     }
 
@@ -67,7 +118,6 @@ public abstract class Monkey extends GravityEntity {
         }
     }
 
-    @Override
     protected Image getImage() {
         return faceRight ? imageRight : imageLeft;
     }
@@ -75,6 +125,15 @@ public abstract class Monkey extends GravityEntity {
     @Override
     public Rectangle getBoundingBox() {
         return getImage().getBoundingBoxAt(new Point(x, y));
+    }
+
+    private Platform getCurrentPlatform(Platform[] platforms) {
+        for (Platform platform : platforms) {
+            if (this.getBoundingBox().bottom() == platform.getBoundingBox().top()) {
+                return platform;
+            }
+        }
+        return null;
     }
 
 

@@ -8,7 +8,7 @@ public abstract class GravityEntity {
 
     // Subclasses must implement this
     protected abstract Image getImage();
-    protected abstract void draw();
+//    protected abstract void draw();
 
     public void update(Platform[] platforms) {
         // Apply gravity
@@ -29,6 +29,12 @@ public abstract class GravityEntity {
                 break;
             }
         }
+
+        draw();
+    }
+
+    public void draw(){
+        this.getImage().draw(x,y);
     }
 
     public double getX() {
@@ -42,6 +48,5 @@ public abstract class GravityEntity {
     public Rectangle getBoundingBox() {
         return getImage().getBoundingBoxAt(new Point(x, y));
     }
-
 
 }

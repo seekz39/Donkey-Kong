@@ -131,5 +131,4 @@ public class ShadowDonkeyKong extends AbstractGame {
         game.run();
     }
 
-
 }

@@ -406,7 +406,7 @@ public class Mario {
         return isJumping
                 && Math.abs(this.x - barrel.getX()) <= 1
                 && (this.y < barrel.getY())
-                && ((this.y + height / 2) >= (barrel.getY() + barrel.getBarrelImage().getHeight() / 2
+                && ((this.y + height / 2) >= (barrel.getY() + barrel.getImage().getHeight() / 2
                 - (JUMP_STRENGTH * JUMP_STRENGTH) / (2 * Physics.MARIO_GRAVITY) - height / 2));
     }
 }
