@@ -13,6 +13,7 @@ public class Level2Screen extends GamePlayScreen {
     private Donkey donkey;
     private Platform[] platforms;
     private NormalMonkey[] normalMonkeys;
+    private ArrayList<Banana> bananas = new ArrayList<>();
     private IntelligentMonkey[] intelligentMonkeys;
     private Blaster[] blasters;
     private ArrayList<Bullet> bullets = new ArrayList<>();
@@ -147,11 +148,23 @@ public class Level2Screen extends GamePlayScreen {
             isGameOver = true;
         }
 
+//        for (Bullet bullet : bullets) {
+//            bullet.collideWithPlatforms(platforms);
+//            bullet.update();
+//            bullet.draw();
+//        }
+//
+//        for (Banana banana : bananas) {
+//            banana.update();
+//        }
+
         // 8) Display score and time left
         displayInfo();
 
         // 9) Return game state
         return isGameOver || isLevelCompleted();
+
+
     }
 
 

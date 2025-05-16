@@ -54,4 +54,14 @@ public class Bullet {
 
     }
 
+    public void collideWithPlatforms(Platform[] platforms) {
+        for (Platform platform : platforms) {
+            if (this.getBoundingBox().intersects(platform.getBoundingBox())) {
+                isAlive = false;
+                System.out.println("Bullet hit platform and disappeared");
+                break;
+            }
+        }
+    }
+
 }

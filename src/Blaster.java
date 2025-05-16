@@ -31,7 +31,6 @@ public class Blaster {
     }
 
     public void update(){
-
     }
 
     public int getTotalBullets() {
@@ -68,11 +67,6 @@ public class Blaster {
                 WIDTH,
                 HEIGHT
         );
-    }
-
-    public void addBullet(double x, double y, boolean isFacingRight, ArrayList<Bullet> bullets) {
-        Bullet bullet = new Bullet(x, y, isFacingRight);
-        bullets.add(bullet);
     }
 
 }

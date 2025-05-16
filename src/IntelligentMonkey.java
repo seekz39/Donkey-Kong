@@ -17,8 +17,6 @@ public class IntelligentMonkey extends Monkey {
                 new Image("res/intelli_monkey_right.png")
         );
 
-//        this.imageLeft = new Image("res/intelli_monkey_left.png");
-//        this.imageRight = new Image("res/intelli_monkey_right.png");
     }
 
     private static String joinPath(int[] path) {
@@ -34,7 +32,7 @@ public class IntelligentMonkey extends Monkey {
         bananas.add(new Banana(getX(), getY(), isFacingRight()));
     }
 
-    @Override
+
     public void update(Platform[] platforms) {
         super.update(platforms);
         shootTimer++;
@@ -65,16 +63,6 @@ public class IntelligentMonkey extends Monkey {
             banana.draw();
         }
     }
-
-//    @Override
-//    protected String getImagePathLeft() {
-//        return "res/intelli_monkey_left.png";
-//    }
-//
-//    @Override
-//    protected String getImagePathRight() {
-//        return "res/intelli_monkey_right.png";
-//    }
 
 
 }

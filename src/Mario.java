@@ -17,7 +17,7 @@ public class Mario {
     private boolean hasHammer = false; // Whether Mario has collected a hammer
     private boolean hasBlaster = false;// Whether Mario has collected a blaster
     private final int totalBullets = 5;
-    private int bulletsCount = totalBullets;
+    private int bulletsCount = 0;
 
 
     // Mario images for different states
@@ -343,11 +343,12 @@ public class Mario {
     private void handleBlasterCollection(Blaster[] blasters) {
         for (Blaster blaster : blasters) {
             if (!blaster.isCollected() && isTouchingBlaster(blaster)) {
-                setHasBlaster(true);
                 blaster.collect();
-                System.out.println("Blaster collected!");
+                setHasBlaster(true);
                 hasBlaster = true;
                 hasHammer = false;
+                bulletsCount += totalBullets;
+                System.out.println("Blaster collected!");
             }
         }
     }
