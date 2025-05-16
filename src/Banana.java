@@ -1,5 +1,6 @@
 import bagel.Image;
 import bagel.util.Rectangle;
+import bagel.util.Point;
 
 /**
  * Represents a banana projectile shot by IntelligentMonkey.
@@ -44,7 +45,7 @@ public class Banana {
         return active;
     }
 
-//    public Rectangle getBoundingBox() {
-//        return bananaImg.getBoundingBoxAt(x, y);
-//    }
+    public Rectangle getBoundingBox() {
+        return bananaImg.getBoundingBoxAt(new Point(x, y));
+    }
 }

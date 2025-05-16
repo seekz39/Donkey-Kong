@@ -12,7 +12,7 @@ public class Level1Screen extends GamePlayScreen {
     private Donkey donkey;
     private Platform[] platforms;
 //    private Image background;
-    private int currFrame = 0;
+//    private int currFrame = 0;
     private boolean isGameOver = false;
     private int score = 0;
 
@@ -115,7 +115,7 @@ public class Level1Screen extends GamePlayScreen {
         donkey.draw();
 
         // 6) Update Mario
-        mario.update(input, ladders, platforms, hammer);
+        mario.updateLevel1(input, ladders, platforms, hammer);
 
         // 7) Check if Mario reaches Donkey
         if (mario.hasReached(donkey) && !mario.holdHammer()) {

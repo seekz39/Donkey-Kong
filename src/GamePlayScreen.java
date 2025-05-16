@@ -11,7 +11,7 @@ public abstract class GamePlayScreen {
 
     private Image background;   // Background image for the game
     // Frame tracking
-    private int currFrame = 0;  // Tracks the number of frames elapsed
+    protected int currFrame = 0;  // Tracks the number of frames elapsed
     // Game parameters
     private final int MAX_FRAMES;  // Maximum number of frames before game ends
 

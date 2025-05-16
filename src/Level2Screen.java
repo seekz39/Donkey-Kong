@@ -1,5 +1,6 @@
 import bagel.Input;
 import java.util.Properties;
+import java.util.ArrayList;
 
 /**
  * Represents the gameplay screen for Level 1.
@@ -14,8 +15,9 @@ public class Level2Screen extends GamePlayScreen {
     private NormalMonkey[] normalMonkeys;
     private IntelligentMonkey[] intelligentMonkeys;
     private Blaster[] blasters;
+    private ArrayList<Bullet> bullets = new ArrayList<>();
 //    private Image background;
-    private int currFrame = 0;
+//    private int currFrame = 0;
     private boolean isGameOver = false;
     private int score = 0;
 
@@ -69,7 +71,7 @@ public class Level2Screen extends GamePlayScreen {
             String[] coords = GAME_PROPS.getProperty("blaster.level2." + i).split(",");
             double x = Double.parseDouble(coords[0]);
             double y = Double.parseDouble(coords[1]);
-            blasters[i - 1] = new Blaster(x, y);
+            blasters[i - 1] = new Blaster(x, y, true);
         }
 
     }
@@ -138,7 +140,7 @@ public class Level2Screen extends GamePlayScreen {
 
 
         // 6) Update Mario
-        mario.update(input, ladders, platforms, hammer);
+        mario.updateLevel2(input, ladders, platforms, hammer, blasters, bullets);
 
         // 7) Check if Mario reaches Donkey
         if (mario.hasReached(donkey) && !mario.holdHammer()) {
@@ -254,7 +256,7 @@ public class Level2Screen extends GamePlayScreen {
                 double blasterX = Double.parseDouble(coords[0]);
                 double blasterY = Double.parseDouble(coords[1]);
                 if (blasterIndex < blasterCount) {
-                    blasters[blasterIndex] = new Blaster(blasterX, blasterY);
+                    blasters[blasterIndex] = new Blaster(blasterX, blasterY, true);
                     blasterIndex++;
                 }
             }

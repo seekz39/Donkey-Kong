@@ -1,6 +1,8 @@
 import bagel.*;
 import bagel.util.Rectangle;
 import bagel.util.Colour;
+import java.util.ArrayList;
+
 
 import java.awt.event.InputEvent;
 
@@ -13,6 +15,10 @@ public class Mario {
     private double velocityY = 0; // Vertical velocity
     private boolean isJumping = false; // Whether Mario is currently jumping
     private boolean hasHammer = false; // Whether Mario has collected a hammer
+    private boolean hasBlaster = false;// Whether Mario has collected a blaster
+    private final int totalBullets = 5;
+    private int bulletsCount = totalBullets;
+
 
     // Mario images for different states
     private Image marioImage;
@@ -20,6 +26,8 @@ public class Mario {
     private final Image MARIO_LEFT_IMAGE;
     private final Image MARIO_HAMMER_LEFT_IMAGE;
     private final Image MARIO_HAMMER_RIGHT_IMAGE;
+    private final Image MARIO_BLASTER_LEFT_IMAGE;
+    private final Image MARIO_BLASTER_RIGHT_IMAGE;
 
     // Movement physics constants
     private static final double JUMP_STRENGTH = -5;
@@ -47,6 +55,8 @@ public class Mario {
         this.MARIO_LEFT_IMAGE = new Image("res/mario_left.png");
         this.MARIO_HAMMER_RIGHT_IMAGE = new Image("res/mario_hammer_right.png");
         this.MARIO_HAMMER_LEFT_IMAGE = new Image("res/mario_hammer_left.png");
+        this.MARIO_BLASTER_RIGHT_IMAGE = new Image("res/mario_blaster_right.png");
+        this.MARIO_BLASTER_LEFT_IMAGE = new Image("res/mario_blaster_left.png");
 
         // Default Mario starts facing right
         this.marioImage = MARIO_HAMMER_RIGHT_IMAGE;
@@ -64,6 +74,10 @@ public class Mario {
         this.hasHammer = status;
     }
 
+    public void setHasBlaster(boolean status) {
+        this.hasBlaster = status;
+    }
+
     /**
      * Checks if Mario has the hammer.
      *
@@ -71,6 +85,10 @@ public class Mario {
      */
     public boolean holdHammer() {
         return this.hasHammer;
+    }
+
+    public boolean holdBlaster() {
+        return this.hasBlaster;
     }
 
     /**
@@ -96,11 +114,12 @@ public class Mario {
      * @param platforms The array of platforms in the game that Mario can walk on.
      * @param hammer    The hammer object that Mario can collect and use.
      */
-    public void update(Input input, Ladder[] ladders, Platform[] platforms, Hammer hammer) {
+
+    public void updateLevel1(Input input, Ladder[] ladders, Platform[] platforms, Hammer hammer) {
         handleHorizontalMovement(input); // 1) Horizontal movement
-        updateSprite(hammer); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
+        updateLevel1Sprite(hammer); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
         handleHammerCollection(hammer); // 3) If you just picked up the hammer:
-        updateSprite(); // 4) Now replace sprite (since either isFacingRight or hasHammer could have changed)
+        updateLevel1Sprite(); // 4) Now replace sprite (since either isFacingRight or hasHammer could have changed)
 
         // 5) Ladder logic – check if on a ladder
         boolean isOnLadder;
@@ -130,6 +149,53 @@ public class Mario {
 
         // 12) Draw Mario
         draw();
+    }
+
+    public void updateLevel2(Input input, Ladder[] ladders, Platform[] platforms, Hammer hammer, Blaster[] blasters, ArrayList<Bullet> bullets) {
+        handleHorizontalMovement(input); // 1) Horizontal movement
+        updateLevel2Sprite(hammer, blasters); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
+        handleHammerCollection(hammer);// 3) If you just picked up the hammer:
+        handleBlasterCollection(blasters);
+        updateLevel2Sprite();
+        handleShoot(input, bullets);
+
+        for (Bullet bullet : bullets) {
+            bullet.update();
+            bullet.draw();
+        }
+
+        // 4) Now replace sprite (since either isFacingRight or hasHammer could have changed)
+
+        // 5) Ladder logic – check if on a ladder
+        boolean isOnLadder;
+        isOnLadder = handleLadders(input, ladders);
+
+        // 6) Jump logic: if on platform (we'll detect after we move) but let's queue jump if needed
+        boolean wantsToJump = input.wasPressed(Keys.SPACE);
+
+        // 7) If not on ladder, apply gravity, move Mario
+        if (!isOnLadder) {
+            velocityY += Physics.MARIO_GRAVITY;
+            velocityY = Math.min(Physics.MARIO_TERMINAL_VELOCITY, velocityY);
+        }
+
+        // 8) Actually move Mario vertically after gravity
+        y += velocityY;
+
+        // 9) Check for platform collision AFTER Mario moves
+        boolean onPlatform;
+        onPlatform = handlePlatforms(platforms, hammer);
+
+        // 10) If we are on the platform, allow jumping; Prevent Mario from falling below the ground
+        handleJumping(onPlatform, wantsToJump);
+
+        // 11) Enforce horizontal screen bounds
+        enforceBoundaries();
+
+        // 12) Draw Mario
+        draw();
+
+
     }
 
     /**
@@ -247,10 +313,20 @@ public class Mario {
     }
 
     /** Updates Mario's sprite based on his current state. */
-    private void updateSprite(Hammer hammer) {
+    private void updateLevel1Sprite(Hammer hammer) {
         marioImage = hasHammer
                 ? (isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE)
                 : (isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE);
+    }
+
+    private void updateLevel2Sprite(Hammer hammer, Blaster[] blasters) {
+        if (hasBlaster) {
+            marioImage = isFacingRight ? MARIO_BLASTER_RIGHT_IMAGE : MARIO_BLASTER_LEFT_IMAGE;
+        } else if (hasHammer) {
+            marioImage = isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE;
+        } else {
+            marioImage = isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE;
+        }
     }
 
     /** Handles collecting the hammer if Mario is in contact with it. */
@@ -259,6 +335,20 @@ public class Mario {
             setHasHammer(true);
             hammer.collect();
             System.out.println("Hammer collected!");
+            hasHammer = true;
+            hasBlaster = false;
+        }
+    }
+
+    private void handleBlasterCollection(Blaster[] blasters) {
+        for (Blaster blaster : blasters) {
+            if (!blaster.isCollected() && isTouchingBlaster(blaster)) {
+                setHasBlaster(true);
+                blaster.collect();
+                System.out.println("Blaster collected!");
+                hasBlaster = true;
+                hasHammer = false;
+            }
         }
     }
 
@@ -315,7 +405,7 @@ public class Mario {
      * Switch Mario's sprite (left/right, or hammer/no-hammer).
      * Adjust Mario's 'y' so that the bottom edge stays consistent.
      */
-    private void updateSprite() {
+    private void updateLevel1Sprite() {
         // 1) Remember the old image and its bottom
         Image oldImage = marioImage;
         double oldHeight = oldImage.getHeight();
@@ -340,6 +430,26 @@ public class Mario {
         // 5) Update the recorded width/height to match the new image
         width  = marioImage.getWidth();
         height = newHeight;
+    }
+
+    private void updateLevel2Sprite() {
+        Image oldImage = marioImage;
+        double oldBottom = y + oldImage.getHeight() / 2;
+
+        // 优先级：Blaster > Hammer > Normal
+        if (hasBlaster) {
+            marioImage = isFacingRight ? MARIO_BLASTER_RIGHT_IMAGE : MARIO_BLASTER_LEFT_IMAGE;
+        } else if (hasHammer) {
+            marioImage = isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE;
+        } else {
+            marioImage = isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE;
+        }
+
+        double newBottom = y + marioImage.getHeight() / 2;
+        y -= (newBottom - oldBottom);
+
+        width = marioImage.getWidth();
+        height = marioImage.getHeight();
     }
 
 
@@ -372,6 +482,11 @@ public class Mario {
     private boolean isTouchingHammer(Hammer hammer) {
         Rectangle marioBounds = getBoundingBox();
         return marioBounds.intersects(hammer.getBoundingBox());
+    }
+
+    private boolean isTouchingBlaster(Blaster balster) {
+        Rectangle marioBounds = getBoundingBox();
+        return marioBounds.intersects(balster.getBoundingBox());
     }
 
     /**
@@ -408,5 +523,20 @@ public class Mario {
                 && (this.y < barrel.getY())
                 && ((this.y + height / 2) >= (barrel.getY() + barrel.getImage().getHeight() / 2
                 - (JUMP_STRENGTH * JUMP_STRENGTH) / (2 * Physics.MARIO_GRAVITY) - height / 2));
+    }
+
+    public boolean handleShoot(Input input, ArrayList<Bullet> bullets) {
+        if (input.wasPressed(Keys.S) && hasBlaster && bulletsCount > 0) {
+            boolean faceRight = isFacingRight;
+            Bullet bullet = new Bullet(this.x, this.y, faceRight);
+            bullets.add(bullet);
+            bulletsCount--;
+
+            if (bulletsCount == 0) {
+                hasBlaster = false;
+            }
+            return true;
+        }
+        return false;
     }
 }

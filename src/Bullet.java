@@ -1,3 +1,9 @@
+import bagel.*;
+import java.util.*;
+import bagel.util.*;
+
+
+
 public class Bullet {
     private boolean isPicked;
     private final int totalBullets = 5;
@@ -5,16 +11,47 @@ public class Bullet {
     private double traveled = 0;
     private boolean isAlive = true;
     static private final int MAX_DISTANCE = 300;
+    private boolean isFacingRight;
+    private double x, y;
+    private final Image BULLET_LEFT_IMAGE = new Image("res/bullet_left.png");
+    private final Image BULLET_RIGHT_IMAGE = new Image("res/bullet_right.png");
 
-    public Bullet(){
-        super();
-//        this.facingRight = facingRight;
 
+    public Bullet(double x, double y, boolean isFacingRight) {
+        this.x = x;
+        this.y = y;
+        this.isFacingRight = isFacingRight;
     }
+
 
     public void update() {
-        if(isAlive && traveled < MAX_DISTANCE){
-
+        if (isAlive && traveled < MAX_DISTANCE) {
+            double dx = isFacingRight ? SPEED : -SPEED;
+            x += dx;
+            traveled += Math.abs(dx);
+        } else {
+            isAlive = false;
         }
     }
+
+    public void draw() {
+        if (isAlive) {
+            if (isFacingRight) {
+                BULLET_RIGHT_IMAGE.draw(x, y);
+            } else {
+                BULLET_LEFT_IMAGE.draw(x, y);
+            }
+        }
+    }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
+    public Rectangle getBoundingBox() {
+        Image img = isFacingRight ? BULLET_RIGHT_IMAGE : BULLET_LEFT_IMAGE;
+        return img.getBoundingBoxAt(new Point(x, y));
+
+    }
+
 }

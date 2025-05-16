@@ -33,7 +33,7 @@ public class Barrel extends GravityEntity {
      */
     public void update(Platform[] platforms) {
         if (!isDestroyed) {
-            super.update(platforms); // 使用 GravityEntity 的 gravity + collision
+            super.update(platforms); //  from GravityEntity
             draw();
         }
     }

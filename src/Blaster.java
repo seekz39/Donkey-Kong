@@ -3,6 +3,7 @@ import bagel.Drawing;
 import bagel.Image;
 import bagel.util.Colour;
 import bagel.util.Rectangle;
+import java.util.ArrayList;
 
 public class Blaster {
     private boolean isPicked;
@@ -10,10 +11,15 @@ public class Blaster {
     private final int totalBullets = 5;
     private double x, y;
     private boolean isCollected = false;
+    private final double WIDTH, HEIGHT;
+    private boolean isFacingRight;
 
-    public Blaster(double x, double y){
+    public Blaster(double x, double y, boolean isFacingRight){
         this.x = x;
         this.y = y;
+        this.isFacingRight = isFacingRight;
+        this.WIDTH = BLASTER_IMAGE.getWidth();
+        this.HEIGHT = BLASTER_IMAGE.getHeight();
     }
 
     public boolean isPicked() {
@@ -50,6 +56,23 @@ public class Blaster {
      */
     public boolean isCollected() {
         return isCollected;
+    }
+
+    public Rectangle getBoundingBox() {
+        if (isCollected) {
+            return new Rectangle(-1000, -1000, 0, 0); // Move off-screen if collected
+        }
+        return new Rectangle(
+                x - (WIDTH / 2),  // Center-based positioning
+                y - (HEIGHT / 2),
+                WIDTH,
+                HEIGHT
+        );
+    }
+
+    public void addBullet(double x, double y, boolean isFacingRight, ArrayList<Bullet> bullets) {
+        Bullet bullet = new Bullet(x, y, isFacingRight);
+        bullets.add(bullet);
     }
 
 }

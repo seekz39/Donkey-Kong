@@ -8,7 +8,7 @@ public class IntelligentMonkey extends Monkey {
     private final ArrayList<Banana> bananas = new ArrayList<>();
 
     private int shootTimer = 0;
-    private static final int SHOOT_FREQ = 3; // in seconds (adjust as needed)
+    private static final int SHOOT_FREQ = 5; // in seconds (adjust as needed)
 
     public IntelligentMonkey(double x, double y, String direction, int[] patrolPath) {
         super(

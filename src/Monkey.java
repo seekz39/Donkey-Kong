@@ -36,7 +36,7 @@ public abstract class Monkey extends GravityEntity {
         if (route.isEmpty()) return;
 
         // when monkey reach the edge of the window, flip direction
-        if (x <= 0 || x >= ShadowDonkeyKong.getScreenWidth()) {
+        if (x <= 0 || this.getBoundingBox().right() >= ShadowDonkeyKong.getScreenWidth()) {
             flipDirection();
             directionSign *= -1;
             distanceTravel = 0;
@@ -51,7 +51,7 @@ public abstract class Monkey extends GravityEntity {
             double platformRight = currentPlatform.getBoundingBox().right();
 
             // let monkey walk only in the current platform
-            if ((x >= platformRight) || (x <= platformLeft)) {
+            if ((this.getBoundingBox().right() >= platformRight) || (this.getBoundingBox().left() <= platformLeft)) {
                 flipDirection();
                 directionSign *= -1;
                 distanceTravel = 0;
