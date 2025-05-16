@@ -131,4 +131,8 @@ public abstract class GamePlayScreen {
     public boolean checkingGameTime() {
         return currFrame >= MAX_FRAMES;
     }
+
+    public boolean isGameOver() {
+        return isGameOver;
+    }
 }

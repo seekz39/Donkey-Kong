@@ -53,7 +53,8 @@ public class Banana extends GameEntity{
 
     @Override
     public void changeState(GameEntity other) {
-        if (other instanceof Mario) {
+        if (other instanceof Mario & active) {
+            active = false;
             System.out.println("Banana hit Mario, game over!");
 //            level2Screen.setGameOver(true);
         }

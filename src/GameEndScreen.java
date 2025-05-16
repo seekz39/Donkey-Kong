@@ -33,6 +33,7 @@ public class GameEndScreen {
 
     // Indicates whether the player won or lost
     private boolean isWon;
+    private boolean isLost;
 
     /**
      * Constructs the GameEndScreen, loading required resources such as images, fonts, and text.
@@ -66,6 +67,9 @@ public class GameEndScreen {
      */
     public void setIsWon(boolean isWon) {
         this.isWon = isWon;
+    }
+    public void setIsLost(boolean isLost) {
+        this.isLost = isLost;
     }
 
     /**

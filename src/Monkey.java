@@ -144,9 +144,14 @@ public abstract class Monkey extends GravityEntity {
 
     @Override
     public void changeState(GameEntity other) {
-        if (other instanceof Bullet) {
+        if (other instanceof Bullet && isAlive) {
             isAlive = false;
             System.out.println("Monkey hit by bullet and disappeared.");
+        }else{
+            if (other instanceof Mario && isAlive) {
+                isAlive = false;
+                System.out.println("Monkey hit by Mario and Gameover.");
+            }
         }
     }
 

@@ -3,9 +3,13 @@ import java.util.Properties;
 import java.util.ArrayList;
 
 /**
- * Represents the gameplay screen for Level 1.
+ * Represents the gameplay screen for Level 2.
  */
 public class Level2Screen extends GamePlayScreen {
+
+    //private static final int LEVEL = 1;
+
+
     private Mario mario;
     private Barrel[] barrels;
     private Ladder[] ladders;
@@ -30,11 +34,11 @@ public class Level2Screen extends GamePlayScreen {
 
     @Override
     public boolean isLevelCompleted() {
-        return isGameOver || (mario.hasReached(donkey) && mario.holdHammer());
+        return mario.hasReached(donkey) && mario.holdHammer();
     }
 
-    public void setGameOver(boolean value) {
-        this.isGameOver = value;
+    public boolean isGameOver() {
+        return isGameOver;
     }
 
     public Level2Screen(Properties gameProps) {
@@ -131,28 +135,6 @@ public class Level2Screen extends GamePlayScreen {
             barrel.update(platforms);
         }
 
-
-        for (Monkey monkey : monkeys) {
-            if (monkey.isAlive()) {
-                monkey.update(platforms);
-                monkey.draw();
-
-                // IntelligentMonkey 发射香蕉
-                if (monkey instanceof IntelligentMonkey) {
-                    IntelligentMonkey intelMonkey = (IntelligentMonkey) monkey;
-                    if (intelMonkey.shouldShoot()) {
-                        bananas.add(intelMonkey.shootBanana());
-                    }
-                }
-            }
-        }
-
-        for (Banana banana : bananas) {
-            banana.update();
-            banana.draw();
-        }
-
-
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet bullet = bullets.get(i);
 
@@ -162,7 +144,8 @@ public class Level2Screen extends GamePlayScreen {
             }
 
             for (Monkey monkey : monkeys) {
-                if (monkey.isAlive() && bullet.getBoundingBox().intersects(monkey.getBoundingBox())) {
+//                if (monkey.isAlive() && bullet.getBoundingBox().intersects(monkey.getBoundingBox())) {
+                if (monkey.isAlive() && bullet.collidesWith(monkey)) {
                     monkey.changeState(bullet);
                     bullet.changeState(monkey);
                     break;
@@ -173,11 +156,42 @@ public class Level2Screen extends GamePlayScreen {
             bullet.draw();
         }
 
-//        for (Banana banana : bananas) {
-//            if (banana.collidesWith(mario)) {
-//                isGameOver = true;
-//            }
-//        }
+
+        for (Monkey monkey : monkeys) {
+            if (monkey.isAlive()) {
+
+                if (monkey.collidesWith(mario)) {
+                    System.out.println("Mario touched a monkey — Game Over.");
+                    isGameOver = true;
+                    break;
+                }
+
+                monkey.update(platforms);
+                monkey.draw();
+
+                // IntelligentMonkey shoot banana
+                if (monkey instanceof IntelligentMonkey) {
+                    IntelligentMonkey intelMonkey = (IntelligentMonkey) monkey;
+                    if (intelMonkey.shouldShoot()) {
+                        bananas.add(intelMonkey.shootBanana());
+                    }
+                }
+            }
+        }
+
+
+        // draw banana
+        for (Banana banana : bananas) {
+            if (banana.isActive()) {
+                if (banana.collidesWith(mario)) {
+                    banana.changeState(mario);
+                    isGameOver = true;
+                }
+                banana.update();
+                banana.draw();
+            }
+        }
+
 
         // 4) Check game time and donkey status
         if (checkingGameTime()) {

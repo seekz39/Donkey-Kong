@@ -556,12 +556,16 @@ public class Mario extends GameEntity{
                 System.out.println("Mario hit by barrel! Game Over!");
 //                triggerGameOver(); // 你需要实现这个方法
             }
+        }else {
+            if (other instanceof Monkey) {
+                System.out.println("Mario hit by monkey! Game Over!");
+            }
         }
 
 //        if (other instanceof Banana) {
 //            System.out.println("🍌 Mario hit by banana! Game Over!");
 //        }
 
-        // 可扩展更多碰撞对象
+
     }
 }
