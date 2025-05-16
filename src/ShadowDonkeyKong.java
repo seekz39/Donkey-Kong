@@ -72,9 +72,22 @@ public class ShadowDonkeyKong extends AbstractGame {
             if (gamePlayScreen.update(input)) {
                 boolean isWon = gamePlayScreen.isLevelCompleted();
 
-                // 1) GET THE SCORE
+//              1) GET THE SCORE
+//                int finalScore = isWon ? gamePlayScreen.getScore() : 0;
+//                int finalScore;
                 int finalScore = gamePlayScreen.getScore();
                 int timeRemaining = gamePlayScreen.getSecondsLeft();
+
+//                System.out.println("Is Won: " + isWon);
+//                System.out.println("Score from gamePlayScreen: " + gamePlayScreen.getScore());
+//                System.out.println("Final Score Passed: " + finalScore);
+
+//                if (isWon) {
+//                    finalScore = gamePlayScreen.getScore();
+//                } else {
+//                    finalScore = 0;
+//                }
+
 
                 // 2) CREATE THE END SCREEN
                 gameEndScreen = new GameEndScreen(GAME_PROPS, MESSAGE_PROPS);

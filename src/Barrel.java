@@ -31,6 +31,7 @@ public class Barrel extends GravityEntity {
      *
      * @param platforms An array of platforms for collision detection.
      */
+    @Override
     public void update(Platform[] platforms) {
         if (!isDestroyed) {
             super.update(platforms); //  from GravityEntity
@@ -108,6 +109,22 @@ public class Barrel extends GravityEntity {
      * @return The current y-coordinate of the barrel.
      */
     public double getY() { return y; }
+
+    @Override
+    public void changeState(GameEntity other) {
+        if (other instanceof Mario) {
+            Mario mario = (Mario) other;
+
+            if (mario.holdHammer()) {
+                isDestroyed = true; // Barrel disappears
+                System.out.println("Mario smashed barrel with hammer!");
+            } else {
+                // trigger game over — this depends on how your game handles it
+                System.out.println("Mario hit by barrel! Game Over!");
+
+            }
+        }
+    }
 
 
 

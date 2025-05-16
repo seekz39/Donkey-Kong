@@ -5,7 +5,7 @@ import bagel.util.Point;
 /**
  * Represents a banana projectile shot by IntelligentMonkey.
  */
-public class Banana {
+public class Banana extends GameEntity{
     private final static double SPEED = 1.8;
     private final static int TRAVEL_MAX = 300;
     private final Image bananaImg = new Image("res/banana.png");
@@ -18,6 +18,7 @@ public class Banana {
         this.x = x;
         this.y = y;
         this.goingRight = goingRight;
+
     }
 
     /**
@@ -45,7 +46,16 @@ public class Banana {
         return active;
     }
 
+    @Override
     public Rectangle getBoundingBox() {
         return bananaImg.getBoundingBoxAt(new Point(x, y));
+    }
+
+    @Override
+    public void changeState(GameEntity other) {
+        if (other instanceof Mario) {
+            System.out.println("Banana hit Mario, game over!");
+//            level2Screen.setGameOver(true);
+        }
     }
 }

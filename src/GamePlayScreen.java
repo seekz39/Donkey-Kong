@@ -37,6 +37,17 @@ public abstract class GamePlayScreen {
         return score;
     }
 
+//    public int getScore() {
+//        if (isGameOver) {
+//            return 0;
+//        }
+//        return score;
+//    }
+
+    public void addScore(int points) {
+        score += points;
+    }
+
     /**
      * Calculates the remaining time left in seconds.
      *

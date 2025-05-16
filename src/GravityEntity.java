@@ -2,13 +2,14 @@ import bagel.Image;
 import bagel.util.Point;
 import bagel.util.Rectangle;
 
-public abstract class GravityEntity {
+public abstract class GravityEntity extends GameEntity {
     protected double x, y;
     protected double velocityY = 0;
 
     // Subclasses must implement this
     protected abstract Image getImage();
 //    protected abstract void draw();
+
 
     public void update(Platform[] platforms) {
         // Apply gravity
@@ -48,5 +49,11 @@ public abstract class GravityEntity {
     public Rectangle getBoundingBox() {
         return getImage().getBoundingBoxAt(new Point(x, y));
     }
+
+//    public boolean collidesWith(GravityEntity other) {
+//        return this.getBoundingBox().intersects(other.getBoundingBox());
+//    }
+//
+//    public abstract void changeState(GravityEntity collider);
 
 }

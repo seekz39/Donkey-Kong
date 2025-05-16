@@ -14,7 +14,7 @@ public class Level1Screen extends GamePlayScreen {
 //    private Image background;
 //    private int currFrame = 0;
     private boolean isGameOver = false;
-    private int score = 0;
+//    private int score = 0;
 
     private static final int BARREL_SCORE = 100;
     private static final int TIME_DISPLAY_DIFF_Y = 30;
@@ -91,14 +91,16 @@ public class Level1Screen extends GamePlayScreen {
         for (Barrel barrel : barrels) {
             if (barrel == null) continue;
             if (mario.jumpOver(barrel)) {
-                score += BARREL_CROSS_SCORE;
+//                score += BARREL_CROSS_SCORE;
+                addScore(BARREL_CROSS_SCORE);
             }
             if (!barrel.isDestroyed() && mario.isTouchingBarrel(barrel)) {
                 if (!mario.holdHammer()) {
                     isGameOver = true;
                 } else {
                     barrel.destroy();
-                    score += BARREL_SCORE;
+//                    score += BARREL_SCORE;
+                    addScore(BARREL_SCORE);
                 }
             }
             barrel.update(platforms);

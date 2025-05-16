@@ -17,6 +17,7 @@ public abstract class Monkey extends GravityEntity {
     private int directionSign = 1;
     private double distanceTravel = 0;
     protected double velocityY = 0;
+    private boolean isAlive = true;
     private static final double DEFAULT_SPEED = 0.5;
 
     public Monkey(double x, double y, String direction, String routeStr, Image imageLeft, Image imageRight) {
@@ -77,6 +78,11 @@ public abstract class Monkey extends GravityEntity {
         }
     }
 
+
+    public boolean isAlive() {
+        return isAlive;
+    }
+
     public double getX() {
         return x;
     }
@@ -134,6 +140,14 @@ public abstract class Monkey extends GravityEntity {
             }
         }
         return null;
+    }
+
+    @Override
+    public void changeState(GameEntity other) {
+        if (other instanceof Bullet) {
+            isAlive = false;
+            System.out.println("Monkey hit by bullet and disappeared.");
+        }
     }
 
 

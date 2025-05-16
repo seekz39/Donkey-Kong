@@ -98,4 +98,17 @@ public class Donkey extends GravityEntity {
 
     public void renderHealth(int health){}
 
+    @Override
+    public void changeState(GameEntity other) {
+        if (other instanceof Bullet) {
+            health--;
+            System.out.println("Donkey hit by bullet! Health: " + health);
+
+            if (health <= 0) {
+                System.out.println("☠Donkey defeated!");
+                //game over logic
+            }
+        }
+    }
+
 }

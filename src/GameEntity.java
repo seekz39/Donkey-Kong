@@ -2,7 +2,6 @@ import bagel.util.Rectangle;
 
 public abstract class GameEntity {
     public abstract Rectangle getBoundingBox();
-    public abstract void update();
     public abstract void draw();
 
     public boolean collidesWith(GameEntity other) {

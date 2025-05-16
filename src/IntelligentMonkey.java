@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * Represents an intelligent monkey that follows a specified patrol path and shoots bananas.
  */
 public class IntelligentMonkey extends Monkey {
-    private final ArrayList<Banana> bananas = new ArrayList<>();
+//    private final ArrayList<Banana> bananas = new ArrayList<>();
 
     private int shootTimer = 0;
     private static final int SHOOT_FREQ = 5; // in seconds (adjust as needed)
@@ -28,28 +28,32 @@ public class IntelligentMonkey extends Monkey {
         return sb.toString();
     }
 
-    private void shootBanana() {
-        bananas.add(new Banana(getX(), getY(), isFacingRight()));
+//    public void shootBanana() {
+//        bananas.add(new Banana(getX(), getY(), isFacingRight()));
+//    }
+
+    public Banana shootBanana() {
+        return new Banana(getX(), getY(), isFacingRight());
     }
 
 
     public void update(Platform[] platforms) {
         super.update(platforms);
+    }
+
+    public boolean shouldShoot() {
         shootTimer++;
         if (shootTimer / 60 >= SHOOT_FREQ) {
-            shootBanana();
             shootTimer = 0;
+            return true;
         }
-
-        // Update bananas
-        for (Banana banana : bananas) {
-            banana.update();
-        }
+        return false;
     }
 
-    public ArrayList<Banana> getBananas() {
-        return bananas;
-    }
+
+//    public ArrayList<Banana> getBananas() {
+//        return bananas;
+//    }
 
     @Override
     public void draw() {
@@ -59,9 +63,9 @@ public class IntelligentMonkey extends Monkey {
             imageLeft.draw(x, y);
         }
 
-        for (Banana banana : bananas) {
-            banana.draw();
-        }
+//        for (Banana banana : bananas) {
+//            banana.draw();
+//        }
     }
 
 

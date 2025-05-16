@@ -12,19 +12,30 @@ public class Level2Screen extends GamePlayScreen {
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
-    private NormalMonkey[] normalMonkeys;
+
     private ArrayList<Banana> bananas = new ArrayList<>();
-    private IntelligentMonkey[] intelligentMonkeys;
     private Blaster[] blasters;
     private ArrayList<Bullet> bullets = new ArrayList<>();
-//    private Image background;
+    private ArrayList<Monkey> monkeys = new ArrayList<>();
+    private ArrayList<IntelligentMonkey> intelligentMonkeys = new ArrayList<>();
+    private ArrayList<NormalMonkey> normalMonkeys = new ArrayList<>();
 //    private int currFrame = 0;
+//    private int score = 0;
     private boolean isGameOver = false;
-    private int score = 0;
+
 
     private static final int BARREL_SCORE = 100;
     private static final int TIME_DISPLAY_DIFF_Y = 30;
     private static final int BARREL_CROSS_SCORE = 30;
+
+    @Override
+    public boolean isLevelCompleted() {
+        return isGameOver || (mario.hasReached(donkey) && mario.holdHammer());
+    }
+
+    public void setGameOver(boolean value) {
+        this.isGameOver = value;
+    }
 
     public Level2Screen(Properties gameProps) {
         super(gameProps);
@@ -74,12 +85,14 @@ public class Level2Screen extends GamePlayScreen {
             double y = Double.parseDouble(coords[1]);
             blasters[i - 1] = new Blaster(x, y, true);
         }
-
+        initializeGameObjects();
     }
+
 
 
     @Override
     public boolean update(Input input) {
+
         currFrame++;
 
         // Draw background
@@ -103,33 +116,74 @@ public class Level2Screen extends GamePlayScreen {
         for (Barrel barrel : barrels) {
             if (barrel == null) continue;
             if (mario.jumpOver(barrel)) {
-                score += BARREL_CROSS_SCORE;
+//                score += BARREL_CROSS_SCORE;
+                addScore(BARREL_CROSS_SCORE);
             }
             if (!barrel.isDestroyed() && mario.isTouchingBarrel(barrel)) {
                 if (!mario.holdHammer()) {
                     isGameOver = true;
                 } else {
                     barrel.destroy();
-                    score += BARREL_SCORE;
+//                    score += BARREL_SCORE;
+                    addScore(BARREL_SCORE);
                 }
             }
             barrel.update(platforms);
         }
 
-        for (IntelligentMonkey monkey : intelligentMonkeys) {
-            monkey.update(platforms);
-            monkey.draw();
+
+        for (Monkey monkey : monkeys) {
+            if (monkey.isAlive()) {
+                monkey.update(platforms);
+                monkey.draw();
+
+                // IntelligentMonkey 发射香蕉
+                if (monkey instanceof IntelligentMonkey) {
+                    IntelligentMonkey intelMonkey = (IntelligentMonkey) monkey;
+                    if (intelMonkey.shouldShoot()) {
+                        bananas.add(intelMonkey.shootBanana());
+                    }
+                }
+            }
         }
 
-        for (NormalMonkey monkey : normalMonkeys) {
-            monkey.update(platforms);
-            monkey.draw();
+        for (Banana banana : bananas) {
+            banana.update();
+            banana.draw();
         }
+
+
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet bullet = bullets.get(i);
+
+            if (!bullet.isAlive()) {
+                bullets.remove(i);
+                continue;
+            }
+
+            for (Monkey monkey : monkeys) {
+                if (monkey.isAlive() && bullet.getBoundingBox().intersects(monkey.getBoundingBox())) {
+                    monkey.changeState(bullet);
+                    bullet.changeState(monkey);
+                    break;
+                }
+            }
+
+            bullet.update();
+            bullet.draw();
+        }
+
+//        for (Banana banana : bananas) {
+//            if (banana.collidesWith(mario)) {
+//                isGameOver = true;
+//            }
+//        }
 
         // 4) Check game time and donkey status
         if (checkingGameTime()) {
             isGameOver = true;
         }
+
         donkey.update(platforms);
 
         // 5) Draw hammer and donkey
@@ -148,29 +202,23 @@ public class Level2Screen extends GamePlayScreen {
             isGameOver = true;
         }
 
-//        for (Bullet bullet : bullets) {
-//            bullet.collideWithPlatforms(platforms);
-//            bullet.update();
-//            bullet.draw();
-//        }
-//
-//        for (Banana banana : bananas) {
-//            banana.update();
-//        }
-
         // 8) Display score and time left
         displayInfo();
 
         // 9) Return game state
         return isGameOver || isLevelCompleted();
 
-
     }
-
 
 
     @Override
     public void initializeGameObjects() {
+
+        this.intelligentMonkeys = new ArrayList<>();
+        this.normalMonkeys = new ArrayList<>();
+        this.monkeys = new ArrayList<>();
+
+
         // 1) Create Mario
         String[] marioPos = GAME_PROPS.getProperty("mario.level1").split(",");
         double marioX = Double.parseDouble(marioPos[0]);
@@ -276,8 +324,6 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         int intelligentCount = Integer.parseInt(GAME_PROPS.getProperty("intelligentMonkey.level2.count"));
-        this.intelligentMonkeys = new IntelligentMonkey[intelligentCount];
-        int intelligentIndex = 0;
         for (int i = 1; i <= intelligentCount; i++) {
             String monkeyData = GAME_PROPS.getProperty("intelligentMonkey.level2." + i);
             if (monkeyData != null) {
@@ -299,16 +345,13 @@ public class Level2Screen extends GamePlayScreen {
                     patrolPath[j] = Integer.parseInt(routeStr[j]);
                 }
 
-                if (intelligentIndex < intelligentCount) {
-                    intelligentMonkeys[intelligentIndex] = new IntelligentMonkey(x, y, direction, patrolPath);
-                    intelligentIndex++;
-                }
+                IntelligentMonkey monkey = new IntelligentMonkey(x, y, direction, patrolPath);
+                intelligentMonkeys.add(monkey);
+                monkeys.add(monkey);
             }
         }
 
         int normalCount = Integer.parseInt(GAME_PROPS.getProperty("normalMonkey.level2.count"));
-        this.normalMonkeys = new NormalMonkey[normalCount];
-        int normalIndex = 0;
         for (int i = 1; i <= normalCount; i++) {
             String monkeyData = GAME_PROPS.getProperty("normalMonkey.level2." + i);
             if (monkeyData != null) {
@@ -329,17 +372,13 @@ public class Level2Screen extends GamePlayScreen {
                 for (int j = 0; j < routeStr.length; j++) {
                     patrolPath[j] = Integer.parseInt(routeStr[j]);
                 }
-                if (normalIndex < normalCount) {
-                    normalMonkeys[normalIndex] = new NormalMonkey(x, y, direction, patrolPath);
-                    normalIndex++;
-                }
+
+                NormalMonkey monkey = new NormalMonkey(x, y, direction, patrolPath);
+                normalMonkeys.add(monkey);
+                monkeys.add(monkey);
             }
         }
     }
-
-    @Override
-    public boolean isLevelCompleted() {
-        return mario.hasReached(donkey) && mario.holdHammer();
-    }
-
 }
+
+

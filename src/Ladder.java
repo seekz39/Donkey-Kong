@@ -104,4 +104,9 @@ public class Ladder extends GravityEntity {
     public double getHeight() {
         return height;
     }
+
+    @Override
+    public void changeState(GameEntity other) {
+        // Ladders do not respond to collisions
+    }
 }

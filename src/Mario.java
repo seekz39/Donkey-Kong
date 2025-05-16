@@ -10,7 +10,7 @@ import java.awt.event.InputEvent;
  * Represents the player-controlled character, Mario.
  * Mario can move, jump, climb ladders, pick up a hammer, and interact with platforms.
  */
-public class Mario {
+public class Mario extends GameEntity{
     private double x, y; // Mario's position
     private double velocityY = 0; // Vertical velocity
     private boolean isJumping = false; // Whether Mario is currently jumping
@@ -38,7 +38,10 @@ public class Mario {
     private static double width;
     private boolean isFacingRight = true; // Mario's facing direction
 
-
+//    @Override
+//    protected Image getImage() {
+//        return this.marioImage;
+//    }
 
     /**
      * Constructs a Mario character at the specified starting position.
@@ -539,5 +542,26 @@ public class Mario {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void changeState(GameEntity other) {
+        if (other instanceof Barrel) {
+            if (this.holdHammer()) {
+                // 打碎桶，分数 +100（比如）
+                System.out.println("Mario smashed the barrel!");
+//                addScore(100); // 如果你有 addScore 方法
+            } else {
+                // 被桶撞到，游戏结束
+                System.out.println("Mario hit by barrel! Game Over!");
+//                triggerGameOver(); // 你需要实现这个方法
+            }
+        }
+
+//        if (other instanceof Banana) {
+//            System.out.println("🍌 Mario hit by banana! Game Over!");
+//        }
+
+        // 可扩展更多碰撞对象
     }
 }

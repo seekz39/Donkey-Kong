@@ -4,7 +4,7 @@ import bagel.util.*;
 
 
 
-public class Bullet {
+public class Bullet extends GameEntity {
     private boolean isPicked;
     private final int totalBullets = 5;
     static private final double SPEED = 3.0;
@@ -61,6 +61,14 @@ public class Bullet {
                 System.out.println("Bullet hit platform and disappeared");
                 break;
             }
+        }
+    }
+
+    @Override
+    public void changeState(GameEntity other) {
+        if (other instanceof Monkey) {
+            isAlive = false;
+            System.out.println("Bullet hit Monkey and disappeared!");
         }
     }
 
