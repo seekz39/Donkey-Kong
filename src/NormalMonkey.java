@@ -11,12 +11,4 @@ public class NormalMonkey extends Monkey {
                 new Image("res/normal_monkey_right.png"));
     }
 
-    private static String joinPath(int[] path) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < path.length; i++) {
-            sb.append(path[i]);
-            if (i < path.length - 1) sb.append(",");
-        }
-        return sb.toString();
-    }
 }

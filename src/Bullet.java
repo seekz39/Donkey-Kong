@@ -12,15 +12,12 @@ public class Bullet extends GameEntity {
     private boolean isAlive = true;
     static private final int MAX_DISTANCE = 300;
     private boolean isFacingRight;
-//    private double x, y;
     private static final Image BULLET_LEFT_IMAGE = new Image("res/bullet_left.png");
     private final Image BULLET_RIGHT_IMAGE = new Image("res/bullet_right.png");
 
 
     public Bullet(double x, double y, boolean isFacingRight) {
         super(BULLET_LEFT_IMAGE, x, y);
-//        this.x = x;
-//        this.y = y;
         this.isFacingRight = isFacingRight;
     }
 

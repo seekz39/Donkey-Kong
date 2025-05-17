@@ -59,6 +59,7 @@ public class Barrel extends GravityEntity {
      * @return A {@link Rectangle} representing the barrel's bounding box.
      *         If the barrel is destroyed, returns an off-screen bounding box.
      */
+    @Override
     public Rectangle getBoundingBox() {
         if (isDestroyed) {
             return new Rectangle(-1000, -1000, 0, 0); // Off-screen if destroyed

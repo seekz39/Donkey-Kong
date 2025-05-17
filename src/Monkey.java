@@ -2,35 +2,27 @@ import java.util.ArrayList;
 import bagel.Image;
 import bagel.util.Rectangle;
 import bagel.util.Point;
-import bagel.util.Rectangle;
 
 /**
  * Abstract base class for all types of Monkey enemies.
  */
 public abstract class Monkey extends GravityEntity {
-//    protected Image imageLeft;
-//    protected Image imageRight;
-    protected boolean faceRight;
-    protected ArrayList<Integer> route = new ArrayList<>();
-    protected double speed;
-    protected int routeIndex = 0;
+    private boolean faceRight;
+    private ArrayList<Integer> route = new ArrayList<>();
+    private double speed;
+    private int routeIndex = 0;
     private int directionSign = 1;
     private double distanceTravel = 0;
-    protected double velocityY = 0;
+    private double velocityY = 0;
     private boolean isAlive = true;
     private static final double DEFAULT_SPEED = 0.5;
     private final Image imageLeft;
     private final Image imageRight;
-//    private int x, y;
 
     public Monkey(double x, double y, String direction, String routeStr, Image left, Image right) {
-//        this.x = x;
-//        this.y = y;
         super(left, x, y);
         this.imageLeft  = left;
         this.imageRight = right;
-//        this.imageLeft = imageLeft;
-//        this.imageRight = imageRight;
         this.faceRight = direction.equals("right");
         this.directionSign = faceRight ? 1 : -1;
         this.speed = DEFAULT_SPEED;
@@ -89,14 +81,6 @@ public abstract class Monkey extends GravityEntity {
         return isAlive;
     }
 
-//    public double getX() {
-//        return x;
-//    }
-//
-//    public double getY() {
-//        return y;
-//    }
-
     public boolean isFacingRight() {
         return faceRight;
     }
@@ -139,6 +123,17 @@ public abstract class Monkey extends GravityEntity {
         }
         return null;
     }
+
+    public static String joinPath(int[] path) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < path.length; i++) {
+            sb.append(path[i]);
+            if (i < path.length - 1) sb.append(",");
+        }
+        return sb.toString();
+    }
+
+
 
     @Override
     public void changeState(GameEntity other) {

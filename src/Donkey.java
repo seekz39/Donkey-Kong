@@ -8,11 +8,9 @@ import bagel.util.Rectangle;
  */
 public class Donkey extends GravityEntity {
     private static final Image DONKEY_IMAGE = new Image("res/donkey_kong.png");
-//    private final double X; // constant because x does not change, only relying on falling
     private int health;
     private final int MAX_HEALTH = 5;
     private GamePlayScreen gamePlayScreen;
-//    private int x, y;
 
     /**
      * Constructs a new Donkey at the specified starting position.
@@ -22,9 +20,6 @@ public class Donkey extends GravityEntity {
      */
     public Donkey(double x, double y) {
         super(DONKEY_IMAGE, x, y);
-//        this.DONKEY_IMAGE = new Image("res/donkey_kong.png"); // Load Donkey Kong sprite
-//        this.x = startX;
-//        this.y = startY;
         this.health = MAX_HEALTH;
 
     }
@@ -33,17 +28,6 @@ public class Donkey extends GravityEntity {
     public void setGamePlayScreen(GamePlayScreen screen) {
         this.gamePlayScreen = screen;
     }
-
-    /**
-     * Updates Donkey's position by applying gravity and checking for platform collisions.
-     * If Donkey lands on a platform, the velocity is reset to zero.
-     *
-     * @param platforms An array of platforms Donkey can land on.
-     */
-    public void update(Platform[] platforms) {
-        super.update(platforms);
-    }
-
 
 
     public int getHealth() {

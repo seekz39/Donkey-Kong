@@ -3,11 +3,8 @@ import bagel.util.Point;
 import bagel.util.Rectangle;
 
 public abstract class GravityEntity extends GameEntity {
-//    private double x, y;
     private double velocityY = 0;
 
-    // Subclasses must implement this
-//    public abstract Image getImage();
 
     public GravityEntity(Image initialImage, double startX, double startY) {
         super(initialImage, startX, startY);
@@ -25,9 +22,6 @@ public abstract class GravityEntity extends GameEntity {
         // Check for platform collisions
         for (Platform platform : platforms) {
             if (getBoundingBox().intersects(platform.getBoundingBox())) {
-//                y = platform.getY()
-//                        - (platform.getHeight() / 2.0)
-//                        - (getImage().getHeight() / 2.0);
                 double newY = platform.getY()
                         - (platform.getHeight() / 2.0)
                         - (getImage().getHeight() / 2.0);

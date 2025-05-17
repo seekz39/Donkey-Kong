@@ -42,5 +42,9 @@ public abstract class GameEntity {
         return image;
     }
 
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
 }
 

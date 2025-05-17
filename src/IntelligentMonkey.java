@@ -5,7 +5,6 @@ import java.util.ArrayList;
  * Represents an intelligent monkey that follows a specified patrol path and shoots bananas.
  */
 public class IntelligentMonkey extends Monkey {
-//    private final ArrayList<Banana> bananas = new ArrayList<>();
 
     private int shootTimer = 0;
     private static final int SHOOT_FREQ = 5; // in seconds (adjust as needed)
@@ -17,15 +16,6 @@ public class IntelligentMonkey extends Monkey {
                 new Image("res/intelli_monkey_right.png")
         );
 
-    }
-
-    private static String joinPath(int[] path) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < path.length; i++) {
-            sb.append(path[i]);
-            if (i < path.length - 1) sb.append(",");
-        }
-        return sb.toString();
     }
 
     public Banana shootBanana() {

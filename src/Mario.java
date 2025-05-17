@@ -123,7 +123,7 @@ public class Mario extends GameEntity{
 
     public void updateLevel1(Input input, Ladder[] ladders, Platform[] platforms, Hammer hammer) {
         handleHorizontalMovement(input); // 1) Horizontal movement
-        updateLevel1Sprite(hammer); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
+//        updateLevel1Sprite(hammer); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
         handleHammerCollection(hammer); // 3) If you just picked up the hammer:
         updateLevel1Sprite(); // 4) Now replace sprite (since either isFacingRight or hasHammer could have changed)
 
@@ -160,7 +160,7 @@ public class Mario extends GameEntity{
 
     public void updateLevel2(Input input, Ladder[] ladders, Platform[] platforms, Hammer hammer, Blaster[] blasters, ArrayList<Bullet> bullets) {
         handleHorizontalMovement(input); // 1) Horizontal movement
-        updateLevel2Sprite(hammer, blasters); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
+//        updateLevel2Sprite(hammer, blasters); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
         handleHammerCollection(hammer);// 3) If you just picked up the hammer:
         handleBlasterCollection(blasters);
         updateLevel2Sprite();
@@ -329,22 +329,22 @@ public class Mario extends GameEntity{
         }
     }
 
-    /** Updates Mario's sprite based on his current state. */
-    private void updateLevel1Sprite(Hammer hammer) {
-        marioImage = hasHammer
-                ? (isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE)
-                : (isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE);
-    }
+//    /** Updates Mario's sprite based on his current state. */
+//    private void updateLevel1Sprite(Hammer hammer) {
+//        marioImage = hasHammer
+//                ? (isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE)
+//                : (isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE);
+//    }
 
-    private void updateLevel2Sprite(Hammer hammer, Blaster[] blasters) {
-        if (hasBlaster) {
-            marioImage = isFacingRight ? MARIO_BLASTER_RIGHT_IMAGE : MARIO_BLASTER_LEFT_IMAGE;
-        } else if (hasHammer) {
-            marioImage = isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE;
-        } else {
-            marioImage = isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE;
-        }
-    }
+//    private void updateLevel2Sprite(Hammer hammer, Blaster[] blasters) {
+//        if (hasBlaster) {
+//            marioImage = isFacingRight ? MARIO_BLASTER_RIGHT_IMAGE : MARIO_BLASTER_LEFT_IMAGE;
+//        } else if (hasHammer) {
+//            marioImage = isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE;
+//        } else {
+//            marioImage = isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE;
+//        }
+//    }
 
     /** Handles collecting the hammer if Mario is in contact with it. */
     private void handleHammerCollection(Hammer hammer) {
@@ -448,7 +448,6 @@ public class Mario extends GameEntity{
 
         // 4) Shift 'y' so the bottom edge is the same as before
         //    (If new sprite is taller, we move Mario up so he doesn't sink into platforms)
-//        y -= (newBottom - oldBottom);
         setY(getY() - (newBottom - oldBottom));
 
         // 5) Update the recorded width/height to match the new image
@@ -457,6 +456,7 @@ public class Mario extends GameEntity{
     }
 
     private void updateLevel2Sprite() {
+
         Image oldImage = marioImage;
         double oldBottom = getY() + oldImage.getHeight() / 2;
 
@@ -469,12 +469,13 @@ public class Mario extends GameEntity{
             marioImage = isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE;
         }
 
-        double newBottom = getY() + marioImage.getHeight() / 2;
-//        y -= (newBottom - oldBottom);
+        double newHeight = marioImage.getHeight();
+        double newBottom = getY() + newHeight / 2;
+
         setY(getY() - (newBottom - oldBottom));
 
         width = marioImage.getWidth();
-        height = marioImage.getHeight();
+        height = newHeight;
     }
 
 
@@ -482,6 +483,7 @@ public class Mario extends GameEntity{
      * Draws Mario on the screen.
      */
     public void draw() {
+        this.setImage(marioImage);
         marioImage.draw(getX(), getY());
 //    drawBoundingBox(); // Uncomment for debugging
     }
