@@ -46,14 +46,8 @@ public abstract class GravityEntity extends GameEntity {
         return y;
     }
 
-    public Rectangle getBoundingBox() {
-        return getImage().getBoundingBoxAt(new Point(x, y));
-    }
-
-//    public boolean collidesWith(GravityEntity other) {
-//        return this.getBoundingBox().intersects(other.getBoundingBox());
+//    public Rectangle getBoundingBox() {
+//        return getImage().getBoundingBoxAt(new Point(x, y));
 //    }
-//
-//    public abstract void changeState(GravityEntity collider);
 
 }

@@ -37,12 +37,8 @@ public abstract class GamePlayScreen {
         return score;
     }
 
-//    public int getScore() {
-//        if (isGameOver) {
-//            return 0;
-//        }
-//        return score;
-//    }
+    public abstract int getLevel();
+
 
     public void addScore(int points) {
         score += points;
@@ -139,5 +135,9 @@ public abstract class GamePlayScreen {
 
     public Font getStatusFont() {
         return STATUS_FONT;
+    }
+
+    public int getFrame() {
+        return MAX_FRAMES;
     }
 }

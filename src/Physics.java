@@ -32,20 +32,9 @@ public class Physics {
      */
     public static final double MARIO_TERMINAL_VELOCITY = 10.0;
 
+    /**
+     * The maximum falling speed (terminal velocity) for game entities.
+     */
     public static final double TERMINAL_VELOCITY = 10.0;
 
-    /**
-     * The maximum falling speed (terminal velocity) for barrels.
-     */
-    public static final double BARREL_TERMINAL_VELOCITY = 5.0;
-
-    /**
-     * The maximum falling speed (terminal velocity) while climbing ladders.
-     */
-    public static final double LADDER_TERMINAL_VELOCITY = 5.0;
-
-    /**
-     * The maximum falling speed (terminal velocity) for Donkey Kong.
-     */
-    public static final double DONKEY_TERMINAL_VELOCITY = 5.0;
 }

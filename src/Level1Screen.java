@@ -5,13 +5,16 @@ import java.util.Properties;
  * Represents the gameplay screen for Level 1.
  */
 public class Level1Screen extends GamePlayScreen {
+
+    private static final int LEVEL = 1;
+
+
     private Mario mario;
     private Barrel[] barrels;
     private Ladder[] ladders;
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
-//    private Image background;
 //    private int currFrame = 0;
     private boolean isGameOver = false;
 //    private int score = 0;
@@ -22,49 +25,14 @@ public class Level1Screen extends GamePlayScreen {
 
     public Level1Screen(Properties gameProps) {
         super(gameProps);
-//        background = new Image(gameProps.getProperty("backgroundImage"));
+        initializeGameObjects();
 
-        // === Mario ===
-        String[] marioPos = gameProps.getProperty("mario.level1").split(",");
-        mario = new Mario(Double.parseDouble(marioPos[0]), Double.parseDouble(marioPos[1]));
-
-        // === Donkey ===
-        String[] donkeyPos = gameProps.getProperty("donkey.level1").split(",");
-        donkey = new Donkey(Double.parseDouble(donkeyPos[0]), Double.parseDouble(donkeyPos[1]));
-
-        // === Barrels ===
-        int barrelCount = Integer.parseInt(gameProps.getProperty("barrel.level1.count"));
-        barrels = new Barrel[barrelCount];
-        for (int i = 1; i <= barrelCount; i++) {
-            String[] coords = gameProps.getProperty("barrel.level1." + i).split(",");
-            barrels[i - 1] = new Barrel(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-        }
-
-        // === Ladders ===
-        int ladderCount = Integer.parseInt(gameProps.getProperty("ladder.level1.count"));
-        ladders = new Ladder[ladderCount];
-        for (int i = 1; i <= ladderCount; i++) {
-            String[] coords = gameProps.getProperty("ladder.level1." + i).split(",");
-            ladders[i - 1] = new Ladder(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-        }
-
-        // === Platforms ===
-        String[] platformEntries = gameProps.getProperty("platforms.level1").split(";");
-        platforms = new Platform[platformEntries.length];
-        for (int i = 0; i < platformEntries.length; i++) {
-            String[] coords = platformEntries[i].trim().split(",");
-            platforms[i] = new Platform(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-        }
-
-        // === Hammer ===
-        String[] hammerCoords = gameProps.getProperty("hammer.level1.1").split(",");
-        hammer = new Hammer(Double.parseDouble(hammerCoords[0]), Double.parseDouble(hammerCoords[1]));
     }
 
-//    @Override
-//    protected void initializeGameObjects() {
-//        // No-op: Level1-specific initialization is done in constructor
-//    }
+    @Override
+    public int getLevel() {
+        return LEVEL;
+    }
 
     @Override
     public boolean update(Input input) {

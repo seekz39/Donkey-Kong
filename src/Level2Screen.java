@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Level2Screen extends GamePlayScreen {
 
-    //private static final int LEVEL = 1;
+    private static final int LEVEL = 2;
 
     private Mario mario;
     private Barrel[] barrels;
@@ -31,9 +31,11 @@ public class Level2Screen extends GamePlayScreen {
     private double healthY;
     private double bulletCountX;
     private double bulletCountY;
+//    private static final int TIME_DISPLAY_DIFF_Y = 30;
     private static final int BARREL_SCORE = 100;
-    private static final int TIME_DISPLAY_DIFF_Y = 30;
     private static final int BARREL_CROSS_SCORE = 30;
+    private static final int MONKEY_SCORE = 100;
+
 
     @Override
     public boolean isLevelCompleted() {
@@ -51,6 +53,11 @@ public class Level2Screen extends GamePlayScreen {
     }
 
     @Override
+    public int getLevel() {
+        return LEVEL;
+    }
+
+    @Override
     public void displayInfo() {
         super.displayInfo();
 
@@ -64,55 +71,8 @@ public class Level2Screen extends GamePlayScreen {
 
     public Level2Screen(Properties gameProps) {
         super(gameProps);
-
-        // === Mario ===
-        String[] marioPos = gameProps.getProperty("mario.level2").split(",");
-        mario = new Mario(Double.parseDouble(marioPos[0]), Double.parseDouble(marioPos[1]));
-
-        // === Donkey ===
-        String[] donkeyPos = gameProps.getProperty("donkey.level2").split(",");
-        donkey = new Donkey(Double.parseDouble(donkeyPos[0]), Double.parseDouble(donkeyPos[1]));
-
-        // === Barrels ===
-        int barrelCount = Integer.parseInt(gameProps.getProperty("barrel.level2.count"));
-        barrels = new Barrel[barrelCount];
-        for (int i = 1; i <= barrelCount; i++) {
-            String[] coords = gameProps.getProperty("barrel.level2." + i).split(",");
-            barrels[i - 1] = new Barrel(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-        }
-
-        // === Ladders ===
-        int ladderCount = Integer.parseInt(gameProps.getProperty("ladder.level2.count"));
-        ladders = new Ladder[ladderCount];
-        for (int i = 1; i <= ladderCount; i++) {
-            String[] coords = gameProps.getProperty("ladder.level2." + i).split(",");
-            ladders[i - 1] = new Ladder(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-        }
-
-        // === Platforms ===
-        String[] platformEntries = gameProps.getProperty("platforms.level2").split(";");
-        platforms = new Platform[platformEntries.length];
-        for (int i = 0; i < platformEntries.length; i++) {
-            String[] coords = platformEntries[i].trim().split(",");
-            platforms[i] = new Platform(Double.parseDouble(coords[0]), Double.parseDouble(coords[1]));
-        }
-
-        // === Hammer ===
-        String[] hammerCoords = gameProps.getProperty("hammer.level2.1").split(",");
-        hammer = new Hammer(Double.parseDouble(hammerCoords[0]), Double.parseDouble(hammerCoords[1]));
-
-        // 9) Create Blasters
-        int blasterCount = Integer.parseInt(GAME_PROPS.getProperty("blaster.level2.count"));
-        blasters = new Blaster[blasterCount];
-        for (int i = 1; i <= blasterCount; i++) {
-            String[] coords = GAME_PROPS.getProperty("blaster.level2." + i).split(",");
-            double x = Double.parseDouble(coords[0]);
-            double y = Double.parseDouble(coords[1]);
-            blasters[i - 1] = new Blaster(x, y, true);
-        }
         initializeGameObjects();
     }
-
 
 
     @Override
@@ -179,6 +139,7 @@ public class Level2Screen extends GamePlayScreen {
                 if (monkey.isAlive() && bullet.collidesWith(monkey)) {
                     monkey.changeState(bullet);
                     bullet.changeState(monkey);
+                    addScore(MONKEY_SCORE);
                     break;
                 }
             }
@@ -188,11 +149,11 @@ public class Level2Screen extends GamePlayScreen {
         for (Monkey monkey : monkeys) {
             if (monkey.isAlive()) {
 
-                if (monkey.collidesWith(mario)) {
-                    System.out.println("Mario touched a monkey — Game Over.");
-                    isGameOver = true;
-                    break;
-                }
+//                if (monkey.collidesWith(mario)) {
+//                    System.out.println("Mario touched a monkey — Game Over.");
+//                    isGameOver = true;
+//                    break;
+//                }
 
                 monkey.update(platforms);
                 monkey.draw();
@@ -211,10 +172,10 @@ public class Level2Screen extends GamePlayScreen {
         // draw banana
         for (Banana banana : bananas) {
             if (banana.isActive()) {
-                if (banana.collidesWith(mario)) {
-                    banana.changeState(mario);
-                    isGameOver = true;
-                }
+//                if (banana.collidesWith(mario)) {
+//                    banana.changeState(mario);
+//                    isGameOver = true;
+//                }
 
                 banana.update();
                 banana.draw();
