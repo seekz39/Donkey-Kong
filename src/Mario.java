@@ -465,6 +465,10 @@ public class Mario extends GameEntity{
 //    drawBoundingBox(); // Uncomment for debugging
     }
 
+    public int getBulletsCount() {
+        return bulletsCount;
+    }
+
 
     /**
      * Checks if Mario is touching a ladder.
@@ -548,13 +552,13 @@ public class Mario extends GameEntity{
     public void changeState(GameEntity other) {
         if (other instanceof Barrel) {
             if (this.holdHammer()) {
-                // 打碎桶，分数 +100（比如）
+
                 System.out.println("Mario smashed the barrel!");
-//                addScore(100); // 如果你有 addScore 方法
+//                addScore(100);
             } else {
                 // 被桶撞到，游戏结束
                 System.out.println("Mario hit by barrel! Game Over!");
-//                triggerGameOver(); // 你需要实现这个方法
+//                isGameOver();
             }
         }else {
             if (other instanceof Monkey) {
@@ -562,10 +566,6 @@ public class Mario extends GameEntity{
             }
         }
 
-//        if (other instanceof Banana) {
-//            System.out.println("🍌 Mario hit by banana! Game Over!");
-//        }
-
-
     }
+
 }

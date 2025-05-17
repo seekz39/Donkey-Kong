@@ -11,6 +11,7 @@ public class Donkey extends GravityEntity {
 //    private final double X; // constant because x does not change, only relying on falling
     private int health;
     private final int MAX_HEALTH = 5;
+    private GamePlayScreen gamePlayScreen;
 
     /**
      * Constructs a new Donkey at the specified starting position.
@@ -22,6 +23,13 @@ public class Donkey extends GravityEntity {
         this.DONKEY_IMAGE = new Image("res/donkey_kong.png"); // Load Donkey Kong sprite
         this.x = startX;
         this.y = startY;
+        this.health = MAX_HEALTH;
+
+    }
+
+
+    public void setGamePlayScreen(GamePlayScreen screen) {
+        this.gamePlayScreen = screen;
     }
 
     /**
@@ -31,29 +39,8 @@ public class Donkey extends GravityEntity {
      * @param platforms An array of platforms Donkey can land on.
      */
     public void update(Platform[] platforms) {
-        super.update(platforms); // 使用 GravityEntity 的 gravity + collision
-//        draw();
+        super.update(platforms);
     }
-
-    /**
-     * Checks if Donkey is colliding with a given platform.
-     *
-     * @param platform The platform to check for collision.
-     * @return {@code true} if Donkey is touching the platform, {@code false} otherwise.
-     */
-//    private boolean isTouchingPlatform(Platform platform) {
-//        Rectangle donkeyBounds = getBoundingBox();
-//        return donkeyBounds.intersects(platform.getBoundingBox());
-//    }
-
-    /**
-     * Draws Donkey on the screen.
-     */
-//    @Override
-//    public void draw() {
-//        DONKEY_IMAGE.draw(X, y);
-////        drawBoundingBox(); // Uncomment for debugging
-//    }
 
 
     /**
@@ -95,8 +82,12 @@ public class Donkey extends GravityEntity {
      */
     public double getY() { return y; }
 
+    public int getHealth() {
+        return health;
+    }
 
-    public void renderHealth(int health){}
+
+//    public void renderHealth(int health){}
 
     @Override
     public void changeState(GameEntity other) {
@@ -106,7 +97,7 @@ public class Donkey extends GravityEntity {
 
             if (health <= 0) {
                 System.out.println("☠Donkey defeated!");
-                //game over logic
+
             }
         }
     }

@@ -9,13 +9,13 @@ public class Level2Screen extends GamePlayScreen {
 
     //private static final int LEVEL = 1;
 
-
     private Mario mario;
     private Barrel[] barrels;
     private Ladder[] ladders;
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
+    private GamePlayScreen gamePlayScreen;
 
     private ArrayList<Banana> bananas = new ArrayList<>();
     private Blaster[] blasters;
@@ -26,20 +26,41 @@ public class Level2Screen extends GamePlayScreen {
 //    private int currFrame = 0;
 //    private int score = 0;
     private boolean isGameOver = false;
-
-
+    private boolean playerWon = false;
+    private double healthX;
+    private double healthY;
+    private double bulletCountX;
+    private double bulletCountY;
     private static final int BARREL_SCORE = 100;
     private static final int TIME_DISPLAY_DIFF_Y = 30;
     private static final int BARREL_CROSS_SCORE = 30;
 
     @Override
     public boolean isLevelCompleted() {
-        return mario.hasReached(donkey) && mario.holdHammer();
+        // Win if Mario reaches Donkey with the hammer…
+        boolean reachedWithHammer = mario.hasReached(donkey) && mario.holdHammer();
+        // …or if Donkey’s health has dropped to zero
+        boolean donkeyDefeated   = donkey.getHealth() <= 0;
+
+//        return mario.hasReached(donkey) && mario.holdHammer();
+        return reachedWithHammer || donkeyDefeated;
     }
 
     public boolean isGameOver() {
         return isGameOver;
     }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+
+        String healthText = "DONKEY HEALTH " + donkey.getHealth();
+        getStatusFont().drawString(healthText, healthX, healthY);
+
+        String text = "BULLETS " + mario.getBulletsCount();
+        getStatusFont().drawString(text, bulletCountX, bulletCountY);
+    }
+
 
     public Level2Screen(Properties gameProps) {
         super(gameProps);
@@ -135,6 +156,7 @@ public class Level2Screen extends GamePlayScreen {
             barrel.update(platforms);
         }
 
+
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet bullet = bullets.get(i);
 
@@ -143,17 +165,23 @@ public class Level2Screen extends GamePlayScreen {
                 continue;
             }
 
+            bullet.update();
+            bullet.draw();
+
+            if (bullet.collidesWith(donkey)) {
+                donkey.changeState(bullet);
+                bullet.changeState(donkey);
+                bullets.remove(i);
+                continue;
+            }
+
             for (Monkey monkey : monkeys) {
-//                if (monkey.isAlive() && bullet.getBoundingBox().intersects(monkey.getBoundingBox())) {
                 if (monkey.isAlive() && bullet.collidesWith(monkey)) {
                     monkey.changeState(bullet);
                     bullet.changeState(monkey);
                     break;
                 }
             }
-
-            bullet.update();
-            bullet.draw();
         }
 
 
@@ -187,6 +215,7 @@ public class Level2Screen extends GamePlayScreen {
                     banana.changeState(mario);
                     isGameOver = true;
                 }
+
                 banana.update();
                 banana.draw();
             }
@@ -232,7 +261,6 @@ public class Level2Screen extends GamePlayScreen {
         this.normalMonkeys = new ArrayList<>();
         this.monkeys = new ArrayList<>();
 
-
         // 1) Create Mario
         String[] marioPos = GAME_PROPS.getProperty("mario.level1").split(",");
         double marioX = Double.parseDouble(marioPos[0]);
@@ -244,6 +272,15 @@ public class Level2Screen extends GamePlayScreen {
         double donkeyX = Double.parseDouble(donkeyPos[0]);
         double donkeyY = Double.parseDouble(donkeyPos[1]);
         this.donkey = new Donkey(donkeyX, donkeyY);
+
+        String[] donkeyHealth = GAME_PROPS.getProperty("gamePlay.donkeyhealth.coords").split(",");
+        this.healthX = Double.parseDouble(donkeyHealth[0]);
+        this.healthY = Double.parseDouble(donkeyHealth[1]);
+
+        this.bulletCountX = Double.parseDouble(donkeyHealth[0]);
+        this.bulletCountY = Double.parseDouble(donkeyHealth[1]) + 30;
+
+        donkey.setGamePlayScreen(this);
 
         // 3) Create the Barrels array
         int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level1.count"));
@@ -311,7 +348,7 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         // 6) Create Hammer
-        String[] hammerCoords = GAME_PROPS.getProperty("hammer.level1.1").split(",");
+        String[] hammerCoords = GAME_PROPS.getProperty("hammer.level2.1").split(",");
         double hammerX = Double.parseDouble(hammerCoords[0]);
         double hammerY = Double.parseDouble(hammerCoords[1]);
         this.hammer = new Hammer(hammerX, hammerY);
@@ -393,6 +430,8 @@ public class Level2Screen extends GamePlayScreen {
             }
         }
     }
+
+
 }
 
 

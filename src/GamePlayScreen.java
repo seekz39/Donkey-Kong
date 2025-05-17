@@ -75,6 +75,7 @@ public abstract class GamePlayScreen {
         this.SCORE_Y = Integer.parseInt(gameProps.getProperty("gamePlay.score.y"));
         this.background = new Image("res/background.png");
 
+
         // Initialize game objects
         initializeGameObjects();
     }
@@ -134,5 +135,9 @@ public abstract class GamePlayScreen {
 
     public boolean isGameOver() {
         return isGameOver;
+    }
+
+    public Font getStatusFont() {
+        return STATUS_FONT;
     }
 }
