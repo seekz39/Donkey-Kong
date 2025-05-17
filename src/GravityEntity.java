@@ -7,7 +7,7 @@ public abstract class GravityEntity extends GameEntity {
     private double velocityY = 0;
 
     // Subclasses must implement this
-    public abstract Image getImage();
+//    public abstract Image getImage();
 
     public GravityEntity(Image initialImage, double startX, double startY) {
         super(initialImage, startX, startY);
@@ -39,20 +39,5 @@ public abstract class GravityEntity extends GameEntity {
 
         draw();
     }
-
-    public void draw(){
-        this.getImage().draw(getX(),getY());
-    }
-
-//    public double getX() {
-//        return x;
-//    }
-//
-//    public double getY() {
-//        return y;
-//    }
-//
-//    public void setX(double x) { this.x = x; }
-//    public void setY(double y) { this.y = y; }
 
 }

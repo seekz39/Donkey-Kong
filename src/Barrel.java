@@ -52,15 +52,6 @@ public class Barrel extends GravityEntity {
         }
     }
 
-    /**
-     * Retrieves the barrel's image.
-     *
-     * @return An {@link Image} representing the barrel.
-     */
-    @Override
-    public Image getImage() {
-        return this.BARREL_IMAGE;
-    }
 
     /**
      * Creates and returns the barrel's bounding box for collision detection.
@@ -97,19 +88,6 @@ public class Barrel extends GravityEntity {
         return isDestroyed;
     }
 
-    /**
-     * Gets the x-coordinate of the barrel.
-     *
-     * @return The current x-coordinate of the barrel.
-     */
-//    public double getX() { return x; }
-//
-//    /**
-//     * Gets the y-coordinate of the barrel.
-//     *
-//     * @return The current y-coordinate of the barrel.
-//     */
-//    public double getY() { return y; }
 
     @Override
     public void changeState(GameEntity other) {

@@ -482,7 +482,7 @@ public class Mario extends GameEntity{
      * Draws Mario on the screen.
      */
     public void draw() {
-//        marioImage.draw(getX(), getY());
+        marioImage.draw(getX(), getY());
 //    drawBoundingBox(); // Uncomment for debugging
     }
 

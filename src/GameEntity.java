@@ -18,9 +18,7 @@ public abstract class GameEntity {
         return image.getBoundingBoxAt(new Point(x, y));
     }
 
-    public abstract void draw(
-
-    );
+//    public abstract void draw();
 
     public boolean collidesWith(GameEntity other) {
         return this.getBoundingBox().intersects(other.getBoundingBox());
@@ -34,12 +32,15 @@ public abstract class GameEntity {
     public double getY() { return y; }
     public void setY(double y) { this.y = y; }
 
-//    public void getImage(Image image) {
-//        return image;
-//    }
+//    public abstract Image getImage();
 
-    public void setImage(Image image) {
-        this.image = image;
+    public void draw(){
+        image.draw(getX(),getY());
     }
+
+    public Image getImage() {
+        return image;
+    }
+
 }
 

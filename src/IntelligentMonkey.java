@@ -28,10 +28,6 @@ public class IntelligentMonkey extends Monkey {
         return sb.toString();
     }
 
-//    public void shootBanana() {
-//        bananas.add(new Banana(getX(), getY(), isFacingRight()));
-//    }
-
     public Banana shootBanana() {
         return new Banana(getX(), getY(), isFacingRight());
     }
@@ -48,28 +44,6 @@ public class IntelligentMonkey extends Monkey {
             return true;
         }
         return false;
-    }
-
-
-//    public ArrayList<Banana> getBananas() {
-//        return bananas;
-//    }
-
-//    @Override
-//    public void draw() {
-//        if (faceRight) {
-//            imageRight.draw(getX(), getY());
-//        } else {
-//            imageLeft.draw(getX(), getY());
-//        }
-
-//        for (Banana banana : bananas) {
-//            banana.draw();
-//        }
-
-    @Override
-    public void draw() {
-        getImage().draw(getX(), getY());
     }
 
 }

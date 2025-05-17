@@ -130,12 +130,6 @@ public abstract class Monkey extends GravityEntity {
         }
     }
 
-    @Override
-    public Image getImage() {
-        return faceRight ? imageRight : imageLeft;
-    }
-
-
 
     private Platform getCurrentPlatform(Platform[] platforms) {
         for (Platform platform : platforms) {

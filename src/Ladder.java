@@ -41,56 +41,9 @@ public class Ladder extends GravityEntity {
         // 1) Apply gravity
         super.update(platforms);
         // 2) Draw the ladder after updating position
-        draw();
+//        draw();
     }
 
-    /**
-     * Returns the bounding box of the ladder for collision detection.
-     *
-     * @return A {@link Rectangle} representing the ladder's bounding box.
-     */
-//    public Rectangle getBoundingBox() {
-//        return new Rectangle(
-//                getX() - (LADDER_IMAGE.getWidth() / 2),
-//                getY() - (LADDER_IMAGE.getHeight() / 2),
-//                LADDER_IMAGE.getWidth(),
-//                LADDER_IMAGE.getHeight()
-//        );
-//    }
-
-    /**
-     * Retrieves the ladder's image.
-     *
-     * @return An {@link Image} representing the barrel.
-     */
-    @Override
-    public Image getImage() {
-        return this.LADDER_IMAGE;
-    }
-
-    @Override
-    public void draw() {
-        super.draw();
-    }
-
-
-//    /**
-//     * Gets the x-coordinate of the ladder.
-//     *
-//     * @return The current x-coordinate of the ladder.
-//     */
-//    public double getX() {
-//        return x;
-//    }
-
-//    /**
-//     * Gets the y-coordinate of the ladder.
-//     *
-//     * @return The current y-coordinate of the ladder.
-//     */
-//    public double getY() {
-//        return y;
-//    }
 
     /**
      * Gets the width of the ladder.
@@ -114,4 +67,5 @@ public class Ladder extends GravityEntity {
     public void changeState(GameEntity other) {
         // Ladders do not respond to collisions
     }
+
 }

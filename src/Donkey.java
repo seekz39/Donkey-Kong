@@ -45,44 +45,6 @@ public class Donkey extends GravityEntity {
     }
 
 
-    /**
-     * Retrieves the barrel's image.
-     *
-     * @return An {@link Image} representing the barrel.
-     */
-    @Override
-    public Image getImage() {
-        return this.DONKEY_IMAGE;
-    }
-
-    /**
-     * Returns Donkey's bounding box for collision detection.
-     *
-     * @return A {@link Rectangle} representing Donkey's bounding box.
-     */
-//    public Rectangle getBoundingBox() {
-//        return new Rectangle(
-//                getX() - (DONKEY_IMAGE.getWidth() / 2),
-//                getY() - (DONKEY_IMAGE.getHeight() / 2),
-//                DONKEY_IMAGE.getWidth(),
-//                DONKEY_IMAGE.getHeight()
-//        );
-//    }
-
-
-    /**
-     * Gets the x-coordinate of the DONKEY.
-     *
-     * @return The current x-coordinate of the Donkey.
-     */
-//    public double getX() { return x; }
-//
-//    /**
-//     * Gets the y-coordinate of the donkey.
-//     *
-//     * @return The current y-coordinate of the Donkey.
-//     */
-//    public double getY() { return y; }
 
     public int getHealth() {
         return health;
