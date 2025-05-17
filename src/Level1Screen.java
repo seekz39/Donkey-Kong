@@ -36,7 +36,8 @@ public class Level1Screen extends GamePlayScreen {
 
     @Override
     public boolean update(Input input) {
-        currFrame++;
+//        currFrame++;
+        setCurrFrame(getCurrFrame() + 1);
 
         // Draw background
         getBackground().drawFromTopLeft(0, 0);

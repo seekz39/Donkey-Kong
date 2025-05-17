@@ -37,13 +37,7 @@ public class Mario extends GameEntity{
     private static double height;
     private static double width;
     private boolean isFacingRight = true; // Mario's facing direction
-
     private static final Image MARIO_RIGHT_IMAGE = new Image("res/mario_right.png");
-
-//    @Override
-//    protected Image getImage() {
-//        return this.marioImage;
-//    }
 
     /**
      * Constructs a Mario character at the specified starting position.
@@ -53,8 +47,6 @@ public class Mario extends GameEntity{
      */
     public Mario(double x, double y) {
         super(MARIO_RIGHT_IMAGE, x, y);
-//        this.x = startX;
-//        this.y = startY;
 
         // Load images for left and right-facing Mario
 //        this.MARIO_RIGHT_IMAGE = new Image("res/mario_right.png");
@@ -97,19 +89,6 @@ public class Mario extends GameEntity{
         return this.hasBlaster;
     }
 
-    /**
-     * Gets Mario's bounding box for collision detection.
-     *
-     * @return A {@link Rectangle} representing Mario's collision area.
-     */
-//    public Rectangle getBoundingBox() {
-//        return new Rectangle(
-//                x - (width / 2),
-//                y - (height / 2),
-//                width,
-//                height
-//        );
-//    }
 
     /**
      * Updates Mario's movement, jumping, ladder climbing, hammer collection, and interactions.
@@ -328,23 +307,6 @@ public class Mario extends GameEntity{
             isFacingRight = true;
         }
     }
-
-//    /** Updates Mario's sprite based on his current state. */
-//    private void updateLevel1Sprite(Hammer hammer) {
-//        marioImage = hasHammer
-//                ? (isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE)
-//                : (isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE);
-//    }
-
-//    private void updateLevel2Sprite(Hammer hammer, Blaster[] blasters) {
-//        if (hasBlaster) {
-//            marioImage = isFacingRight ? MARIO_BLASTER_RIGHT_IMAGE : MARIO_BLASTER_LEFT_IMAGE;
-//        } else if (hasHammer) {
-//            marioImage = isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE;
-//        } else {
-//            marioImage = isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE;
-//        }
-//    }
 
     /** Handles collecting the hammer if Mario is in contact with it. */
     private void handleHammerCollection(Hammer hammer) {
@@ -575,11 +537,9 @@ public class Mario extends GameEntity{
     public void changeState(GameEntity other) {
         if (other instanceof Barrel) {
             if (this.holdHammer()) {
-
                 System.out.println("Mario smashed the barrel!");
 //                addScore(100);
             } else {
-                // 被桶撞到，游戏结束
                 System.out.println("Mario hit by barrel! Game Over!");
 //                isGameOver();
             }

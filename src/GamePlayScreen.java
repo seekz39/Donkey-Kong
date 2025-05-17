@@ -11,7 +11,7 @@ public abstract class GamePlayScreen {
 
     private Image background;   // Background image for the game
     // Frame tracking
-    protected int currFrame = 0;  // Tracks the number of frames elapsed
+    private int currFrame = 0;  // Tracks the number of frames elapsed
     // Game parameters
     private final int MAX_FRAMES;  // Maximum number of frames before game ends
 
@@ -136,7 +136,11 @@ public abstract class GamePlayScreen {
         return STATUS_FONT;
     }
 
-    public int getFrame() {
-        return MAX_FRAMES;
+    public int getCurrFrame() {
+        return currFrame;
+    }
+
+    public void setCurrFrame(int frame) {
+        this.currFrame = frame;
     }
 }

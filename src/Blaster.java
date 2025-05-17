@@ -1,22 +1,17 @@
-import bagel.DrawOptions;
-import bagel.Drawing;
 import bagel.Image;
-import bagel.util.Colour;
 import bagel.util.Rectangle;
 import java.util.ArrayList;
 
-public class Blaster {
+public class Blaster extends GameEntity {
     private boolean isPicked;
-    private final Image BLASTER_IMAGE = new Image("res/blaster.png");
+    private static final Image BLASTER_IMAGE = new Image("res/blaster.png");
     private final int totalBullets = 5;
-    private double x, y;
     private boolean isCollected = false;
     private final double WIDTH, HEIGHT;
     private boolean isFacingRight;
 
     public Blaster(double x, double y, boolean isFacingRight){
-        this.x = x;
-        this.y = y;
+        super(BLASTER_IMAGE, x, y);
         this.isFacingRight = isFacingRight;
         this.WIDTH = BLASTER_IMAGE.getWidth();
         this.HEIGHT = BLASTER_IMAGE.getHeight();
@@ -37,9 +32,10 @@ public class Blaster {
         return totalBullets;
     }
 
+    @Override
     public void draw() {
         if (!isCollected) {
-            BLASTER_IMAGE.draw(x, y); // Bagel centers images automatically
+            BLASTER_IMAGE.draw(getX(), getY()); // Bagel centers images automatically
 //            drawBoundingBox(); // Uncomment for debugging
         }
     }
@@ -57,16 +53,13 @@ public class Blaster {
         return isCollected;
     }
 
-    public Rectangle getBoundingBox() {
-        if (isCollected) {
-            return new Rectangle(-1000, -1000, 0, 0); // Move off-screen if collected
+    @Override
+    public void changeState(GameEntity other) {
+        if (other instanceof Mario && !isPicked) {
+            isPicked = true;
+            System.out.println("blaster collected by mario and disappeared.");
         }
-        return new Rectangle(
-                x - (WIDTH / 2),  // Center-based positioning
-                y - (HEIGHT / 2),
-                WIDTH,
-                HEIGHT
-        );
+
     }
 
 }

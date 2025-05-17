@@ -78,7 +78,8 @@ public class Level2Screen extends GamePlayScreen {
     @Override
     public boolean update(Input input) {
 
-        currFrame++;
+//        currFrame++;
+        setCurrFrame(getCurrFrame() + 1);
 
         // Draw background
         getBackground().drawFromTopLeft(0, 0);
@@ -140,6 +141,15 @@ public class Level2Screen extends GamePlayScreen {
                     monkey.changeState(bullet);
                     bullet.changeState(monkey);
                     addScore(MONKEY_SCORE);
+                    break;
+                }
+            }
+
+            for (Platform platform : platforms) {
+                if (bullet.collidesWith(platform)) {
+                    bullet.changeState(platform);
+                    bullets.remove(i);
+                    i--;
                     break;
                 }
             }

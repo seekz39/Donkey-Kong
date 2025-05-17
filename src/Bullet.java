@@ -3,10 +3,7 @@ import java.util.*;
 import bagel.util.*;
 
 
-
 public class Bullet extends GameEntity {
-    private boolean isPicked;
-    private final int totalBullets = 5;
     static private final double SPEED = 3.0;
     private double traveled = 0;
     private boolean isAlive = true;
@@ -52,21 +49,16 @@ public class Bullet extends GameEntity {
 
     }
 
-    public void collideWithPlatforms(Platform[] platforms) {
-        for (Platform platform : platforms) {
-            if (this.getBoundingBox().intersects(platform.getBoundingBox())) {
-                isAlive = false;
-                System.out.println("Bullet hit platform and disappeared");
-                break;
-            }
-        }
-    }
-
     @Override
     public void changeState(GameEntity other) {
         if (other instanceof Monkey) {
             isAlive = false;
             System.out.println("Bullet hit Monkey and disappeared!");
+        }else {
+            if (other instanceof Platform){
+                isAlive = false;
+                System.out.println("Bullet hit Platform and disappeared!");
+            }
         }
     }
 
