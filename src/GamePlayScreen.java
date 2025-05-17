@@ -39,7 +39,6 @@ public abstract class GamePlayScreen {
 
     public abstract int getLevel();
 
-
     public void addScore(int points) {
         score += points;
     }

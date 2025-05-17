@@ -12,14 +12,15 @@ public class Bullet extends GameEntity {
     private boolean isAlive = true;
     static private final int MAX_DISTANCE = 300;
     private boolean isFacingRight;
-    private double x, y;
-    private final Image BULLET_LEFT_IMAGE = new Image("res/bullet_left.png");
+//    private double x, y;
+    private static final Image BULLET_LEFT_IMAGE = new Image("res/bullet_left.png");
     private final Image BULLET_RIGHT_IMAGE = new Image("res/bullet_right.png");
 
 
     public Bullet(double x, double y, boolean isFacingRight) {
-        this.x = x;
-        this.y = y;
+        super(BULLET_LEFT_IMAGE, x, y);
+//        this.x = x;
+//        this.y = y;
         this.isFacingRight = isFacingRight;
     }
 
@@ -27,7 +28,7 @@ public class Bullet extends GameEntity {
     public void update() {
         if (isAlive && traveled < MAX_DISTANCE) {
             double dx = isFacingRight ? SPEED : -SPEED;
-            x += dx;
+            setX(getX() + dx);
             traveled += Math.abs(dx);
         } else {
             isAlive = false;
@@ -37,9 +38,9 @@ public class Bullet extends GameEntity {
     public void draw() {
         if (isAlive) {
             if (isFacingRight) {
-                BULLET_RIGHT_IMAGE.draw(x, y);
+                BULLET_RIGHT_IMAGE.draw(getX(), getY());
             } else {
-                BULLET_LEFT_IMAGE.draw(x, y);
+                BULLET_LEFT_IMAGE.draw(getX(), getY());
             }
         }
     }
@@ -50,7 +51,7 @@ public class Bullet extends GameEntity {
 
     public Rectangle getBoundingBox() {
         Image img = isFacingRight ? BULLET_RIGHT_IMAGE : BULLET_LEFT_IMAGE;
-        return img.getBoundingBoxAt(new Point(x, y));
+        return img.getBoundingBoxAt(new Point(getX(), getY()));
 
     }
 

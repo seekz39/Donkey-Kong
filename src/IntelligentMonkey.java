@@ -55,18 +55,21 @@ public class IntelligentMonkey extends Monkey {
 //        return bananas;
 //    }
 
-    @Override
-    public void draw() {
-        if (faceRight) {
-            imageRight.draw(x, y);
-        } else {
-            imageLeft.draw(x, y);
-        }
+//    @Override
+//    public void draw() {
+//        if (faceRight) {
+//            imageRight.draw(getX(), getY());
+//        } else {
+//            imageLeft.draw(getX(), getY());
+//        }
 
 //        for (Banana banana : bananas) {
 //            banana.draw();
 //        }
-    }
 
+    @Override
+    public void draw() {
+        getImage().draw(getX(), getY());
+    }
 
 }

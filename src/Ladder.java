@@ -7,22 +7,22 @@ import bagel.util.Rectangle;
  * The ladder falls under gravity until it lands on a platform.
  */
 public class Ladder extends GravityEntity {
-    private final Image LADDER_IMAGE;
+//    private final Image LADDER_IMAGE;
+    private static final Image LADDER_IMAGE = new Image("res/ladder.png");
     public static double width;
     public static double height;
+//    private int x, y;
 
     private double velocityY = 0; // Current vertical velocity due to gravity
 
     /**
      * Constructs a ladder at the specified position.
      *
-     * @param startX The initial x-coordinate.
-     * @param startY The initial y-coordinate.
+     * @param x The initial x-coordinate.
+     * @param y The initial y-coordinate.
      */
-    public Ladder(double startX, double startY) {
-        this.LADDER_IMAGE = new Image("res/ladder.png");
-        this.x = startX;
-        this.y = startY;
+    public Ladder(double x, double y) {
+        super(LADDER_IMAGE, x, y);
         width = LADDER_IMAGE.getWidth();
         height = LADDER_IMAGE.getHeight();
     }
@@ -49,14 +49,14 @@ public class Ladder extends GravityEntity {
      *
      * @return A {@link Rectangle} representing the ladder's bounding box.
      */
-    public Rectangle getBoundingBox() {
-        return new Rectangle(
-                x - (LADDER_IMAGE.getWidth() / 2),
-                y - (LADDER_IMAGE.getHeight() / 2),
-                LADDER_IMAGE.getWidth(),
-                LADDER_IMAGE.getHeight()
-        );
-    }
+//    public Rectangle getBoundingBox() {
+//        return new Rectangle(
+//                getX() - (LADDER_IMAGE.getWidth() / 2),
+//                getY() - (LADDER_IMAGE.getHeight() / 2),
+//                LADDER_IMAGE.getWidth(),
+//                LADDER_IMAGE.getHeight()
+//        );
+//    }
 
     /**
      * Retrieves the ladder's image.
@@ -64,28 +64,33 @@ public class Ladder extends GravityEntity {
      * @return An {@link Image} representing the barrel.
      */
     @Override
-    protected Image getImage() {
+    public Image getImage() {
         return this.LADDER_IMAGE;
     }
 
-
-    /**
-     * Gets the x-coordinate of the ladder.
-     *
-     * @return The current x-coordinate of the ladder.
-     */
-    public double getX() {
-        return x;
+    @Override
+    public void draw() {
+        super.draw();
     }
 
-    /**
-     * Gets the y-coordinate of the ladder.
-     *
-     * @return The current y-coordinate of the ladder.
-     */
-    public double getY() {
-        return y;
-    }
+
+//    /**
+//     * Gets the x-coordinate of the ladder.
+//     *
+//     * @return The current x-coordinate of the ladder.
+//     */
+//    public double getX() {
+//        return x;
+//    }
+
+//    /**
+//     * Gets the y-coordinate of the ladder.
+//     *
+//     * @return The current y-coordinate of the ladder.
+//     */
+//    public double getY() {
+//        return y;
+//    }
 
     /**
      * Gets the width of the ladder.

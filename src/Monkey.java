@@ -8,8 +8,8 @@ import bagel.util.Rectangle;
  * Abstract base class for all types of Monkey enemies.
  */
 public abstract class Monkey extends GravityEntity {
-    protected Image imageLeft;
-    protected Image imageRight;
+//    protected Image imageLeft;
+//    protected Image imageRight;
     protected boolean faceRight;
     protected ArrayList<Integer> route = new ArrayList<>();
     protected double speed;
@@ -19,12 +19,18 @@ public abstract class Monkey extends GravityEntity {
     protected double velocityY = 0;
     private boolean isAlive = true;
     private static final double DEFAULT_SPEED = 0.5;
+    private final Image imageLeft;
+    private final Image imageRight;
+//    private int x, y;
 
-    public Monkey(double x, double y, String direction, String routeStr, Image imageLeft, Image imageRight) {
-        this.x = x;
-        this.y = y;
-        this.imageLeft = imageLeft;
-        this.imageRight = imageRight;
+    public Monkey(double x, double y, String direction, String routeStr, Image left, Image right) {
+//        this.x = x;
+//        this.y = y;
+        super(left, x, y);
+        this.imageLeft  = left;
+        this.imageRight = right;
+//        this.imageLeft = imageLeft;
+//        this.imageRight = imageRight;
         this.faceRight = direction.equals("right");
         this.directionSign = faceRight ? 1 : -1;
         this.speed = DEFAULT_SPEED;
@@ -37,11 +43,11 @@ public abstract class Monkey extends GravityEntity {
         if (route.isEmpty()) return;
 
         // when monkey reach the edge of the window, flip direction
-        if (x <= 0 || this.getBoundingBox().right() >= ShadowDonkeyKong.getScreenWidth()) {
+        if (getX() <= 0 || this.getBoundingBox().right() >= ShadowDonkeyKong.getScreenWidth()) {
             flipDirection();
             directionSign *= -1;
             distanceTravel = 0;
-            x += directionSign * speed;
+            setX(getX() + directionSign * speed);
             return;
         }
 
@@ -56,12 +62,12 @@ public abstract class Monkey extends GravityEntity {
                 flipDirection();
                 directionSign *= -1;
                 distanceTravel = 0;
-                x += directionSign * speed;
+                setX(getX() + directionSign * speed);
                 return;
             }
         }
 
-        x += directionSign * speed;
+        setX(getX() + directionSign * speed);
         distanceTravel += speed;
 
         if (distanceTravel >= route.get(routeIndex)) {
@@ -83,13 +89,13 @@ public abstract class Monkey extends GravityEntity {
         return isAlive;
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
+//    public double getX() {
+//        return x;
+//    }
+//
+//    public double getY() {
+//        return y;
+//    }
 
     public boolean isFacingRight() {
         return faceRight;
@@ -118,20 +124,18 @@ public abstract class Monkey extends GravityEntity {
     @Override
     public void draw() {
         if (faceRight) {
-            this.imageRight.draw(x, y);
+            this.imageRight.draw(getX(), getY());
         } else {
-            this.imageLeft.draw(x, y);
+            this.imageLeft.draw(getX(), getY());
         }
     }
 
-    protected Image getImage() {
+    @Override
+    public Image getImage() {
         return faceRight ? imageRight : imageLeft;
     }
 
-    @Override
-    public Rectangle getBoundingBox() {
-        return getImage().getBoundingBoxAt(new Point(x, y));
-    }
+
 
     private Platform getCurrentPlatform(Platform[] platforms) {
         for (Platform platform : platforms) {
@@ -150,7 +154,7 @@ public abstract class Monkey extends GravityEntity {
         }else{
             if (other instanceof Mario && isAlive) {
                 isAlive = false;
-                System.out.println("Monkey hit by Mario and Gameover.");
+                System.out.println("Monkey hit by Mario and game over.");
             }
         }
     }

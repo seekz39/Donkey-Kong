@@ -8,15 +8,16 @@ import bagel.util.Point;
 public class Banana extends GameEntity{
     private final static double SPEED = 1.8;
     private final static int TRAVEL_MAX = 300;
-    private final Image bananaImg = new Image("res/banana.png");
-    private double x, y;
+    private static final Image BANANA_IMAGE = new Image("res/banana.png");
+//    private double x, y;
     private double distanceTraveled = 0;
     private boolean active = true;
     private final boolean goingRight;
 
     public Banana(double x, double y, boolean goingRight) {
-        this.x = x;
-        this.y = y;
+        super(BANANA_IMAGE, x, y);
+//        this.x = x;
+//        this.y = y;
         this.goingRight = goingRight;
 
     }
@@ -28,7 +29,7 @@ public class Banana extends GameEntity{
         if (!active) return;
 
         double dx = goingRight ? SPEED : -SPEED;
-        x += dx;
+        setX(getX() + dx);
         distanceTraveled += Math.abs(dx);
 
         if (distanceTraveled >= TRAVEL_MAX) {
@@ -38,7 +39,7 @@ public class Banana extends GameEntity{
 
     public void draw() {
         if (active) {
-            bananaImg.draw(x, y);
+            BANANA_IMAGE.draw(getX(), getY());
         }
     }
 
@@ -48,7 +49,7 @@ public class Banana extends GameEntity{
 
     @Override
     public Rectangle getBoundingBox() {
-        return bananaImg.getBoundingBoxAt(new Point(x, y));
+        return BANANA_IMAGE.getBoundingBoxAt(new Point(getX(), getY()));
     }
 
     @Override

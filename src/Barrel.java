@@ -7,8 +7,8 @@ import bagel.util.Rectangle;
  * The barrel can be destroyed, at which point it will no longer be drawn or interact with the environment.
  */
 public class Barrel extends GravityEntity {
-    private final Image BARREL_IMAGE;
-    private final double X; // constant because x does not change, only relying on falling
+    private static final Image BARREL_IMAGE = new Image("res/barrel.png");
+//    private final double X; // constant because x does not change, only relying on falling
 //    private double y;
 //    private double velocityY = 0;
     private boolean isDestroyed = false;
@@ -16,13 +16,14 @@ public class Barrel extends GravityEntity {
     /**
      * Constructs a new Barrel at the specified starting position.
      *
-     * @param startX The initial x-coordinate of the barrel.
-     * @param startY The initial y-coordinate of the barrel.
+     * @param x The initial x-coordinate of the barrel.
+     * @param y The initial y-coordinate of the barrel.
      */
-    public Barrel(double startX, double startY) {
-        this.BARREL_IMAGE = new Image("res/barrel.png"); // Load barrel sprite
-        this.X = startX;
-        this.y = startY;
+    public Barrel(double x, double y) {
+        super(BARREL_IMAGE, x, y);
+//        this.BARREL_IMAGE = new Image("res/barrel.png"); // Load barrel sprite
+//        this.X = startX;
+//        this.y = startY;
     }
 
     /**
@@ -46,7 +47,7 @@ public class Barrel extends GravityEntity {
     @Override
     public void draw() {
         if (!isDestroyed) {
-            BARREL_IMAGE.draw(X, y);
+            BARREL_IMAGE.draw(getX(), getY());
 //            drawBoundingBox(); // Uncomment for debugging
         }
     }
@@ -57,7 +58,7 @@ public class Barrel extends GravityEntity {
      * @return An {@link Image} representing the barrel.
      */
     @Override
-    protected Image getImage() {
+    public Image getImage() {
         return this.BARREL_IMAGE;
     }
 
@@ -72,8 +73,8 @@ public class Barrel extends GravityEntity {
             return new Rectangle(-1000, -1000, 0, 0); // Off-screen if destroyed
         }
         return new Rectangle(
-                X - (BARREL_IMAGE.getWidth() / 2),
-                y - (BARREL_IMAGE.getHeight() / 2),
+                getX() - (BARREL_IMAGE.getWidth() / 2),
+                getY() - (BARREL_IMAGE.getHeight() / 2),
                 BARREL_IMAGE.getWidth(),
                 BARREL_IMAGE.getHeight()
         );
@@ -101,14 +102,14 @@ public class Barrel extends GravityEntity {
      *
      * @return The current x-coordinate of the barrel.
      */
-    public double getX() { return X; }
-
-    /**
-     * Gets the y-coordinate of the barrel.
-     *
-     * @return The current y-coordinate of the barrel.
-     */
-    public double getY() { return y; }
+//    public double getX() { return x; }
+//
+//    /**
+//     * Gets the y-coordinate of the barrel.
+//     *
+//     * @return The current y-coordinate of the barrel.
+//     */
+//    public double getY() { return y; }
 
     @Override
     public void changeState(GameEntity other) {

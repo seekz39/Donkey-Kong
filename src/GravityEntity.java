@@ -3,18 +3,20 @@ import bagel.util.Point;
 import bagel.util.Rectangle;
 
 public abstract class GravityEntity extends GameEntity {
-    protected double x, y;
-    protected double velocityY = 0;
+//    private double x, y;
+    private double velocityY = 0;
 
     // Subclasses must implement this
-    protected abstract Image getImage();
-//    protected abstract void draw();
+    public abstract Image getImage();
 
+    public GravityEntity(Image initialImage, double startX, double startY) {
+        super(initialImage, startX, startY);
+    }
 
     public void update(Platform[] platforms) {
         // Apply gravity
         velocityY += Physics.MONKEY_GRAVITY;
-        y += velocityY;
+        setY(getY() + velocityY);
 
         if (velocityY > Physics.TERMINAL_VELOCITY) {
             velocityY = Physics.TERMINAL_VELOCITY;
@@ -23,9 +25,13 @@ public abstract class GravityEntity extends GameEntity {
         // Check for platform collisions
         for (Platform platform : platforms) {
             if (getBoundingBox().intersects(platform.getBoundingBox())) {
-                y = platform.getY()
+//                y = platform.getY()
+//                        - (platform.getHeight() / 2.0)
+//                        - (getImage().getHeight() / 2.0);
+                double newY = platform.getY()
                         - (platform.getHeight() / 2.0)
                         - (getImage().getHeight() / 2.0);
+                setY(newY);
                 velocityY = 0;
                 break;
             }
@@ -35,19 +41,18 @@ public abstract class GravityEntity extends GameEntity {
     }
 
     public void draw(){
-        this.getImage().draw(x,y);
+        this.getImage().draw(getX(),getY());
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-//    public Rectangle getBoundingBox() {
-//        return getImage().getBoundingBoxAt(new Point(x, y));
+//    public double getX() {
+//        return x;
 //    }
+//
+//    public double getY() {
+//        return y;
+//    }
+//
+//    public void setX(double x) { this.x = x; }
+//    public void setY(double y) { this.y = y; }
 
 }

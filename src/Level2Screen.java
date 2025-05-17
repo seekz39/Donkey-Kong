@@ -223,13 +223,13 @@ public class Level2Screen extends GamePlayScreen {
         this.monkeys = new ArrayList<>();
 
         // 1) Create Mario
-        String[] marioPos = GAME_PROPS.getProperty("mario.level1").split(",");
+        String[] marioPos = GAME_PROPS.getProperty("mario.level2").split(",");
         double marioX = Double.parseDouble(marioPos[0]);
         double marioY = Double.parseDouble(marioPos[1]);
         this.mario = new Mario(marioX, marioY);
 
         // 2) Create Donkey Kong
-        String[] donkeyPos = GAME_PROPS.getProperty("donkey.level1").split(",");
+        String[] donkeyPos = GAME_PROPS.getProperty("donkey.level2").split(",");
         double donkeyX = Double.parseDouble(donkeyPos[0]);
         double donkeyY = Double.parseDouble(donkeyPos[1]);
         this.donkey = new Donkey(donkeyX, donkeyY);
@@ -244,11 +244,11 @@ public class Level2Screen extends GamePlayScreen {
         donkey.setGamePlayScreen(this);
 
         // 3) Create the Barrels array
-        int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level1.count"));
+        int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level2.count"));
         this.barrels = new Barrel[barrelCount];
         int barrelIndex = 0;
         for (int i = 1; i <= barrelCount; i++) {
-            String barrelData = GAME_PROPS.getProperty("barrel.level1." + i);
+            String barrelData = GAME_PROPS.getProperty("barrel.level2." + i);
             if (barrelData != null) {
                 String[] coords = barrelData.split(",");
                 if (coords.length < 2) {
@@ -265,11 +265,11 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         // 4) Create the Ladders array
-        int ladderCount = Integer.parseInt(GAME_PROPS.getProperty("ladder.level1.count"));
+        int ladderCount = Integer.parseInt(GAME_PROPS.getProperty("ladder.level2.count"));
         this.ladders = new Ladder[ladderCount];
         int ladderIndex = 0;
         for (int i = 1; i <= ladderCount; i++) {
-            String ladderData = GAME_PROPS.getProperty("ladder.level1." + i);
+            String ladderData = GAME_PROPS.getProperty("ladder.level2." + i);
             if (ladderData != null) {
                 String[] coords = ladderData.split(",");
                 if (coords.length < 2) {
@@ -286,7 +286,7 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         // 5) Create the Platforms array
-        String platformData = GAME_PROPS.getProperty("platforms.level1");
+        String platformData = GAME_PROPS.getProperty("platforms.level2");
         if (platformData != null && !platformData.isEmpty()) {
             String[] platformEntries = platformData.split(";");
             this.platforms = new Platform[platformEntries.length];

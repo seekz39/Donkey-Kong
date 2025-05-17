@@ -11,7 +11,7 @@ import java.awt.event.InputEvent;
  * Mario can move, jump, climb ladders, pick up a hammer, and interact with platforms.
  */
 public class Mario extends GameEntity{
-    private double x, y; // Mario's position
+//    private double x, y; // Mario's position
     private double velocityY = 0; // Vertical velocity
     private boolean isJumping = false; // Whether Mario is currently jumping
     private boolean hasHammer = false; // Whether Mario has collected a hammer
@@ -22,7 +22,7 @@ public class Mario extends GameEntity{
 
     // Mario images for different states
     private Image marioImage;
-    private final Image MARIO_RIGHT_IMAGE;
+//    private final Image MARIO_RIGHT_IMAGE;
     private final Image MARIO_LEFT_IMAGE;
     private final Image MARIO_HAMMER_LEFT_IMAGE;
     private final Image MARIO_HAMMER_RIGHT_IMAGE;
@@ -38,6 +38,8 @@ public class Mario extends GameEntity{
     private static double width;
     private boolean isFacingRight = true; // Mario's facing direction
 
+    private static final Image MARIO_RIGHT_IMAGE = new Image("res/mario_right.png");
+
 //    @Override
 //    protected Image getImage() {
 //        return this.marioImage;
@@ -46,15 +48,16 @@ public class Mario extends GameEntity{
     /**
      * Constructs a Mario character at the specified starting position.
      *
-     * @param startX Initial x-coordinate.
-     * @param startY Initial y-coordinate.
+     * @param x Initial x-coordinate.
+     * @param y Initial y-coordinate.
      */
-    public Mario(double startX, double startY) {
-        this.x = startX;
-        this.y = startY;
+    public Mario(double x, double y) {
+        super(MARIO_RIGHT_IMAGE, x, y);
+//        this.x = startX;
+//        this.y = startY;
 
         // Load images for left and right-facing Mario
-        this.MARIO_RIGHT_IMAGE = new Image("res/mario_right.png");
+//        this.MARIO_RIGHT_IMAGE = new Image("res/mario_right.png");
         this.MARIO_LEFT_IMAGE = new Image("res/mario_left.png");
         this.MARIO_HAMMER_RIGHT_IMAGE = new Image("res/mario_hammer_right.png");
         this.MARIO_HAMMER_LEFT_IMAGE = new Image("res/mario_hammer_left.png");
@@ -99,14 +102,14 @@ public class Mario extends GameEntity{
      *
      * @return A {@link Rectangle} representing Mario's collision area.
      */
-    public Rectangle getBoundingBox() {
-        return new Rectangle(
-                x - (width / 2),
-                y - (height / 2),
-                width,
-                height
-        );
-    }
+//    public Rectangle getBoundingBox() {
+//        return new Rectangle(
+//                x - (width / 2),
+//                y - (height / 2),
+//                width,
+//                height
+//        );
+//    }
 
     /**
      * Updates Mario's movement, jumping, ladder climbing, hammer collection, and interactions.
@@ -138,7 +141,8 @@ public class Mario extends GameEntity{
         }
 
         // 8) Actually move Mario vertically after gravity
-        y += velocityY;
+//        y += velocityY;
+        setY(getY() + velocityY);
 
         // 9) Check for platform collision AFTER Mario moves
         boolean onPlatform;
@@ -183,7 +187,8 @@ public class Mario extends GameEntity{
         }
 
         // 8) Actually move Mario vertically after gravity
-        y += velocityY;
+//        y += velocityY;
+        setY(getY() + velocityY);
 
         // 9) Check for platform collision AFTER Mario moves
         boolean onPlatform;
@@ -228,7 +233,9 @@ public class Mario extends GameEntity{
                     // and not far below it (a small threshold based on velocity)
                     if (marioBottom <= platformTop + velocityY) {
                         // Snap Mario so his bottom = the platform top
-                        y = platformTop - (marioImage.getHeight() / 2);
+//                        y = platformTop - (marioImage.getHeight() / 2);
+                        double newY = platformTop - (marioImage.getHeight() / 2);
+                        setY(newY);
                         velocityY = 0;
                         isJumping = false;
                         onPlatform = true;
@@ -256,8 +263,8 @@ public class Mario extends GameEntity{
         for (Ladder ladder : ladders) {
             double ladderLeft  = ladder.getX() - (ladder.getWidth() / 2);
             double ladderRight = ladder.getX() + (ladder.getWidth() / 2);
-            double marioRight  = x + (marioImage.getWidth() / 2);
-            double marioBottom = y + (marioImage.getHeight() / 2);
+            double marioRight  = getX() + (marioImage.getWidth() / 2);
+            double marioBottom = getY() + (marioImage.getHeight() / 2);
             double ladderTop    = ladder.getY() - (ladder.getHeight() / 2);
             double ladderBottom = ladder.getY() + (ladder.getHeight() / 2);
 
@@ -273,29 +280,34 @@ public class Mario extends GameEntity{
 
                     // ----------- Climb UP -----------
                     if (input.isDown(Keys.UP)) {
-                        y -= CLIMB_SPEED;
+//                        y -= CLIMB_SPEED;
+                        setY(getY() - CLIMB_SPEED);
                         velocityY = 0;
                     }
 
                     // ----------- Climb DOWN -----------
                     if (input.isDown(Keys.DOWN)) {
-                        double nextY = y + CLIMB_SPEED;
+                        double nextY = getY() + CLIMB_SPEED;
                         double nextBottom = nextY + (marioImage.getHeight() / 2);
 
                         if (marioBottom > ladderTop && nextBottom <= ladderBottom) {
-                            y = nextY;
+//                            y = nextY;
+                            setY(nextY);
                             velocityY = 0;
                         } else if (marioBottom == ladderBottom) {
                             velocityY = 0;
                         } else if (ladderBottom - marioBottom < CLIMB_SPEED) {
-                            y = y + ladderBottom - marioBottom;
+//                            y = y + ladderBottom - marioBottom;
+                            double newY = getY() + (ladderBottom - marioBottom);
+                            setY(newY);
                             velocityY = 0;
                         }
                     }
                 }
             } else if (marioBottom == ladderTop && input.isDown(Keys.DOWN) && (marioRight - marioImage.getWidth() / 2 > ladderLeft && marioRight - marioImage.getWidth() / 2  < ladderRight)) {
-                double nextY = y + CLIMB_SPEED;
-                y = nextY;
+                double nextY = getY() + CLIMB_SPEED;
+                setY(nextY);
+//                y = nextY;
                 velocityY = 0; // ignore gravity
             } else if (marioBottom == ladderBottom && input.isDown(Keys.DOWN) && (marioRight - marioImage.getWidth() / 2 > ladderLeft && marioRight - marioImage.getWidth() / 2  < ladderRight)) {
                 velocityY = 0; // ignore gravity
@@ -307,10 +319,12 @@ public class Mario extends GameEntity{
     /** Handles horizontal movement based on player input. */
     private void handleHorizontalMovement(Input input) {
         if (input.isDown(Keys.LEFT)) {
-            x -= MOVE_SPEED;
+//            x -= MOVE_SPEED;
+            setX(getX() - MOVE_SPEED);
             isFacingRight = false;
         } else if (input.isDown(Keys.RIGHT)) {
-            x += MOVE_SPEED;
+//            x += MOVE_SPEED;
+            setX(getX() + MOVE_SPEED);
             isFacingRight = true;
         }
     }
@@ -363,9 +377,11 @@ public class Mario extends GameEntity{
             isJumping = true;
             System.out.println("Jumping!");
         }
-        double bottomOfMario = y + (marioImage.getHeight() / 2);
+        double bottomOfMario = getY() + (marioImage.getHeight() / 2);
         if (bottomOfMario > ShadowDonkeyKong.getScreenHeight()) {
-            y = ShadowDonkeyKong.getScreenHeight() - (marioImage.getHeight() / 2);
+//            y = ShadowDonkeyKong.getScreenHeight() - (marioImage.getHeight() / 2);
+            setY(ShadowDonkeyKong.getScreenHeight()
+                    - (marioImage.getHeight() / 2.0));
             velocityY = 0;
             isJumping = false;
         }
@@ -380,23 +396,26 @@ public class Mario extends GameEntity{
         double halfW = marioImage.getWidth() / 2;
 
         // Prevent Mario from moving beyond the left edge of the screen
-        if (x < halfW) {
-            x = halfW;
+        if (getX() < halfW) {
+//            g = halfW;
+            setX(halfW);
         }
 
         // Prevent Mario from moving beyond the right edge of the screen
         double maxX = ShadowDonkeyKong.getScreenWidth() - halfW;
-        if (x > maxX) {
-            x = maxX;
+        if (getX() > maxX) {
+//            x = maxX;
+            setX(maxX);
         }
 
         // Calculate Mario's bottom edge position
-        double bottomOfMario = y + (marioImage.getHeight() / 2);
+        double bottomOfMario = getY() + (marioImage.getHeight() / 2);
 
         // Prevent Mario from falling below the bottom of the screen
         if (bottomOfMario > ShadowDonkeyKong.getScreenHeight()) {
             // Reposition Mario to stand on the bottom edge
-            y = ShadowDonkeyKong.getScreenHeight() - (marioImage.getHeight() / 2);
+//            y = ShadowDonkeyKong.getScreenHeight() - (marioImage.getHeight() / 2);
+            setY(ShadowDonkeyKong.getScreenHeight() - (marioImage.getHeight() / 2));
 
             // Stop vertical movement and reset jumping state
             velocityY = 0;
@@ -413,7 +432,7 @@ public class Mario extends GameEntity{
         // 1) Remember the old image and its bottom
         Image oldImage = marioImage;
         double oldHeight = oldImage.getHeight();
-        double oldBottom = y + (oldHeight / 2);
+        double oldBottom = getY() + (oldHeight / 2);
 
         // 2) Assign the new image based on facing & hammer
         //    (Whatever logic you currently use in update())
@@ -425,11 +444,12 @@ public class Mario extends GameEntity{
 
         // 3) Now recalc Mario’s bottom with the new image
         double newHeight = marioImage.getHeight();
-        double newBottom = y + (newHeight / 2);
+        double newBottom = getY() + (newHeight / 2);
 
         // 4) Shift 'y' so the bottom edge is the same as before
         //    (If new sprite is taller, we move Mario up so he doesn't sink into platforms)
-        y -= (newBottom - oldBottom);
+//        y -= (newBottom - oldBottom);
+        setY(getY() - (newBottom - oldBottom));
 
         // 5) Update the recorded width/height to match the new image
         width  = marioImage.getWidth();
@@ -438,7 +458,7 @@ public class Mario extends GameEntity{
 
     private void updateLevel2Sprite() {
         Image oldImage = marioImage;
-        double oldBottom = y + oldImage.getHeight() / 2;
+        double oldBottom = getY() + oldImage.getHeight() / 2;
 
         // 优先级：Blaster > Hammer > Normal
         if (hasBlaster) {
@@ -449,8 +469,9 @@ public class Mario extends GameEntity{
             marioImage = isFacingRight ? MARIO_RIGHT_IMAGE : MARIO_LEFT_IMAGE;
         }
 
-        double newBottom = y + marioImage.getHeight() / 2;
-        y -= (newBottom - oldBottom);
+        double newBottom = getY() + marioImage.getHeight() / 2;
+//        y -= (newBottom - oldBottom);
+        setY(getY() - (newBottom - oldBottom));
 
         width = marioImage.getWidth();
         height = marioImage.getHeight();
@@ -461,7 +482,7 @@ public class Mario extends GameEntity{
      * Draws Mario on the screen.
      */
     public void draw() {
-        marioImage.draw(x, y);
+//        marioImage.draw(getX(), getY());
 //    drawBoundingBox(); // Uncomment for debugging
     }
 
@@ -527,16 +548,16 @@ public class Mario extends GameEntity{
      */
     public boolean jumpOver(Barrel barrel) {
         return isJumping
-                && Math.abs(this.x - barrel.getX()) <= 1
-                && (this.y < barrel.getY())
-                && ((this.y + height / 2) >= (barrel.getY() + barrel.getImage().getHeight() / 2
+                && Math.abs(getX() - barrel.getX()) <= 1
+                && (getY() < barrel.getY())
+                && ((getY() + height / 2) >= (barrel.getY() + barrel.getImage().getHeight() / 2
                 - (JUMP_STRENGTH * JUMP_STRENGTH) / (2 * Physics.MARIO_GRAVITY) - height / 2));
     }
 
     public boolean handleShoot(Input input, ArrayList<Bullet> bullets) {
         if (input.wasPressed(Keys.S) && hasBlaster && bulletsCount > 0) {
             boolean faceRight = isFacingRight;
-            Bullet bullet = new Bullet(this.x, this.y, faceRight);
+            Bullet bullet = new Bullet(getX(), getY(), faceRight);
             bullets.add(bullet);
             bulletsCount--;
 
