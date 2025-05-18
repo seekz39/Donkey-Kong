@@ -10,20 +10,17 @@ public class Level2Screen extends GamePlayScreen {
     private static final int LEVEL = 2;
 
     private Mario mario;
-    private Barrel[] barrels;
-    private Ladder[] ladders;
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
-
+    private ArrayList<Ladder> ladders = new ArrayList<>();
+    private ArrayList<Barrel> barrels = new ArrayList<>();
     private ArrayList<Banana> bananas = new ArrayList<>();
-    private Blaster[] blasters;
+    private ArrayList<Blaster> blasters = new ArrayList<>();
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private ArrayList<Monkey> monkeys = new ArrayList<>();
     private ArrayList<IntelligentMonkey> intelligentMonkeys = new ArrayList<>();
     private ArrayList<NormalMonkey> normalMonkeys = new ArrayList<>();
-    private boolean isGameOver = false;
-    private boolean playerWon = false;
     private double healthX;
     private double healthY;
     private static final int BARREL_SCORE = 100;
@@ -31,20 +28,6 @@ public class Level2Screen extends GamePlayScreen {
     private static final int MONKEY_SCORE = 100;
     private static final int BULLET_COUNT_DIFF_Y = 30;
 
-
-    @Override
-    public boolean isPlayerWon() {
-        // Win if Mario reaches Donkey with the hammer…
-        boolean reachedWithHammer = mario.collidesWith(donkey) && mario.holdHammer();
-        // …or if Donkey’s health has dropped to zero
-        boolean donkeyDefeated   = donkey.getHealth() <= 0;
-
-        return reachedWithHammer || donkeyDefeated;
-    }
-
-    public boolean isGameOver() {
-        return isGameOver;
-    }
 
     @Override
     public int getLevel() {
@@ -69,7 +52,6 @@ public class Level2Screen extends GamePlayScreen {
         this.addScore(startingScore);
     }
 
-
     @Override
     public boolean update(Input input) {
 
@@ -79,21 +61,21 @@ public class Level2Screen extends GamePlayScreen {
         // Draw background
         getBackground().drawFromTopLeft(0, 0);
 
-        // 1) Draw and update platforms
+        // Draw platforms
         for (Platform platform : platforms) {
             if (platform != null) {
                 platform.draw();
             }
         }
 
-        // 2) Update ladders
+        // Update ladders
         for (Ladder ladder : ladders) {
             if (ladder != null) {
                 ladder.update(platforms);
             }
         }
 
-        // 3) Update barrels
+        // Update barrels and collisions
         for (Barrel barrel : barrels) {
             if (barrel == null) continue;
 
@@ -103,18 +85,17 @@ public class Level2Screen extends GamePlayScreen {
             }
 
             if (!barrel.isDestroyed() && mario.collidesWith(barrel)) {
-                if (!mario.holdHammer()) {
-                    isGameOver = true;
-                } else {
-                    barrel.destroy();
+                if (mario.holdHammer()) {
+                    barrel.changeState(mario);
                     addScore(BARREL_SCORE);
                 }
             }
             barrel.update(platforms);
         }
 
-
+        // update bullets and collisions
         for (int i = bullets.size() - 1; i >= 0; i--) {
+
             Bullet bullet = bullets.get(i);
 
             if (!bullet.isAlive()) {
@@ -130,7 +111,7 @@ public class Level2Screen extends GamePlayScreen {
             }
 
             for (Monkey monkey : monkeys) {
-                if (monkey.isAlive() && bullet.collidesWith(monkey)) {
+                if (bullet.collidesWith(monkey)) {
                     monkey.changeState(bullet);
                     bullet.changeState(monkey);
                     addScore(MONKEY_SCORE);
@@ -149,60 +130,42 @@ public class Level2Screen extends GamePlayScreen {
             bullet.update();
         }
 
-
+        //update monkey
         for (Monkey monkey : monkeys) {
-            if (monkey.isAlive()) {
+            if (!monkey.isAlive()) {
+                continue;
+            }
 
-//                if (monkey.collidesWith(mario)) {
-//                    if(!mario.holdHammer()) {
-//                        System.out.println("Mario touched a monkey — Game Over.");
-//                        isGameOver = true;
-//                    }else{
-//                        if(mario.holdHammer()){
-//                            monkey.changeState(mario);
-//                            addScore(MONKEY_SCORE);
-//                            System.out.println("Mario killed a monkey use hammer.");
-//                        }
-//                    }
-//                    break;
-//                }
+            if (monkey.collidesWith(mario) && mario.holdHammer()) {
+                monkey.changeState(mario);
+                addScore(MONKEY_SCORE);
+                System.out.println("Mario killed a monkey using hammer.");
+                break;
+            }
 
-                monkey.update(platforms);
+            monkey.update(platforms);
 
-                // IntelligentMonkey shoot banana
-                if (monkey instanceof IntelligentMonkey) {
-                    IntelligentMonkey intelMonkey = (IntelligentMonkey) monkey;
-                    if (intelMonkey.shouldShoot()) {
-                        bananas.add(intelMonkey.shootBanana());
-                    }
+            // intelligent monkey shoot banana
+            if (monkey instanceof IntelligentMonkey) {
+                IntelligentMonkey intel = (IntelligentMonkey) monkey;
+                if (intel.shouldShoot()) {
+                    bananas.add(intel.shootBanana());
                 }
             }
         }
 
-
-        // draw banana
+        // update banana
         for (Banana banana : bananas) {
-            if (banana.isActive()) {
-//                if (banana.collidesWith(mario)) {
-//                    banana.changeState(mario);
-//                    isGameOver = true;
-//                }
-                banana.update();
-            }
+            banana.update();
         }
 
-        // Mario touch Hammer
-        if (mario.collidesWith(hammer)) {
+        // update Hammer
+        if (!hammer.isCollected() && mario.collidesWith(hammer)) {
             mario.changeState(hammer);
         }
-
-        // 5) Draw hammer
         hammer.update();
 
-        // Draw hammer
-        donkey.update(platforms);
-
-        // draw blaster and process collision
+        // update blaster
         for (Blaster blaster : blasters) {
             if (!blaster.isCollected() && mario.collidesWith(blaster)) {
                 mario.changeState(blaster);
@@ -210,35 +173,83 @@ public class Level2Screen extends GamePlayScreen {
             blaster.update();
         }
 
-        // 6) Update Mario
+        // Update Mario
         mario.updateLevel2(input, ladders, platforms, bullets);
 
+        // Update Donkey
+        donkey.update(platforms);
 
-        // 7) Check if Mario reaches Donkey
-        if (mario.collidesWith(donkey) && !mario.holdHammer()) {
-            isGameOver = true;
-        }
-
-        // 4) Check game time
-        if (checkingGameTime()) {
-            isGameOver = true;
-        }
-
-        // 8) Display score and time left
+        // Display score and time left
         displayInfo();
 
-        // 9) Return game state
-        return isGameOver || isPlayerWon();
+        // Return game state
+        return isGameOver() || isPlayerWon();
 
+    }
+
+    @Override
+    public boolean isPlayerWon() {
+
+        // Win if Mario reaches Donkey with the hammer…
+        boolean reachedWithHammer = mario.collidesWith(donkey) && mario.holdHammer();
+        // …or if Donkey’s health has dropped to zero
+        boolean donkeyDefeated   = donkey.getHealth() <= 0;
+
+        return reachedWithHammer || donkeyDefeated;
+    }
+
+    @Override
+    public boolean isGameOver() {
+
+        // 1) Mario and Monkey collision
+        for (Monkey monkey : monkeys) {
+            if (monkey.isAlive() && mario.collidesWith(monkey) && !mario.holdHammer()) {
+                System.out.println("Mario killed by monkey.");
+                return true;
+            }
+        }
+
+        // 2) Mario and Banana collision
+        for (Banana banana : bananas) {
+            if (banana.isActive() && banana.collidesWith(mario)) {
+                System.out.println("Mario killed by banana.");
+                return true;
+            }
+        }
+
+        // 3) Mario and Donkey collision
+        if (mario.collidesWith(donkey) && !mario.holdHammer()) {
+            System.out.println("Mario killed by donkey.");
+            return true;
+        }
+
+        // 3) Mario and Barrel collision
+        for (Barrel barrel : barrels) {
+            if (barrel == null) continue;
+
+            if (!barrel.isDestroyed() && mario.collidesWith(barrel) && !mario.holdHammer()) {
+                System.out.println("Mario killed by barrel.");
+                return true;
+            }
+        }
+
+        // time end
+        if (checkingGameTime()) {
+            System.out.println("Mario killed by time.");
+            return true;
+        }
+        return false;
     }
 
 
     @Override
     public void initializeGameObjects() {
-
-        this.intelligentMonkeys = new ArrayList<>();
-        this.normalMonkeys = new ArrayList<>();
-        this.monkeys = new ArrayList<>();
+        this.barrels   = new ArrayList<>();
+        this.ladders   = new ArrayList<>();
+        this.monkeys   = new ArrayList<>();
+        this.bananas   = new ArrayList<>();
+        this.bullets   = new ArrayList<>();
+        this.blasters  = new ArrayList<>();
 
         // 1) Create Mario
         String[] marioPos = GAME_PROPS.getProperty("mario.level2").split(",");
@@ -258,67 +269,35 @@ public class Level2Screen extends GamePlayScreen {
 
         // 3) Create the Barrels array
         int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level2.count"));
-        this.barrels = new Barrel[barrelCount];
-        int barrelIndex = 0;
         for (int i = 1; i <= barrelCount; i++) {
-            String barrelData = GAME_PROPS.getProperty("barrel.level2." + i);
-            if (barrelData != null) {
-                String[] coords = barrelData.split(",");
-                if (coords.length < 2) {
-                    System.out.println("Warning: Incomplete data for barrel." + i);
-                    continue; // Skip invalid entries
-                }
-                double barrelX = Double.parseDouble(coords[0]);
-                double barrelY = Double.parseDouble(coords[1]);
-                if (barrelIndex < barrelCount) {
-                    barrels[barrelIndex] = new Barrel(barrelX, barrelY);
-                    barrelIndex++;
-                }
-            }
+            String data = GAME_PROPS.getProperty("barrel.level2." + i);
+            if (data == null) continue;
+            String[] coord = data.split(",");
+            double x = Double.parseDouble(coord[0]);
+            double y = Double.parseDouble(coord[1]);
+            barrels.add(new Barrel(x, y));
         }
 
         // 4) Create the Ladders array
         int ladderCount = Integer.parseInt(GAME_PROPS.getProperty("ladder.level2.count"));
-        this.ladders = new Ladder[ladderCount];
-        int ladderIndex = 0;
         for (int i = 1; i <= ladderCount; i++) {
-            String ladderData = GAME_PROPS.getProperty("ladder.level2." + i);
-            if (ladderData != null) {
-                String[] coords = ladderData.split(",");
-                if (coords.length < 2) {
-                    System.out.println("Warning: Incomplete data for ladder." + i);
-                    continue; // Skip invalid entries
-                }
-                double ladderX = Double.parseDouble(coords[0]);
-                double ladderY = Double.parseDouble(coords[1]);
-                if (ladderIndex < ladderCount) {
-                    ladders[ladderIndex] = new Ladder(ladderX, ladderY);
-                    ladderIndex++;
-                }
-            }
+            String data = GAME_PROPS.getProperty("ladder.level2." + i);
+            if (data == null) continue;
+            String[] coord = data.split(",");
+            double x = Double.parseDouble(coord[0]);
+            double y = Double.parseDouble(coord[1]);
+            ladders.add(new Ladder(x, y));
         }
 
         // 5) Create the Platforms array
-        String platformData = GAME_PROPS.getProperty("platforms.level2");
-        if (platformData != null && !platformData.isEmpty()) {
-            String[] platformEntries = platformData.split(";");
-            this.platforms = new Platform[platformEntries.length];
-            int pIndex = 0;
-            for (String entry : platformEntries) {
-                String[] coords = entry.trim().split(",");
-                if (coords.length < 2) {
-                    System.out.println("Warning: Invalid platform entry -> " + entry);
-                    continue; // Skip invalid entries
-                }
-                double x = Double.parseDouble(coords[0]);
-                double y = Double.parseDouble(coords[1]);
-                if (pIndex < platformEntries.length) {
-                    platforms[pIndex] = new Platform(x, y);
-                    pIndex++;
-                }
-            }
-        } else {
-            this.platforms = new Platform[0]; // No platform data
+        String[] platformEntries = GAME_PROPS.getProperty("platforms.level2").split(";");
+        platforms = new Platform[platformEntries.length];
+        for (int i = 0; i < platformEntries.length; i++) {
+            String entry = platformEntries[i].trim();
+            String[] coord = entry.split(",");
+            double x = Double.parseDouble(coord[0]);
+            double y = Double.parseDouble(coord[1]);
+            platforms[i] = new Platform(x, y);
         }
 
         // 6) Create Hammer
@@ -328,24 +307,14 @@ public class Level2Screen extends GamePlayScreen {
         this.hammer = new Hammer(hammerX, hammerY);
 
         // 9) Create the Blasters array
-        int blasterCount = Integer.parseInt(GAME_PROPS.getProperty("blaster.level2.count"));
-        this.blasters = new Blaster[blasterCount];
-        int blasterIndex = 0;
-        for (int i = 1; i <= blasterCount; i++) {
-            String blasterData = GAME_PROPS.getProperty("blaster.level2." + i);
-            if (blasterData != null) {
-                String[] coords = blasterData.split(",");
-                if (coords.length < 2) {
-                    System.out.println("Warning: Incomplete data for blaster." + i);
-                    continue; // Skip invalid entries
-                }
-                double blasterX = Double.parseDouble(coords[0]);
-                double blasterY = Double.parseDouble(coords[1]);
-                if (blasterIndex < blasterCount) {
-                    blasters[blasterIndex] = new Blaster(blasterX, blasterY, true);
-                    blasterIndex++;
-                }
-            }
+        int blastCount = Integer.parseInt(GAME_PROPS.getProperty("blaster.level2.count"));
+        for (int i = 1; i <= blastCount; i++) {
+            String data = GAME_PROPS.getProperty("blaster.level2." + i);
+            if (data == null) continue;
+            String[] coord = data.split(",");
+            double x = Double.parseDouble(coord[0]);
+            double y = Double.parseDouble(coord[1]);
+            blasters.add(new Blaster(x, y, true));
         }
 
         int intelligentCount = Integer.parseInt(GAME_PROPS.getProperty("intelligentMonkey.level2.count"));
@@ -371,7 +340,7 @@ public class Level2Screen extends GamePlayScreen {
                 }
 
                 IntelligentMonkey monkey = new IntelligentMonkey(x, y, direction, patrolPath);
-                intelligentMonkeys.add(monkey);
+//                intelligentMonkeys.add(monkey);
                 monkeys.add(monkey);
             }
         }
@@ -399,10 +368,11 @@ public class Level2Screen extends GamePlayScreen {
                 }
 
                 NormalMonkey monkey = new NormalMonkey(x, y, direction, patrolPath);
-                normalMonkeys.add(monkey);
+//                normalMonkeys.add(monkey);
                 monkeys.add(monkey);
             }
         }
+
     }
 
 

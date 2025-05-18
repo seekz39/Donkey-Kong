@@ -97,7 +97,7 @@ public class Mario extends GameEntity{
      * @param platforms The array of platforms in the game that Mario can walk on.
      */
 
-    public void updateLevel1(Input input, Ladder[] ladders, Platform[] platforms) {
+    public void updateLevel1(Input input, ArrayList<Ladder> ladders, Platform[] platforms) {
         handleHorizontalMovement(input); // 1) Horizontal movement
 //        updateLevel1Sprite(hammer); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
 //        handleHammerCollection(hammer); // 3) If you just picked up the hammer:
@@ -117,7 +117,6 @@ public class Mario extends GameEntity{
         }
 
         // 8) Actually move Mario vertically after gravity
-//        y += velocityY;
         setY(getY() + velocityY);
 
         // 9) Check for platform collision AFTER Mario moves
@@ -134,7 +133,7 @@ public class Mario extends GameEntity{
         draw();
     }
 
-    public void updateLevel2(Input input, Ladder[] ladders, Platform[] platforms, ArrayList<Bullet> bullets) {
+    public void updateLevel2(Input input, ArrayList<Ladder> ladders, Platform[] platforms, ArrayList<Bullet> bullets) {
         handleHorizontalMovement(input); // 1) Horizontal movement
         updateLevel2Sprite();
         handleShoot(input, bullets);
@@ -160,7 +159,6 @@ public class Mario extends GameEntity{
         }
 
         // 8) Actually move Mario vertically after gravity
-//        y += velocityY;
         setY(getY() + velocityY);
 
         // 9) Check for platform collision AFTER Mario moves
@@ -172,7 +170,7 @@ public class Mario extends GameEntity{
         handleJumping(onPlatform, wantsToJump);
 
 
-            // 11) Enforce horizontal screen bounds
+        // 11) Enforce horizontal screen bounds
         enforceBoundaries();
 
         // 12) Draw Mario
@@ -231,7 +229,7 @@ public class Mario extends GameEntity{
      * @param ladders An array of {@link Ladder} objects representing ladders in the game.
      * @return {@code true} if Mario is on a ladder, {@code false} otherwise.
      */
-    private boolean handleLadders(Input input, Ladder[] ladders) {
+    private boolean handleLadders(Input input, ArrayList<Ladder> ladders) {
         boolean isOnLadder = false;
         for (Ladder ladder : ladders) {
             double ladderLeft  = ladder.getBoundingBox().left();

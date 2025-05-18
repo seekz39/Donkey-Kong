@@ -22,7 +22,7 @@ public class Banana extends GameEntity{
      */
     public void update() {
         if (!active) {
-            super.draw();
+            return;
         }
 
         double absDistance = goingRight ? SPEED : -SPEED;
@@ -31,6 +31,8 @@ public class Banana extends GameEntity{
         if (distanceTraveled >= TRAVEL_MAX) {
             active = false;
         }
+
+        draw();
     }
 
     public boolean isActive() {

@@ -1,4 +1,6 @@
 import bagel.Input;
+
+import java.util.ArrayList;
 import java.util.Properties;
 
 /**
@@ -9,21 +11,19 @@ public class Level1Screen extends GamePlayScreen {
     private static final int LEVEL = 1;
 
     private Mario mario;
-    private Barrel[] barrels;
-    private Ladder[] ladders;
+    private ArrayList<Ladder> ladders = new ArrayList<>();
+    private ArrayList<Barrel> barrels = new ArrayList<>();
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
     private boolean isGameOver = false;
 
     private static final int BARREL_SCORE = 100;
-    private static final int TIME_DISPLAY_DIFF_Y = 30;
     private static final int BARREL_CROSS_SCORE = 30;
 
     public Level1Screen(Properties gameProps) {
         super(gameProps);
         initializeGameObjects();
-
     }
 
     @Override
@@ -60,21 +60,13 @@ public class Level1Screen extends GamePlayScreen {
                 addScore(BARREL_CROSS_SCORE);
             }
             if (!barrel.isDestroyed() && mario.collidesWith(barrel)) {
-                if (!mario.holdHammer()) {
-                    isGameOver = true;
-                } else {
-                    barrel.destroy();
+                if (mario.holdHammer()) {
+                    barrel.changeState(mario);
                     addScore(BARREL_SCORE);
                 }
             }
             barrel.update(platforms);
         }
-
-        // 4) Check game time and donkey status
-        if (checkingGameTime()) {
-            isGameOver = true;
-        }
-        donkey.update(platforms);
 
         // Mario touch Hammer
         if (mario.collidesWith(hammer)) {
@@ -83,21 +75,16 @@ public class Level1Screen extends GamePlayScreen {
 
         // 5) Draw hammer and donkey
         hammer.draw();
-        donkey.draw();
+        donkey.update(platforms);
 
         // 6) Update Mario
         mario.updateLevel1(input, ladders, platforms);
-
-        // 7) Check if Mario reaches Donkey
-        if (mario.collidesWith(donkey) && !mario.holdHammer()) {
-            isGameOver = true;
-        }
 
         // 8) Display score and time left
         displayInfo();
 
         // 9) Return game state
-        return isGameOver || isPlayerWon();
+        return isGameOver() || isPlayerWon();
     }
 
     @Override
@@ -115,45 +102,25 @@ public class Level1Screen extends GamePlayScreen {
         this.donkey = new Donkey(donkeyX, donkeyY);
 
         // 3) Create the Barrels array
-        int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level1.count"));
-        this.barrels = new Barrel[barrelCount];
-        int barrelIndex = 0;
+        int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level2.count"));
         for (int i = 1; i <= barrelCount; i++) {
-            String barrelData = GAME_PROPS.getProperty("barrel.level1." + i);
-            if (barrelData != null) {
-                String[] coords = barrelData.split(",");
-                if (coords.length < 2) {
-                    System.out.println("Warning: Incomplete data for barrel." + i);
-                    continue; // Skip invalid entries
-                }
-                double barrelX = Double.parseDouble(coords[0]);
-                double barrelY = Double.parseDouble(coords[1]);
-                if (barrelIndex < barrelCount) {
-                    barrels[barrelIndex] = new Barrel(barrelX, barrelY);
-                    barrelIndex++;
-                }
-            }
+            String data = GAME_PROPS.getProperty("barrel.level2." + i);
+            if (data == null) continue;
+            String[] coord = data.split(",");
+            double x = Double.parseDouble(coord[0]);
+            double y = Double.parseDouble(coord[1]);
+            barrels.add(new Barrel(x, y));
         }
 
         // 4) Create the Ladders array
-        int ladderCount = Integer.parseInt(GAME_PROPS.getProperty("ladder.level1.count"));
-        this.ladders = new Ladder[ladderCount];
-        int ladderIndex = 0;
+        int ladderCount = Integer.parseInt(GAME_PROPS.getProperty("ladder.level2.count"));
         for (int i = 1; i <= ladderCount; i++) {
-            String ladderData = GAME_PROPS.getProperty("ladder.level1." + i);
-            if (ladderData != null) {
-                String[] coords = ladderData.split(",");
-                if (coords.length < 2) {
-                    System.out.println("Warning: Incomplete data for ladder." + i);
-                    continue; // Skip invalid entries
-                }
-                double ladderX = Double.parseDouble(coords[0]);
-                double ladderY = Double.parseDouble(coords[1]);
-                if (ladderIndex < ladderCount) {
-                    ladders[ladderIndex] = new Ladder(ladderX, ladderY);
-                    ladderIndex++;
-                }
-            }
+            String data = GAME_PROPS.getProperty("ladder.level2." + i);
+            if (data == null) continue;
+            String[] coord = data.split(",");
+            double x = Double.parseDouble(coord[0]);
+            double y = Double.parseDouble(coord[1]);
+            ladders.add(new Ladder(x, y));
         }
 
         // 5) Create the Platforms array
@@ -191,4 +158,31 @@ public class Level1Screen extends GamePlayScreen {
         return mario.collidesWith(donkey) && mario.holdHammer();
     }
 
+    @Override
+    public boolean isGameOver() {
+
+        // 1) Mario and Donkey collision
+        if (mario.collidesWith(donkey) && !mario.holdHammer()) {
+            System.out.println("Mario killed by donkey.");
+            return true;
+        }
+
+        // 2) Mario and Barrel collision
+        for (Barrel barrel : barrels) {
+            if (barrel == null) continue;
+
+            if (!barrel.isDestroyed() && mario.collidesWith(barrel) && !mario.holdHammer()) {
+                System.out.println("Mario killed by barrel.");
+                return true;
+            }
+        }
+
+        // time end
+        if (checkingGameTime()) {
+            System.out.println("Mario killed by time.");
+            return true;
+        }
+        return false;
     }
+
+}
