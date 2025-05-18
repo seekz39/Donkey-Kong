@@ -103,7 +103,7 @@ public class Mario extends GameEntity{
     public void updateLevel1(Input input, Ladder[] ladders, Platform[] platforms, Hammer hammer) {
         handleHorizontalMovement(input); // 1) Horizontal movement
 //        updateLevel1Sprite(hammer); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
-        handleHammerCollection(hammer); // 3) If you just picked up the hammer:
+//        handleHammerCollection(hammer); // 3) If you just picked up the hammer:
         updateLevel1Sprite(); // 4) Now replace sprite (since either isFacingRight or hasHammer could have changed)
 
         // 5) Ladder logic – check if on a ladder
@@ -125,7 +125,7 @@ public class Mario extends GameEntity{
 
         // 9) Check for platform collision AFTER Mario moves
         boolean onPlatform;
-        onPlatform = handlePlatforms(platforms, hammer);
+        onPlatform = handlePlatforms(platforms);
 
         // 10) If we are on the platform, allow jumping; Prevent Mario from falling below the ground
         handleJumping(onPlatform, wantsToJump);
@@ -139,9 +139,6 @@ public class Mario extends GameEntity{
 
     public void updateLevel2(Input input, Ladder[] ladders, Platform[] platforms, Hammer hammer, Blaster[] blasters, ArrayList<Bullet> bullets) {
         handleHorizontalMovement(input); // 1) Horizontal movement
-//        updateLevel2Sprite(hammer, blasters); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
-        handleHammerCollection(hammer);// 3) If you just picked up the hammer:
-        handleBlasterCollection(blasters);
         updateLevel2Sprite();
         handleShoot(input, bullets);
 
@@ -171,7 +168,7 @@ public class Mario extends GameEntity{
 
         // 9) Check for platform collision AFTER Mario moves
         boolean onPlatform;
-        onPlatform = handlePlatforms(platforms, hammer);
+        onPlatform = handlePlatforms(platforms);
 
         // 10) If we are on the platform, allow jumping; Prevent Mario from falling below the ground
         handleJumping(onPlatform, wantsToJump);
@@ -191,10 +188,9 @@ public class Mario extends GameEntity{
      * preventing his jump from being interrupted in mid-air.
      *
      * @param platforms An array of {@link Platform} objects representing the platforms in the game.
-     * @param hammer    A {@link Hammer} object (not used in this method, but might be for future logic).
      * @return {@code true} if Mario is standing on a platform, {@code false} otherwise.
      */
-    private boolean handlePlatforms(Platform[] platforms, Hammer hammer) {
+    private boolean handlePlatforms(Platform[] platforms) {
         boolean onPlatform = false;
 
         // We'll only snap Mario to a platform if he's moving downward (velocityY >= 0)
@@ -212,7 +208,6 @@ public class Mario extends GameEntity{
                     // and not far below it (a small threshold based on velocity)
                     if (marioBottom <= platformTop + velocityY) {
                         // Snap Mario so his bottom = the platform top
-//                        y = platformTop - (marioImage.getHeight() / 2);
                         double newY = platformTop - (marioImage.getHeight() / 2);
                         setY(newY);
                         velocityY = 0;
@@ -247,7 +242,7 @@ public class Mario extends GameEntity{
             double ladderTop    = ladder.getY() - (ladder.getHeight() / 2);
             double ladderBottom = ladder.getY() + (ladder.getHeight() / 2);
 
-            if (isTouchingLadder(ladder)) {
+            if (collidesWith(ladder)) {
                 // Check horizontal overlap so Mario is truly on the ladder
                 if (marioRight - marioImage.getWidth() / 2 > ladderLeft && marioRight - marioImage.getWidth() / 2 < ladderRight) {
                     isOnLadder = true;
@@ -259,7 +254,6 @@ public class Mario extends GameEntity{
 
                     // ----------- Climb UP -----------
                     if (input.isDown(Keys.UP)) {
-//                        y -= CLIMB_SPEED;
                         setY(getY() - CLIMB_SPEED);
                         velocityY = 0;
                     }
@@ -270,7 +264,6 @@ public class Mario extends GameEntity{
                         double nextBottom = nextY + (marioImage.getHeight() / 2);
 
                         if (marioBottom > ladderTop && nextBottom <= ladderBottom) {
-//                            y = nextY;
                             setY(nextY);
                             velocityY = 0;
                         } else if (marioBottom == ladderBottom) {
@@ -286,7 +279,6 @@ public class Mario extends GameEntity{
             } else if (marioBottom == ladderTop && input.isDown(Keys.DOWN) && (marioRight - marioImage.getWidth() / 2 > ladderLeft && marioRight - marioImage.getWidth() / 2  < ladderRight)) {
                 double nextY = getY() + CLIMB_SPEED;
                 setY(nextY);
-//                y = nextY;
                 velocityY = 0; // ignore gravity
             } else if (marioBottom == ladderBottom && input.isDown(Keys.DOWN) && (marioRight - marioImage.getWidth() / 2 > ladderLeft && marioRight - marioImage.getWidth() / 2  < ladderRight)) {
                 velocityY = 0; // ignore gravity
@@ -298,11 +290,9 @@ public class Mario extends GameEntity{
     /** Handles horizontal movement based on player input. */
     private void handleHorizontalMovement(Input input) {
         if (input.isDown(Keys.LEFT)) {
-//            x -= MOVE_SPEED;
             setX(getX() - MOVE_SPEED);
             isFacingRight = false;
         } else if (input.isDown(Keys.RIGHT)) {
-//            x += MOVE_SPEED;
             setX(getX() + MOVE_SPEED);
             isFacingRight = true;
         }
@@ -310,7 +300,7 @@ public class Mario extends GameEntity{
 
     /** Handles collecting the hammer if Mario is in contact with it. */
     private void handleHammerCollection(Hammer hammer) {
-        if (!hammer.isCollected() && isTouchingHammer(hammer)) {
+        if (!hammer.isCollected() && collidesWith(hammer)) {
             setHasHammer(true);
             hammer.collect();
             System.out.println("Hammer collected!");
@@ -321,7 +311,7 @@ public class Mario extends GameEntity{
 
     private void handleBlasterCollection(Blaster[] blasters) {
         for (Blaster blaster : blasters) {
-            if (!blaster.isCollected() && isTouchingBlaster(blaster)) {
+            if (!blaster.isCollected() && collidesWith(blaster)) {
                 blaster.collect();
                 setHasBlaster(true);
                 hasBlaster = true;
@@ -341,7 +331,6 @@ public class Mario extends GameEntity{
         }
         double bottomOfMario = getY() + (marioImage.getHeight() / 2);
         if (bottomOfMario > ShadowDonkeyKong.getScreenHeight()) {
-//            y = ShadowDonkeyKong.getScreenHeight() - (marioImage.getHeight() / 2);
             setY(ShadowDonkeyKong.getScreenHeight()
                     - (marioImage.getHeight() / 2.0));
             velocityY = 0;
@@ -359,14 +348,12 @@ public class Mario extends GameEntity{
 
         // Prevent Mario from moving beyond the left edge of the screen
         if (getX() < halfW) {
-//            g = halfW;
             setX(halfW);
         }
 
         // Prevent Mario from moving beyond the right edge of the screen
         double maxX = ShadowDonkeyKong.getScreenWidth() - halfW;
         if (getX() > maxX) {
-//            x = maxX;
             setX(maxX);
         }
 
@@ -376,7 +363,6 @@ public class Mario extends GameEntity{
         // Prevent Mario from falling below the bottom of the screen
         if (bottomOfMario > ShadowDonkeyKong.getScreenHeight()) {
             // Reposition Mario to stand on the bottom edge
-//            y = ShadowDonkeyKong.getScreenHeight() - (marioImage.getHeight() / 2);
             setY(ShadowDonkeyKong.getScreenHeight() - (marioImage.getHeight() / 2));
 
             // Stop vertical movement and reset jumping state
@@ -422,7 +408,6 @@ public class Mario extends GameEntity{
         Image oldImage = marioImage;
         double oldBottom = getY() + oldImage.getHeight() / 2;
 
-        // 优先级：Blaster > Hammer > Normal
         if (hasBlaster) {
             marioImage = isFacingRight ? MARIO_BLASTER_RIGHT_IMAGE : MARIO_BLASTER_LEFT_IMAGE;
         } else if (hasHammer) {
@@ -452,56 +437,6 @@ public class Mario extends GameEntity{
 
     public int getBulletsCount() {
         return bulletsCount;
-    }
-
-
-    /**
-     * Checks if Mario is touching a ladder.
-     *
-     * @param ladder The ladder object to check collision with.
-     * @return {@code true} if Mario is touching the ladder, {@code false} otherwise.
-     */
-    private boolean isTouchingLadder(Ladder ladder) {
-        Rectangle marioBounds = getBoundingBox();
-        return marioBounds.intersects(ladder.getBoundingBox());
-    }
-
-    /**
-     * Checks if Mario is touching the hammer.
-     *
-     * @param hammer The hammer object to check collision with.
-     * @return {@code true} if Mario is touching the hammer, {@code false} otherwise.
-     */
-    private boolean isTouchingHammer(Hammer hammer) {
-        Rectangle marioBounds = getBoundingBox();
-        return marioBounds.intersects(hammer.getBoundingBox());
-    }
-
-    private boolean isTouchingBlaster(Blaster balster) {
-        Rectangle marioBounds = getBoundingBox();
-        return marioBounds.intersects(balster.getBoundingBox());
-    }
-
-    /**
-     * Checks if Mario is touching a barrel.
-     *
-     * @param barrel The barrel object to check collision with.
-     * @return {@code true} if Mario is touching the barrel, {@code false} otherwise.
-     */
-    public boolean isTouchingBarrel(Barrel barrel) {
-        Rectangle marioBounds = getBoundingBox();
-        return marioBounds.intersects(barrel.getBoundingBox());
-    }
-
-    /**
-     * Checks if Mario has reached Donkey Kong.
-     *
-     * @param donkey The Donkey object to check collision with.
-     * @return {@code true} if Mario has reached Donkey Kong, {@code false} otherwise.
-     */
-    public boolean hasReached(Donkey donkey) {
-        Rectangle marioBounds = getBoundingBox();
-        return marioBounds.intersects(donkey.getBoundingBox());
     }
 
     /**
@@ -535,18 +470,21 @@ public class Mario extends GameEntity{
 
     @Override
     public void changeState(GameEntity other) {
-        if (other instanceof Barrel) {
-            if (this.holdHammer()) {
-                System.out.println("Mario smashed the barrel!");
-//                addScore(100);
-            } else {
-                System.out.println("Mario hit by barrel! Game Over!");
-//                isGameOver();
-            }
-        }else {
-            if (other instanceof Monkey) {
-                System.out.println("Mario hit by monkey! Game Over!");
-            }
+        if (other instanceof Hammer hammer && !hammer.isCollected()) {
+            setHasHammer(true);
+            hasHammer = true;
+            hammer.collect();
+            hasBlaster = false;
+            System.out.println("Hammer collected!");
+        }
+
+        else if (other instanceof Blaster blaster && !blaster.isCollected()) {
+            setHasBlaster(true);
+            blaster.collect();
+            hasBlaster = true;
+            hasHammer = false;
+            bulletsCount += totalBullets;
+            System.out.println("Blaster collected!");
         }
 
     }

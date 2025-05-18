@@ -13,6 +13,7 @@ public class ShadowDonkeyKong extends AbstractGame {
 
     private final Properties GAME_PROPS;
     private final Properties MESSAGE_PROPS;
+    private int level1Score = 0;
 
     private HomeScreen homeScreen;
     private GamePlayScreen gamePlayScreen;
@@ -61,7 +62,7 @@ public class ShadowDonkeyKong extends AbstractGame {
                 if (selectedLevel == 1) {
                     gamePlayScreen = new Level1Screen(GAME_PROPS);
                 }else if (selectedLevel == 2) {
-                    gamePlayScreen = new Level2Screen(GAME_PROPS);
+                    gamePlayScreen = new Level2Screen(GAME_PROPS, level1Score);
                 }
 
             }
@@ -74,9 +75,10 @@ public class ShadowDonkeyKong extends AbstractGame {
                 boolean isWon = gamePlayScreen.isLevelCompleted();
                 boolean isLost = gamePlayScreen.isGameOver();
 
-                int current = gamePlayScreen.getLevel();
-                if (isWon && current == 1) {
-                    gamePlayScreen = new Level2Screen(GAME_PROPS);
+                int level = gamePlayScreen.getLevel();
+                if (isWon && level == 1) {
+                    level1Score = gamePlayScreen.getScore();
+                    gamePlayScreen = new Level2Screen(GAME_PROPS, level1Score);
                     return;
                 }
 
@@ -92,7 +94,7 @@ public class ShadowDonkeyKong extends AbstractGame {
                 // 3) PASS finalScore
 //                gameEndScreen.setIsWon(isWon);
                 gameEndScreen.setIsWon(isWon && !isLost);
-                gameEndScreen.setFinalScore(timeRemaining, finalScore);
+                gameEndScreen.setFinalScore(level, timeRemaining, finalScore);
 
                 // 4) Nullify gameplay
                 gamePlayScreen = null;

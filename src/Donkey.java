@@ -21,9 +21,7 @@ public class Donkey extends GravityEntity {
     public Donkey(double x, double y) {
         super(DONKEY_IMAGE, x, y);
         this.health = MAX_HEALTH;
-
     }
-
 
     public void setGamePlayScreen(GamePlayScreen screen) {
         this.gamePlayScreen = screen;
@@ -33,7 +31,6 @@ public class Donkey extends GravityEntity {
     public int getHealth() {
         return health;
     }
-
 
 //    public void renderHealth(int health){}
 

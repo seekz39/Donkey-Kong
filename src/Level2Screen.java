@@ -40,7 +40,7 @@ public class Level2Screen extends GamePlayScreen {
     @Override
     public boolean isLevelCompleted() {
         // Win if Mario reaches Donkey with the hammer…
-        boolean reachedWithHammer = mario.hasReached(donkey) && mario.holdHammer();
+        boolean reachedWithHammer = mario.collidesWith(donkey) && mario.holdHammer();
         // …or if Donkey’s health has dropped to zero
         boolean donkeyDefeated   = donkey.getHealth() <= 0;
 
@@ -69,9 +69,10 @@ public class Level2Screen extends GamePlayScreen {
     }
 
 
-    public Level2Screen(Properties gameProps) {
+    public Level2Screen(Properties gameProps, int startingScore) {
         super(gameProps);
         initializeGameObjects();
+        this.addScore(startingScore);
     }
 
 
@@ -102,20 +103,20 @@ public class Level2Screen extends GamePlayScreen {
         for (Barrel barrel : barrels) {
             if (barrel == null) continue;
             if (mario.jumpOver(barrel)) {
-//                score += BARREL_CROSS_SCORE;
                 addScore(BARREL_CROSS_SCORE);
             }
-            if (!barrel.isDestroyed() && mario.isTouchingBarrel(barrel)) {
+            if (!barrel.isDestroyed() && mario.collidesWith(barrel)) {
                 if (!mario.holdHammer()) {
                     isGameOver = true;
                 } else {
                     barrel.destroy();
-//                    score += BARREL_SCORE;
                     addScore(BARREL_SCORE);
                 }
             }
             barrel.update(platforms);
         }
+
+
 
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
@@ -200,19 +201,34 @@ public class Level2Screen extends GamePlayScreen {
 
         donkey.update(platforms);
 
+        // Mario touch Hammer
+        if (mario.collidesWith(hammer)) {
+            mario.changeState(hammer);
+        }
+
         // 5) Draw hammer and donkey
         hammer.draw();
         donkey.draw();
-        for (Blaster b : blasters) {
-            b.draw();
+
+        // Mario 碰撞 Blasters
+        for (Blaster blaster : blasters) {
+            if (!blaster.isCollected() && mario.collidesWith(blaster)) {
+                mario.changeState(blaster);
+            }
         }
 
+        // draw blasters
+        for (Blaster blaster : blasters) {
+            if (!blaster.isCollected()) {
+                blaster.draw();
+            }
+        }
 
         // 6) Update Mario
         mario.updateLevel2(input, ladders, platforms, hammer, blasters, bullets);
 
         // 7) Check if Mario reaches Donkey
-        if (mario.hasReached(donkey) && !mario.holdHammer()) {
+        if (mario.collidesWith(donkey) && !mario.holdHammer()) {
             isGameOver = true;
         }
 

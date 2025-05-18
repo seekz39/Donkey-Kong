@@ -84,11 +84,20 @@ public class GameEndScreen {
 //        // Weight assigned to points-based scoring
 //        this.finalScore = (TIME_WEIGHT * timeRemaining) + (POINTS_WEIGHT * gainedScore);
 //    }
-    public void setFinalScore(double timeRemaining, double gainedScore) {
+    public void setFinalScore(int level, double timeRemaining, double gainedScore) {
+//        if (gainedScore == 0) {
+//            this.finalScore = 0;
+//        } else {
+//            this.finalScore = (TIME_WEIGHT * timeRemaining) + (POINTS_WEIGHT * gainedScore);
+//        }
         if (gainedScore == 0) {
             this.finalScore = 0;
         } else {
-            this.finalScore = (TIME_WEIGHT * timeRemaining) + (POINTS_WEIGHT * gainedScore);
+            if (level == 2) {
+                this.finalScore = (TIME_WEIGHT * timeRemaining) + (POINTS_WEIGHT * gainedScore);
+            } else {
+                this.finalScore = gainedScore; 
+            }
         }
     }
 

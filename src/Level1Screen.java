@@ -63,7 +63,7 @@ public class Level1Screen extends GamePlayScreen {
 //                score += BARREL_CROSS_SCORE;
                 addScore(BARREL_CROSS_SCORE);
             }
-            if (!barrel.isDestroyed() && mario.isTouchingBarrel(barrel)) {
+            if (!barrel.isDestroyed() && mario.collidesWith(barrel)) {
                 if (!mario.holdHammer()) {
                     isGameOver = true;
                 } else {
@@ -81,6 +81,11 @@ public class Level1Screen extends GamePlayScreen {
         }
         donkey.update(platforms);
 
+        // Mario touch Hammer
+        if (mario.collidesWith(hammer)) {
+            mario.changeState(hammer);
+        }
+
         // 5) Draw hammer and donkey
         hammer.draw();
         donkey.draw();
@@ -89,7 +94,7 @@ public class Level1Screen extends GamePlayScreen {
         mario.updateLevel1(input, ladders, platforms, hammer);
 
         // 7) Check if Mario reaches Donkey
-        if (mario.hasReached(donkey) && !mario.holdHammer()) {
+        if (mario.collidesWith(donkey) && !mario.holdHammer()) {
             isGameOver = true;
         }
 
@@ -188,7 +193,7 @@ public class Level1Screen extends GamePlayScreen {
 
     @Override
     public boolean isLevelCompleted() {
-        return mario.hasReached(donkey) && mario.holdHammer();
+        return mario.collidesWith(donkey) && mario.holdHammer();
     }
 
     }
