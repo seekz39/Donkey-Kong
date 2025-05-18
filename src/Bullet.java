@@ -1,6 +1,4 @@
 import bagel.*;
-import java.util.*;
-import bagel.util.*;
 
 
 public class Bullet extends GameEntity {

@@ -1,6 +1,5 @@
 import bagel.*;
-import bagel.util.Colour;
-import bagel.util.Rectangle;
+
 
 /**
  * Represents Donkey Kong in the game, affected by gravity and platform collisions.
@@ -11,7 +10,6 @@ public class Donkey extends GravityEntity {
     private static final double DONKEY_GRAVITY = 0.4;
     private int health;
     private final int MAX_HEALTH = 5;
-//    private GamePlayScreen gamePlayScreen;
 
     /**
      * Constructs a new Donkey at the specified starting position.

@@ -1,5 +1,4 @@
 import bagel.*;
-
 import java.util.Properties;
 
 /**

@@ -10,5 +10,4 @@ public class NormalMonkey extends Monkey {
                 new Image("res/normal_monkey_left.png"),
                 new Image("res/normal_monkey_right.png"));
     }
-
 }

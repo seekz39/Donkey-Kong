@@ -9,7 +9,8 @@ import java.util.Properties;
 public class Level1Screen extends GamePlayScreen {
 
     private static final int LEVEL = 1;
-
+    private static final int BARREL_SCORE = 100;
+    private static final int BARREL_CROSS_SCORE = 30;
     private Mario mario;
     private ArrayList<Ladder> ladders = new ArrayList<>();
     private ArrayList<Barrel> barrels = new ArrayList<>();
@@ -18,8 +19,6 @@ public class Level1Screen extends GamePlayScreen {
     private Platform[] platforms;
     private boolean isGameOver = false;
 
-    private static final int BARREL_SCORE = 100;
-    private static final int BARREL_CROSS_SCORE = 30;
 
     public Level1Screen(Properties gameProps) {
         super(gameProps);

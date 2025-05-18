@@ -31,7 +31,6 @@ public class Banana extends GameEntity{
         if (distanceTraveled >= TRAVEL_MAX) {
             active = false;
         }
-
         draw();
     }
 

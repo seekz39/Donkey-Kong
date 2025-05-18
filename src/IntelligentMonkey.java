@@ -1,5 +1,4 @@
 import bagel.Image;
-import java.util.ArrayList;
 
 /**
  * Represents an intelligent monkey that follows a specified patrol path and shoots bananas.
@@ -21,10 +20,6 @@ public class IntelligentMonkey extends Monkey {
         return new Banana(getX(), getY(), isFacingRight());
     }
 
-
-//    public void update(Platform[] platforms) {
-//        super.update(platforms);
-//    }
 
     public boolean shouldShoot() {
         shootTimer++;

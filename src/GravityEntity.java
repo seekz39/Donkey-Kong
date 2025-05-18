@@ -1,6 +1,4 @@
 import bagel.Image;
-import bagel.util.Point;
-import bagel.util.Rectangle;
 
 public abstract class GravityEntity extends GameEntity {
     private double velocityY = 0;

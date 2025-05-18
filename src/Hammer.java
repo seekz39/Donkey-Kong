@@ -1,5 +1,4 @@
 import bagel.Image;
-import bagel.util.Rectangle;
 
 /**
  * Represents a Hammer collectible in the game.

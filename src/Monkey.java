@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import bagel.Image;
-import bagel.util.Rectangle;
-import bagel.util.Point;
 
 /**
  * Abstract base class for all types of Monkey enemies.
@@ -93,16 +91,10 @@ public abstract class Monkey extends GravityEntity {
         faceRight = !faceRight;
     }
 
-//    private void flip() {
-//        directionSign *= -1;
-//        faceRight = directionSign > 0;
-//    }
-
     @Override
     public void update(Platform[] platforms) {
         super.update(platforms); // apply gravity
         updateMovement(platforms);
-
     }
 
     @Override
@@ -125,12 +117,12 @@ public abstract class Monkey extends GravityEntity {
     }
 
     public static String joinPath(int[] path) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder record = new StringBuilder();
         for (int i = 0; i < path.length; i++) {
-            sb.append(path[i]);
-            if (i < path.length - 1) sb.append(",");
+            record.append(path[i]);
+            if (i < path.length - 1) record.append(",");
         }
-        return sb.toString();
+        return record.toString();
     }
 
 

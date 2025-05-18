@@ -8,7 +8,10 @@ import java.util.ArrayList;
 public class Level2Screen extends GamePlayScreen {
 
     private static final int LEVEL = 2;
-
+    private static final int BARREL_SCORE = 100;
+    private static final int BARREL_CROSS_SCORE = 30;
+    private static final int MONKEY_SCORE = 100;
+    private static final int BULLET_COUNT_DIFF_Y = 30;
     private Mario mario;
     private Hammer hammer;
     private Donkey donkey;
@@ -19,15 +22,8 @@ public class Level2Screen extends GamePlayScreen {
     private ArrayList<Blaster> blasters = new ArrayList<>();
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private ArrayList<Monkey> monkeys = new ArrayList<>();
-    private ArrayList<IntelligentMonkey> intelligentMonkeys = new ArrayList<>();
-    private ArrayList<NormalMonkey> normalMonkeys = new ArrayList<>();
     private double healthX;
     private double healthY;
-    private static final int BARREL_SCORE = 100;
-    private static final int BARREL_CROSS_SCORE = 30;
-    private static final int MONKEY_SCORE = 100;
-    private static final int BULLET_COUNT_DIFF_Y = 30;
-
 
     @Override
     public int getLevel() {

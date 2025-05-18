@@ -28,8 +28,7 @@ public class Barrel extends GravityEntity {
     @Override
     public void update(Platform[] platforms) {
         if (!isDestroyed) {
-            super.update(platforms); //  from GravityEntity
-            super.draw();
+            super.update(platforms);
         }
     }
 

@@ -8,18 +8,16 @@ import java.util.ArrayList;
  * Mario can move, jump, climb ladders, pick up a hammer, and interact with platforms.
  */
 public class Mario extends GameEntity{
-//    private double x, y; // Mario's position
     private double velocityY = 0; // Vertical velocity
     private boolean isJumping = false; // Whether Mario is currently jumping
     private boolean hasHammer = false; // Whether Mario has collected a hammer
     private boolean hasBlaster = false;// Whether Mario has collected a blaster
     private final int totalBullets = 5;
     private int bulletsCount = 0;
-
+    private boolean isFacingRight = true; // Mario's facing direction
 
     // Mario images for different states
     private Image marioImage;
-//    private final Image MARIO_RIGHT_IMAGE;
     private final Image MARIO_LEFT_IMAGE;
     private final Image MARIO_HAMMER_LEFT_IMAGE;
     private final Image MARIO_HAMMER_RIGHT_IMAGE;
@@ -30,11 +28,9 @@ public class Mario extends GameEntity{
     private static final double JUMP_STRENGTH = -5;
     private static final double MOVE_SPEED = 3.5;
     private static final double CLIMB_SPEED = 2;
-    public static final double MARIO_GRAVITY = 0.2;
-
+    private static final double MARIO_GRAVITY = 0.2;
     private static double height;
     private static double width;
-    private boolean isFacingRight = true; // Mario's facing direction
     private static final Image MARIO_RIGHT_IMAGE = new Image("res/mario_right.png");
 
     /**
@@ -56,7 +52,6 @@ public class Mario extends GameEntity{
 
         // Default Mario starts facing right
         this.marioImage = MARIO_HAMMER_RIGHT_IMAGE;
-
         width = marioImage.getWidth();
         height = marioImage.getHeight();
     }
@@ -175,8 +170,6 @@ public class Mario extends GameEntity{
 
         // 12) Draw Mario
         draw();
-
-
     }
 
     /**
@@ -470,8 +463,8 @@ public class Mario extends GameEntity{
     public void changeState(GameEntity other) {
         if (other instanceof Hammer hammer && !hammer.isCollected()) {
             setHasHammer(true);
-            hasHammer = true;
             hammer.collect();
+            hasHammer = true;
             hasBlaster = false;
             System.out.println("Hammer collected!");
         }
@@ -485,6 +478,5 @@ public class Mario extends GameEntity{
             System.out.println("Blaster collected!");
         }
     }
-
 
 }

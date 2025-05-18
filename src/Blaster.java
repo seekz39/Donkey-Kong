@@ -1,6 +1,4 @@
 import bagel.Image;
-import bagel.util.Rectangle;
-import java.util.ArrayList;
 
 public class Blaster extends GameEntity {
     private boolean isPicked;
