@@ -13,14 +13,14 @@ public abstract class Monkey extends GravityEntity {
     private int routeIndex = 0;
     private int directionSign = 1;
     private double distanceTravel = 0;
-    private double velocityY = 0;
     private boolean isAlive = true;
     private static final double DEFAULT_SPEED = 0.5;
     private final Image imageLeft;
     private final Image imageRight;
+    private static final double MONKEY_GRAVITY = 0.4;
 
     public Monkey(double x, double y, String direction, String routeStr, Image left, Image right) {
-        super(left, x, y);
+        super(left, x, y, MONKEY_GRAVITY);
         this.imageLeft  = left;
         this.imageRight = right;
         this.faceRight = direction.equals("right");
@@ -93,10 +93,10 @@ public abstract class Monkey extends GravityEntity {
         faceRight = !faceRight;
     }
 
-    private void flip() {
-        directionSign *= -1;
-        faceRight = directionSign > 0;
-    }
+//    private void flip() {
+//        directionSign *= -1;
+//        faceRight = directionSign > 0;
+//    }
 
     @Override
     public void update(Platform[] platforms) {
@@ -134,7 +134,6 @@ public abstract class Monkey extends GravityEntity {
     }
 
 
-
     @Override
     public void changeState(GameEntity other) {
         if (other instanceof Bullet && isAlive) {
@@ -147,8 +146,6 @@ public abstract class Monkey extends GravityEntity {
             }
         }
     }
-
-
 }
 
 

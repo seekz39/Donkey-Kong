@@ -1,6 +1,4 @@
 import bagel.Image;
-import bagel.util.Rectangle;
-import bagel.util.Point;
 
 /**
  * Represents a banana projectile shot by IntelligentMonkey.
@@ -9,15 +7,12 @@ public class Banana extends GameEntity{
     private final static double SPEED = 1.8;
     private final static int TRAVEL_MAX = 300;
     private static final Image BANANA_IMAGE = new Image("res/banana.png");
-//    private double x, y;
     private double distanceTraveled = 0;
     private boolean active = true;
     private final boolean goingRight;
 
     public Banana(double x, double y, boolean goingRight) {
         super(BANANA_IMAGE, x, y);
-//        this.x = x;
-//        this.y = y;
         this.goingRight = goingRight;
 
     }
@@ -26,20 +21,15 @@ public class Banana extends GameEntity{
      * Updates banana position and status
      */
     public void update() {
-        if (!active) return;
+        if (!active) {
+            super.draw();
+        }
 
-        double dx = goingRight ? SPEED : -SPEED;
-        setX(getX() + dx);
-        distanceTraveled += Math.abs(dx);
-
+        double absDistance = goingRight ? SPEED : -SPEED;
+        setX(getX() + absDistance);
+        distanceTraveled += Math.abs(absDistance);
         if (distanceTraveled >= TRAVEL_MAX) {
             active = false;
-        }
-    }
-
-    public void draw() {
-        if (active) {
-            BANANA_IMAGE.draw(getX(), getY());
         }
     }
 
@@ -48,16 +38,10 @@ public class Banana extends GameEntity{
     }
 
     @Override
-    public Rectangle getBoundingBox() {
-        return BANANA_IMAGE.getBoundingBoxAt(new Point(getX(), getY()));
-    }
-
-    @Override
     public void changeState(GameEntity other) {
         if (other instanceof Mario & active) {
             active = false;
             System.out.println("Banana hit Mario, game over!");
-//            level2Screen.setGameOver(true);
         }
     }
 }

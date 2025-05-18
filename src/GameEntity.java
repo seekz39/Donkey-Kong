@@ -5,6 +5,8 @@ import bagel.util.Rectangle;
 public abstract class GameEntity {
     private Image image;
     private double x, y;
+    public static final double TERMINAL_VELOCITY = 10.0;
+
 
 //    public abstract Rectangle getBoundingBox();
 

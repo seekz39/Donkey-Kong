@@ -6,7 +6,6 @@ import bagel.util.Rectangle;
  * The hammer can be collected by the player, at which point it disappears from the screen.
  */
 public class Hammer extends GameEntity{
-    private final double WIDTH, HEIGHT;
     private boolean isCollected = false;
     private static final Image HAMMER_IMAGE = new Image("res/hammer.png");
 
@@ -18,34 +17,14 @@ public class Hammer extends GameEntity{
      */
     public Hammer(double x, double y) {
         super(HAMMER_IMAGE, x, y);
-        this.WIDTH = HAMMER_IMAGE.getWidth();
-        this.HEIGHT = HAMMER_IMAGE.getHeight();
     }
-
-    /**
-     * Returns the bounding box of the hammer for collision detection.
-     * If the hammer has been collected, it returns an off-screen bounding box.
-     *
-     * @return A {@link Rectangle} representing the hammer's bounding box.
-     */
-//    public Rectangle getBoundingBox() {
-//        if (isCollected) {
-//            return new Rectangle(-1000, -1000, 0, 0); // Move off-screen if collected
-//        }
-//        return new Rectangle(
-//                getX() - (WIDTH / 2),  // Center-based positioning
-//                getY() - (HEIGHT / 2),
-//                WIDTH,
-//                HEIGHT
-//        );
-//    }
 
     /**
      * Draws the hammer on the screen if it has not been collected.
      */
-    public void draw() {
+    public void update() {
         if (!isCollected) {
-            HAMMER_IMAGE.draw(getX(), getY()); // Bagel centers images automatically
+            super.draw(); // Bagel centers images automatically
 //            drawBoundingBox(); // Uncomment for debugging
         }
     }

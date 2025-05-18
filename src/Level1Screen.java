@@ -8,16 +8,13 @@ public class Level1Screen extends GamePlayScreen {
 
     private static final int LEVEL = 1;
 
-
     private Mario mario;
     private Barrel[] barrels;
     private Ladder[] ladders;
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
-//    private int currFrame = 0;
     private boolean isGameOver = false;
-//    private int score = 0;
 
     private static final int BARREL_SCORE = 100;
     private static final int TIME_DISPLAY_DIFF_Y = 30;
@@ -60,7 +57,6 @@ public class Level1Screen extends GamePlayScreen {
         for (Barrel barrel : barrels) {
             if (barrel == null) continue;
             if (mario.jumpOver(barrel)) {
-//                score += BARREL_CROSS_SCORE;
                 addScore(BARREL_CROSS_SCORE);
             }
             if (!barrel.isDestroyed() && mario.collidesWith(barrel)) {
@@ -68,7 +64,6 @@ public class Level1Screen extends GamePlayScreen {
                     isGameOver = true;
                 } else {
                     barrel.destroy();
-//                    score += BARREL_SCORE;
                     addScore(BARREL_SCORE);
                 }
             }
@@ -91,7 +86,7 @@ public class Level1Screen extends GamePlayScreen {
         donkey.draw();
 
         // 6) Update Mario
-        mario.updateLevel1(input, ladders, platforms, hammer);
+        mario.updateLevel1(input, ladders, platforms);
 
         // 7) Check if Mario reaches Donkey
         if (mario.collidesWith(donkey) && !mario.holdHammer()) {
@@ -102,7 +97,7 @@ public class Level1Screen extends GamePlayScreen {
         displayInfo();
 
         // 9) Return game state
-        return isGameOver || isLevelCompleted();
+        return isGameOver || isPlayerWon();
     }
 
     @Override
@@ -192,7 +187,7 @@ public class Level1Screen extends GamePlayScreen {
     }
 
     @Override
-    public boolean isLevelCompleted() {
+    public boolean isPlayerWon() {
         return mario.collidesWith(donkey) && mario.holdHammer();
     }
 

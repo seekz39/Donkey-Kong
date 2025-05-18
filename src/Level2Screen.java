@@ -15,7 +15,6 @@ public class Level2Screen extends GamePlayScreen {
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
-    private GamePlayScreen gamePlayScreen;
 
     private ArrayList<Banana> bananas = new ArrayList<>();
     private Blaster[] blasters;
@@ -23,28 +22,23 @@ public class Level2Screen extends GamePlayScreen {
     private ArrayList<Monkey> monkeys = new ArrayList<>();
     private ArrayList<IntelligentMonkey> intelligentMonkeys = new ArrayList<>();
     private ArrayList<NormalMonkey> normalMonkeys = new ArrayList<>();
-//    private int currFrame = 0;
-//    private int score = 0;
     private boolean isGameOver = false;
     private boolean playerWon = false;
     private double healthX;
     private double healthY;
-    private double bulletCountX;
-    private double bulletCountY;
-//    private static final int TIME_DISPLAY_DIFF_Y = 30;
     private static final int BARREL_SCORE = 100;
     private static final int BARREL_CROSS_SCORE = 30;
     private static final int MONKEY_SCORE = 100;
+    private static final int BULLET_COUNT_DIFF_Y = 30;
 
 
     @Override
-    public boolean isLevelCompleted() {
+    public boolean isPlayerWon() {
         // Win if Mario reaches Donkey with the hammer…
         boolean reachedWithHammer = mario.collidesWith(donkey) && mario.holdHammer();
         // …or if Donkey’s health has dropped to zero
         boolean donkeyDefeated   = donkey.getHealth() <= 0;
 
-//        return mario.hasReached(donkey) && mario.holdHammer();
         return reachedWithHammer || donkeyDefeated;
     }
 
@@ -65,7 +59,7 @@ public class Level2Screen extends GamePlayScreen {
         getStatusFont().drawString(healthText, healthX, healthY);
 
         String text = "BULLETS " + mario.getBulletsCount();
-        getStatusFont().drawString(text, bulletCountX, bulletCountY);
+        getStatusFont().drawString(text, healthX, healthY + BULLET_COUNT_DIFF_Y);
     }
 
 
@@ -102,9 +96,12 @@ public class Level2Screen extends GamePlayScreen {
         // 3) Update barrels
         for (Barrel barrel : barrels) {
             if (barrel == null) continue;
+
             if (mario.jumpOver(barrel)) {
                 addScore(BARREL_CROSS_SCORE);
+                break;
             }
+
             if (!barrel.isDestroyed() && mario.collidesWith(barrel)) {
                 if (!mario.holdHammer()) {
                     isGameOver = true;
@@ -117,8 +114,6 @@ public class Level2Screen extends GamePlayScreen {
         }
 
 
-
-
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet bullet = bullets.get(i);
 
@@ -126,9 +121,6 @@ public class Level2Screen extends GamePlayScreen {
                 bullets.remove(i);
                 continue;
             }
-
-            bullet.update();
-            bullet.draw();
 
             if (bullet.collidesWith(donkey)) {
                 donkey.changeState(bullet);
@@ -154,6 +146,7 @@ public class Level2Screen extends GamePlayScreen {
                     break;
                 }
             }
+            bullet.update();
         }
 
 
@@ -161,13 +154,20 @@ public class Level2Screen extends GamePlayScreen {
             if (monkey.isAlive()) {
 
 //                if (monkey.collidesWith(mario)) {
-//                    System.out.println("Mario touched a monkey — Game Over.");
-//                    isGameOver = true;
+//                    if(!mario.holdHammer()) {
+//                        System.out.println("Mario touched a monkey — Game Over.");
+//                        isGameOver = true;
+//                    }else{
+//                        if(mario.holdHammer()){
+//                            monkey.changeState(mario);
+//                            addScore(MONKEY_SCORE);
+//                            System.out.println("Mario killed a monkey use hammer.");
+//                        }
+//                    }
 //                    break;
 //                }
 
                 monkey.update(platforms);
-                monkey.draw();
 
                 // IntelligentMonkey shoot banana
                 if (monkey instanceof IntelligentMonkey) {
@@ -187,48 +187,40 @@ public class Level2Screen extends GamePlayScreen {
 //                    banana.changeState(mario);
 //                    isGameOver = true;
 //                }
-
                 banana.update();
-                banana.draw();
             }
         }
-
-
-        // 4) Check game time and donkey status
-        if (checkingGameTime()) {
-            isGameOver = true;
-        }
-
-        donkey.update(platforms);
 
         // Mario touch Hammer
         if (mario.collidesWith(hammer)) {
             mario.changeState(hammer);
         }
 
-        // 5) Draw hammer and donkey
-        hammer.draw();
-        donkey.draw();
+        // 5) Draw hammer
+        hammer.update();
 
-        // Mario 碰撞 Blasters
+        // Draw hammer
+        donkey.update(platforms);
+
+        // draw blaster and process collision
         for (Blaster blaster : blasters) {
             if (!blaster.isCollected() && mario.collidesWith(blaster)) {
                 mario.changeState(blaster);
             }
-        }
-
-        // draw blasters
-        for (Blaster blaster : blasters) {
-            if (!blaster.isCollected()) {
-                blaster.draw();
-            }
+            blaster.update();
         }
 
         // 6) Update Mario
-        mario.updateLevel2(input, ladders, platforms, hammer, blasters, bullets);
+        mario.updateLevel2(input, ladders, platforms, bullets);
+
 
         // 7) Check if Mario reaches Donkey
         if (mario.collidesWith(donkey) && !mario.holdHammer()) {
+            isGameOver = true;
+        }
+
+        // 4) Check game time
+        if (checkingGameTime()) {
             isGameOver = true;
         }
 
@@ -236,7 +228,7 @@ public class Level2Screen extends GamePlayScreen {
         displayInfo();
 
         // 9) Return game state
-        return isGameOver || isLevelCompleted();
+        return isGameOver || isPlayerWon();
 
     }
 
@@ -263,11 +255,6 @@ public class Level2Screen extends GamePlayScreen {
         String[] donkeyHealth = GAME_PROPS.getProperty("gamePlay.donkeyhealth.coords").split(",");
         this.healthX = Double.parseDouble(donkeyHealth[0]);
         this.healthY = Double.parseDouble(donkeyHealth[1]);
-
-        this.bulletCountX = Double.parseDouble(donkeyHealth[0]);
-        this.bulletCountY = Double.parseDouble(donkeyHealth[1]) + 30;
-
-        donkey.setGamePlayScreen(this);
 
         // 3) Create the Barrels array
         int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level2.count"));

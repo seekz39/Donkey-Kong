@@ -8,9 +8,10 @@ import bagel.util.Rectangle;
  */
 public class Donkey extends GravityEntity {
     private static final Image DONKEY_IMAGE = new Image("res/donkey_kong.png");
+    private static final double DONKEY_GRAVITY = 0.4;
     private int health;
     private final int MAX_HEALTH = 5;
-    private GamePlayScreen gamePlayScreen;
+//    private GamePlayScreen gamePlayScreen;
 
     /**
      * Constructs a new Donkey at the specified starting position.
@@ -19,20 +20,13 @@ public class Donkey extends GravityEntity {
      * @param y The initial y-coordinate of Donkey.
      */
     public Donkey(double x, double y) {
-        super(DONKEY_IMAGE, x, y);
+        super(DONKEY_IMAGE, x, y, DONKEY_GRAVITY);
         this.health = MAX_HEALTH;
     }
-
-    public void setGamePlayScreen(GamePlayScreen screen) {
-        this.gamePlayScreen = screen;
-    }
-
 
     public int getHealth() {
         return health;
     }
-
-//    public void renderHealth(int health){}
 
     @Override
     public void changeState(GameEntity other) {
@@ -41,10 +35,8 @@ public class Donkey extends GravityEntity {
             System.out.println("Donkey hit by bullet! Health: " + health);
 
             if (health <= 0) {
-                System.out.println("☠Donkey defeated!");
-
+                System.out.println("Donkey defeated!");
             }
         }
     }
-
 }

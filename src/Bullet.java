@@ -27,6 +27,7 @@ public class Bullet extends GameEntity {
         } else {
             isAlive = false;
         }
+        draw();
     }
 
     public void draw() {
@@ -43,11 +44,11 @@ public class Bullet extends GameEntity {
         return isAlive;
     }
 
-    public Rectangle getBoundingBox() {
-        Image img = isFacingRight ? BULLET_RIGHT_IMAGE : BULLET_LEFT_IMAGE;
-        return img.getBoundingBoxAt(new Point(getX(), getY()));
-
-    }
+//    public Rectangle getBoundingBox() {
+//        Image img = isFacingRight ? BULLET_RIGHT_IMAGE : BULLET_LEFT_IMAGE;
+//        return img.getBoundingBoxAt(new Point(getX(), getY()));
+//
+//    }
 
     @Override
     public void changeState(GameEntity other) {

@@ -15,7 +15,6 @@ public class IntelligentMonkey extends Monkey {
                 new Image("res/intelli_monkey_left.png"),
                 new Image("res/intelli_monkey_right.png")
         );
-
     }
 
     public Banana shootBanana() {
@@ -23,9 +22,9 @@ public class IntelligentMonkey extends Monkey {
     }
 
 
-    public void update(Platform[] platforms) {
-        super.update(platforms);
-    }
+//    public void update(Platform[] platforms) {
+//        super.update(platforms);
+//    }
 
     public boolean shouldShoot() {
         shootTimer++;

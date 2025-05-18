@@ -22,9 +22,7 @@ public abstract class GamePlayScreen {
     private static final String SCORE_MESSAGE = "SCORE ";
     private static final String TIME_MESSAGE = "Time Left ";
 
-    private static final int BARREL_SCORE = 100;
     private static final int TIME_DISPLAY_DIFF_Y = 30;
-    private static final int BARREL_CROSS_SCORE = 30;
     private int score = 0;  // Player's score for jumping over barrels
     private boolean isGameOver = false; // Game over flag
 
@@ -113,7 +111,7 @@ public abstract class GamePlayScreen {
      * @return {@code true} if Mario reaches Donkey Kong while holding a hammer,
      *         indicating the level is completed; {@code false} otherwise.
      */
-     public abstract boolean isLevelCompleted();
+     public abstract boolean isPlayerWon();
 
     /**
      * Checks if the game has reached its time limit by comparing the current frame count

@@ -4,19 +4,22 @@ import bagel.util.Rectangle;
 
 public abstract class GravityEntity extends GameEntity {
     private double velocityY = 0;
+    private final double gravity;
+    public static final double TERMINAL_VELOCITY = 10.0;
 
 
-    public GravityEntity(Image initialImage, double startX, double startY) {
+    public GravityEntity(Image initialImage, double startX, double startY, double gravity) {
         super(initialImage, startX, startY);
+        this.gravity = gravity;
     }
 
     public void update(Platform[] platforms) {
         // Apply gravity
-        velocityY += Physics.MONKEY_GRAVITY;
+        velocityY += this.gravity;
         setY(getY() + velocityY);
 
-        if (velocityY > Physics.TERMINAL_VELOCITY) {
-            velocityY = Physics.TERMINAL_VELOCITY;
+        if (velocityY > TERMINAL_VELOCITY) {
+            velocityY = TERMINAL_VELOCITY;
         }
 
         // Check for platform collisions

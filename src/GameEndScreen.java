@@ -79,24 +79,14 @@ public class GameEndScreen {
      * @param timeRemaining The remaining time in the game.
      * @param gainedScore   The total points earned during the game.
      */
-//    public void setFinalScore(double timeRemaining, double gainedScore) {
-//          // Weight assigned to time-based scoring
-//        // Weight assigned to points-based scoring
-//        this.finalScore = (TIME_WEIGHT * timeRemaining) + (POINTS_WEIGHT * gainedScore);
-//    }
     public void setFinalScore(int level, double timeRemaining, double gainedScore) {
-//        if (gainedScore == 0) {
-//            this.finalScore = 0;
-//        } else {
-//            this.finalScore = (TIME_WEIGHT * timeRemaining) + (POINTS_WEIGHT * gainedScore);
-//        }
         if (gainedScore == 0) {
             this.finalScore = 0;
         } else {
             if (level == 2) {
                 this.finalScore = (TIME_WEIGHT * timeRemaining) + (POINTS_WEIGHT * gainedScore);
             } else {
-                this.finalScore = gainedScore; 
+                this.finalScore = gainedScore;
             }
         }
     }

@@ -1,6 +1,4 @@
 import bagel.*;
-import bagel.util.Colour;
-import bagel.util.Rectangle;
 
 /**
  * Represents a ladder in the game.
@@ -8,9 +6,7 @@ import bagel.util.Rectangle;
  */
 public class Ladder extends GravityEntity {
     private static final Image LADDER_IMAGE = new Image("res/ladder.png");
-    public static double width;
-    public static double height;
-    private double velocityY = 0; // Current vertical velocity due to gravity
+    public static final double LADDER_GRAVITY = 0.25;
 
     /**
      * Constructs a ladder at the specified position.
@@ -19,28 +15,7 @@ public class Ladder extends GravityEntity {
      * @param y The initial y-coordinate.
      */
     public Ladder(double x, double y) {
-        super(LADDER_IMAGE, x, y);
-        width = LADDER_IMAGE.getWidth();
-        height = LADDER_IMAGE.getHeight();
-    }
-
-
-    /**
-     * Gets the width of the ladder.
-     *
-     * @return The width of the ladder.
-     */
-    public double getWidth() {
-        return width;
-    }
-
-    /**
-     * Gets the height of the ladder.
-     *
-     * @return The height of the ladder.
-     */
-    public double getHeight() {
-        return height;
+        super(LADDER_IMAGE, x, y, LADDER_GRAVITY);
     }
 
     @Override
