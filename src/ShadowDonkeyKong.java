@@ -83,8 +83,6 @@ public class ShadowDonkeyKong extends AbstractGame {
                 }
 
 //              1) GET THE SCORE
-//                int finalScore = gamePlayScreen.getScore();
-//                int timeRemaining = gamePlayScreen.getSecondsLeft();
                 int finalScore = isLost ? 0 : gamePlayScreen.getScore();
                 int timeRemaining = isLost ? 0 : gamePlayScreen.getSecondsLeft();
 

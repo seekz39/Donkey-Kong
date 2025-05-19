@@ -1,6 +1,6 @@
 import bagel.Image;
 
-public class Blaster extends GameEntity {
+public class Blaster extends GameEntity implements Equippable {
     private boolean isPicked;
     private static final Image BLASTER_IMAGE = new Image("res/blaster.png");
     private boolean isCollected = false;

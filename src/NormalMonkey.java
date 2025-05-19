@@ -5,9 +5,12 @@ import bagel.Image;
  */
 public class NormalMonkey extends Monkey {
 
-    public NormalMonkey(double x, double y, String direction, int[] patrolPath) {
+    public NormalMonkey(double x, double y, String direction, int[] patrolPath, Platform[] platforms) {
         super(x, y, direction, joinPath(patrolPath),
                 new Image("res/normal_monkey_left.png"),
-                new Image("res/normal_monkey_right.png"));
+                new Image("res/normal_monkey_right.png"),
+                platforms
+        );
     }
+
 }

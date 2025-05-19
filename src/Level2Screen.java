@@ -335,7 +335,7 @@ public class Level2Screen extends GamePlayScreen {
                     patrolPath[j] = Integer.parseInt(routeStr[j]);
                 }
 
-                IntelligentMonkey monkey = new IntelligentMonkey(x, y, direction, patrolPath);
+                IntelligentMonkey monkey = new IntelligentMonkey(x, y, direction, patrolPath, platforms);
 //                intelligentMonkeys.add(monkey);
                 monkeys.add(monkey);
             }
@@ -363,7 +363,7 @@ public class Level2Screen extends GamePlayScreen {
                     patrolPath[j] = Integer.parseInt(routeStr[j]);
                 }
 
-                NormalMonkey monkey = new NormalMonkey(x, y, direction, patrolPath);
+                NormalMonkey monkey = new NormalMonkey(x, y, direction, patrolPath, platforms);
 //                normalMonkeys.add(monkey);
                 monkeys.add(monkey);
             }

@@ -6,6 +6,7 @@ import bagel.*;
  */
 public class Platform extends GameEntity{
     private static final Image PLATFORM_IMAGE = new Image("res/platform.png"); // Image representing the platform
+    private final double WIDTH, HEIGHT;
 
     /**
      * Constructs a platform at the specified position.
@@ -16,11 +17,16 @@ public class Platform extends GameEntity{
     public Platform(double x, double y) {
         // Load platform sprite
         super(PLATFORM_IMAGE, x, y);
+        this.WIDTH = PLATFORM_IMAGE.getWidth();
+        this.HEIGHT = PLATFORM_IMAGE.getHeight();
     }
 
-    @Override
-    public void changeState(GameEntity other) {
-        // Platforms do not respond to collisions
+    public double getWidth() {
+        return WIDTH;
+    }
+
+    public double getHeight() {
+        return HEIGHT;
     }
 }
 

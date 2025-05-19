@@ -4,7 +4,7 @@ import bagel.Image;
  * Represents a Hammer collectible in the game.
  * The hammer can be collected by the player, at which point it disappears from the screen.
  */
-public class Hammer extends GameEntity{
+public class Hammer extends GameEntity implements Equippable{
     private boolean isCollected = false;
     private static final Image HAMMER_IMAGE = new Image("res/hammer.png");
 

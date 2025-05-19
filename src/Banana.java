@@ -3,7 +3,7 @@ import bagel.Image;
 /**
  * Represents a banana projectile shot by IntelligentMonkey.
  */
-public class Banana extends GameEntity{
+public class Banana extends GameEntity implements Movable{
     private final static double SPEED = 1.8;
     private final static int TRAVEL_MAX = 300;
     private static final Image BANANA_IMAGE = new Image("res/banana.png");
@@ -17,13 +17,7 @@ public class Banana extends GameEntity{
 
     }
 
-    /**
-     * Updates banana position and status
-     */
-    public void update() {
-        if (!active) {
-            return;
-        }
+    public void move() {
 
         double absDistance = goingRight ? SPEED : -SPEED;
         setX(getX() + absDistance);
@@ -31,6 +25,16 @@ public class Banana extends GameEntity{
         if (distanceTraveled >= TRAVEL_MAX) {
             active = false;
         }
+
+    }
+    /**
+     * Updates banana position and status
+     */
+    public void update() {
+        if (!active) {
+            return;
+        }
+        move();
         draw();
     }
 

@@ -108,7 +108,7 @@ public class Mario extends GameEntity{
         // 7) If not on ladder, apply gravity, move Mario
         if (!isOnLadder) {
             velocityY += MARIO_GRAVITY;
-            velocityY = Math.min(TERMINAL_VELOCITY, velocityY);
+            velocityY = Math.min(GravityEntity.TERMINAL_VELOCITY, velocityY);
         }
 
         // 8) Actually move Mario vertically after gravity
@@ -150,7 +150,7 @@ public class Mario extends GameEntity{
         // 7) If not on ladder, apply gravity, move Mario
         if (!isOnLadder) {
             velocityY += MARIO_GRAVITY;
-            velocityY = Math.min(TERMINAL_VELOCITY, velocityY);
+            velocityY = Math.min(GravityEntity.TERMINAL_VELOCITY, velocityY);
         }
 
         // 8) Actually move Mario vertically after gravity

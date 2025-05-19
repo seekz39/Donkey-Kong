@@ -112,6 +112,7 @@ public abstract class GamePlayScreen {
      *         indicating the level is completed; {@code false} otherwise.
      */
      public abstract boolean isPlayerWon();
+     public abstract boolean isGameOver();
 
     /**
      * Checks if the game has reached its time limit by comparing the current frame count
@@ -126,9 +127,6 @@ public abstract class GamePlayScreen {
         return currFrame >= MAX_FRAMES;
     }
 
-    public boolean isGameOver() {
-        return isGameOver;
-    }
 
     public Font getStatusFont() {
         return STATUS_FONT;

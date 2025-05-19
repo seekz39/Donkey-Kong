@@ -8,11 +8,12 @@ public class IntelligentMonkey extends Monkey {
     private int shootTimer = 0;
     private static final int SHOOT_FREQ = 5; // in seconds (adjust as needed)
 
-    public IntelligentMonkey(double x, double y, String direction, int[] patrolPath) {
+    public IntelligentMonkey(double x, double y, String direction, int[] patrolPath, Platform[] platforms) {
         super(
                 x, y, direction, joinPath(patrolPath),
                 new Image("res/intelli_monkey_left.png"),
-                new Image("res/intelli_monkey_right.png")
+                new Image("res/intelli_monkey_right.png"),
+                platforms
         );
     }
 

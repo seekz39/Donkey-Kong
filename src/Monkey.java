@@ -4,7 +4,7 @@ import bagel.Image;
 /**
  * Abstract base class for all types of Monkey enemies.
  */
-public abstract class Monkey extends GravityEntity {
+public abstract class Monkey extends GravityEntity implements Movable {
     private boolean faceRight;
     private ArrayList<Integer> route = new ArrayList<>();
     private double speed;
@@ -16,8 +16,9 @@ public abstract class Monkey extends GravityEntity {
     private final Image imageLeft;
     private final Image imageRight;
     private static final double MONKEY_GRAVITY = 0.4;
+    private final Platform[] platforms;
 
-    public Monkey(double x, double y, String direction, String routeStr, Image left, Image right) {
+    public Monkey(double x, double y, String direction, String routeStr, Image left, Image right,  Platform[] platforms) {
         super(left, x, y, MONKEY_GRAVITY);
         this.imageLeft  = left;
         this.imageRight = right;
@@ -27,9 +28,11 @@ public abstract class Monkey extends GravityEntity {
         for (String part : routeStr.split(",")) {
             this.route.add(Integer.parseInt(part));
         }
+        this.platforms = platforms;
     }
 
-    private void updateMovement(Platform[] platforms) {
+
+    public void move() {
         if (route.isEmpty()) return;
 
         // when monkey reach the edge of the window, flip direction
@@ -75,6 +78,7 @@ public abstract class Monkey extends GravityEntity {
     }
 
 
+
     public boolean isAlive() {
         return isAlive;
     }
@@ -91,10 +95,12 @@ public abstract class Monkey extends GravityEntity {
         faceRight = !faceRight;
     }
 
+
+
     @Override
     public void update(Platform[] platforms) {
         super.update(platforms); // apply gravity
-        updateMovement(platforms);
+        move();
     }
 
     @Override

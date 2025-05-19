@@ -1,7 +1,7 @@
 import bagel.*;
 
 
-public class Bullet extends GameEntity {
+public class Bullet extends GameEntity implements Movable {
     static private final double SPEED = 3.0;
     private double traveled = 0;
     private boolean isAlive = true;
@@ -16,8 +16,7 @@ public class Bullet extends GameEntity {
         this.isFacingRight = isFacingRight;
     }
 
-
-    public void update() {
+    public void move() {
         if (isAlive && traveled < MAX_DISTANCE) {
             double dx = isFacingRight ? SPEED : -SPEED;
             setX(getX() + dx);
@@ -25,6 +24,11 @@ public class Bullet extends GameEntity {
         } else {
             isAlive = false;
         }
+
+    }
+
+    public void update() {
+        move();
         draw();
     }
 

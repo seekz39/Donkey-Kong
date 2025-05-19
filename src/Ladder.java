@@ -6,7 +6,7 @@ import bagel.*;
  */
 public class Ladder extends GravityEntity {
     private static final Image LADDER_IMAGE = new Image("res/ladder.png");
-    public static final double LADDER_GRAVITY = 0.25;
+    private static final double LADDER_GRAVITY = 0.25;
 
     /**
      * Constructs a ladder at the specified position.
