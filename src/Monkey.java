@@ -3,6 +3,10 @@ import bagel.Image;
 
 /**
  * Abstract base class for all types of Monkey enemies.
+ *
+ * Monkeys follow a predefined patrol path across platforms, are affected by gravity,
+ * and can be eliminated by bullets or Mario collisions.
+ * Implements {@link Movable} to advance its position each frame.
  */
 public abstract class Monkey extends GravityEntity implements Movable {
     private boolean faceRight;
@@ -31,7 +35,11 @@ public abstract class Monkey extends GravityEntity implements Movable {
         this.platforms = platforms;
     }
 
-
+    /**
+     * Advances the monkey one step along its patrol path, handling edge-of-window
+     * flips and platform-edge flips.
+     */
+    @Override
     public void move() {
         if (route.isEmpty()) return;
 
@@ -78,31 +86,45 @@ public abstract class Monkey extends GravityEntity implements Movable {
     }
 
 
-
+    /**
+     * @return {@code true} if this monkey is still alive; {@code false} if it has been eliminated.
+     */
     public boolean isAlive() {
         return isAlive;
     }
 
+    /**
+     * @return {@code true} if this monkey is facing right; {@code false} if facing left.
+     */
     public boolean isFacingRight() {
         return faceRight;
     }
 
+    /**
+     * @return the patrol route as a list of segment distances.
+     */
     public ArrayList<Integer> getRoute() {
         return route;
     }
 
+    /** Reverse the monkey's facing direction. */
     public void flipDirection() {
         faceRight = !faceRight;
     }
 
 
-
+    /**
+     * Updates the monkey each frame by applying gravity and then moving.
+     *
+     * @param platforms array of platforms for collision checks
+     */
     @Override
     public void update(Platform[] platforms) {
         super.update(platforms); // apply gravity
         move();
     }
 
+    /** Draws the monkey using the correct image based on its facing direction. */
     @Override
     public void draw() {
         if (faceRight) {
@@ -112,7 +134,12 @@ public abstract class Monkey extends GravityEntity implements Movable {
         }
     }
 
-
+    /**
+     * Checks whether this monkey's bounding box rests on top of any platform.
+     *
+     * @param platforms array of platforms to test against
+     * @return the current platform if standing, otherwise {@code null}
+     */
     private Platform getCurrentPlatform(Platform[] platforms) {
         for (Platform platform : platforms) {
             if (this.getBoundingBox().bottom() == platform.getBoundingBox().top()) {
@@ -122,6 +149,12 @@ public abstract class Monkey extends GravityEntity implements Movable {
         return null;
     }
 
+    /**
+     * Converts an integer array into a comma-separated path string.
+     *
+     * @param path array of distances
+     * @return a comma-delimited string of the path values
+     * */
     public static String joinPath(int[] path) {
         StringBuilder record = new StringBuilder();
         for (int i = 0; i < path.length; i++) {
@@ -131,7 +164,14 @@ public abstract class Monkey extends GravityEntity implements Movable {
         return record.toString();
     }
 
-
+    /**
+     * Changes the state of this monkey when colliding with another entity.
+     *
+     *   If hit by a {@link Bullet}, it dies and disappears.
+     *   If hit by {@link Mario}, it dies and triggers game over logic.
+     *
+     * @param other the entity that this monkey collided with
+     */
     @Override
     public void changeState(GameEntity other) {
         if (!isAlive) {

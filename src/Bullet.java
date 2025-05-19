@@ -1,6 +1,16 @@
 import bagel.*;
+import bagel.util.Rectangle;
+import bagel.util.Point;
 
 
+/**
+ * A projectile fired by Mario when he has a blaster.
+ *
+ * Bullets travel in a straight line (left or right) at a fixed speed,
+ * disappear after traveling a maximum distance or upon colliding with an enemy or platform,
+ * and implement the {@link Movable} interface for integration into the game loop.
+ *
+ */
 public class Bullet extends GameEntity implements Movable {
     static private final double SPEED = 3.0;
     private double traveled = 0;
@@ -16,6 +26,10 @@ public class Bullet extends GameEntity implements Movable {
         this.isFacingRight = isFacingRight;
     }
 
+    /**
+     * Moves the bullet one step according to its speed and facing direction.
+     * The bullet becomes inactive once it has traveled its maximum distance.
+     */
     public void move() {
         if (isAlive && traveled < MAX_DISTANCE) {
             double dx = isFacingRight ? SPEED : -SPEED;
@@ -27,11 +41,19 @@ public class Bullet extends GameEntity implements Movable {
 
     }
 
+    /**
+     * Updates the bullet's position and renders it if still alive.
+     * This method should be called once per frame.
+     */
     public void update() {
         move();
         draw();
     }
 
+    /**
+     * Draws the bullet's current image at its position if it is still active.
+     * Chooses the left- or right-facing sprite based on its direction.
+     */
     public void draw() {
         if (isAlive) {
             if (isFacingRight) {
@@ -42,16 +64,20 @@ public class Bullet extends GameEntity implements Movable {
         }
     }
 
+    /**
+     * Returns whether the bullet is still active (has not exceeded its range or hit something).
+     * @return True if the bullet is alive; false otherwise.
+     */
     public boolean isAlive() {
         return isAlive;
     }
 
-//    public Rectangle getBoundingBox() {
-//        Image img = isFacingRight ? BULLET_RIGHT_IMAGE : BULLET_LEFT_IMAGE;
-//        return img.getBoundingBoxAt(new Point(getX(), getY()));
-//
-//    }
-
+    /**
+     * Handles collisions by marking the bullet as inactive when it hits
+     * a {@link Monkey} or a {@link Platform}
+     *
+     * @param other The entity this bullet has collided with.
+     */
     @Override
     public void changeState(GameEntity other) {
         if (other instanceof Monkey) {

@@ -48,6 +48,10 @@ public class HomeScreen {
         PROMPT_Y = Integer.parseInt(gameProps.getProperty("home.prompt.y"));
     }
 
+    /**
+     * Retrieves the level selected by the player on the home screen.
+     * @return the selected level number (e.g., 1 or 2)
+     */
     public int getSelectedLevel() {
         return selectedLevel;
     }

@@ -18,9 +18,4 @@ public class Ladder extends GravityEntity {
         super(LADDER_IMAGE, x, y, LADDER_GRAVITY);
     }
 
-    @Override
-    public void changeState(GameEntity other) {
-        // Ladders do not respond to collisions
-    }
-
 }

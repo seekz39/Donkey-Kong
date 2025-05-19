@@ -50,6 +50,14 @@ public class Barrel extends GravityEntity {
     }
 
 
+    /**
+     * Handles collision with another game entity.
+     *
+     * If Mario holds a hammer and collide with barrel, the barrel is destroyed and removed from play.
+     * Otherwise, Mario is hit by the barrel, triggering a game-over condition.
+     *
+     * @param other the {@link GameEntity} that collided with this barrel
+     */
     @Override
     public void changeState(GameEntity other) {
         if (other instanceof Mario) {

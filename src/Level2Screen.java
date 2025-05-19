@@ -25,11 +25,29 @@ public class Level2Screen extends GamePlayScreen {
     private double healthX;
     private double healthY;
 
+    public Level2Screen(Properties gameProps, int startingScore) {
+        super(gameProps);
+        initializeGameObjects();
+        this.addScore(startingScore);
+    }
+
+    /**
+     * Returns the current level number for this gameplay screen.
+     *
+     * @return the integer constant LEVEL (2 for Level2Screen)
+     */
     @Override
     public int getLevel() {
         return LEVEL;
     }
 
+    /**
+     * Renders the HUD elements specific to Level 2, in addition to the base information.
+     *
+     * Calls the superclass to draw score and time, then displays Donkey Kong’s current health
+     * and Mario’s remaining bullet count at the configured screen coordinates.
+     *
+     */
     @Override
     public void displayInfo() {
         super.displayInfo();
@@ -42,12 +60,18 @@ public class Level2Screen extends GamePlayScreen {
     }
 
 
-    public Level2Screen(Properties gameProps, int startingScore) {
-        super(gameProps);
-        initializeGameObjects();
-        this.addScore(startingScore);
-    }
-
+    /**
+     * Advances the game state by one frame for Level 2 gameplay.
+     *
+     * This method increments the frame counter, renders the background and platforms,
+     * updates ladders, barrels , bullets , and each monkey and bananas
+     * handles hammer and blaster pickups and Mario’s update
+     * then updates Donkey Kong, and finally displays the score.
+     * After all updates, it checks for end‐of‐game or victory conditions.
+     *
+     * @param input the current keyboard and mouse input state
+     * @return {@code true} if the game is over or the player has won; {@code false} otherwise
+     */
     @Override
     public boolean update(Input input) {
 
@@ -99,6 +123,7 @@ public class Level2Screen extends GamePlayScreen {
                 continue;
             }
 
+            //bullet collide with donkey
             if (bullet.collidesWith(donkey)) {
                 donkey.changeState(bullet);
                 bullet.changeState(donkey);
@@ -106,6 +131,7 @@ public class Level2Screen extends GamePlayScreen {
                 continue;
             }
 
+            //bullet collide with monkey
             for (Monkey monkey : monkeys) {
                 if (bullet.collidesWith(monkey)) {
                     monkey.changeState(bullet);
@@ -115,6 +141,7 @@ public class Level2Screen extends GamePlayScreen {
                 }
             }
 
+            //bullet collide with platform
             for (Platform platform : platforms) {
                 if (bullet.collidesWith(platform)) {
                     bullet.changeState(platform);
@@ -132,6 +159,7 @@ public class Level2Screen extends GamePlayScreen {
                 continue;
             }
 
+            //mario with hammer collide with monkey
             if (monkey.collidesWith(mario) && mario.holdHammer()) {
                 monkey.changeState(mario);
                 addScore(MONKEY_SCORE);
@@ -163,6 +191,7 @@ public class Level2Screen extends GamePlayScreen {
 
         // update blaster
         for (Blaster blaster : blasters) {
+
             if (!blaster.isCollected() && mario.collidesWith(blaster)) {
                 mario.changeState(blaster);
             }
@@ -183,6 +212,13 @@ public class Level2Screen extends GamePlayScreen {
 
     }
 
+    /**
+     * Checks whether the player has won the level.
+     * The player wins if Mario reaches Donkey Kong while holding a hammer,
+     * or if Donkey Kong's health has been reduced to zero or below.
+     *
+     * @return {@code true} if the win condition is met; {@code false} otherwise.
+     */
     @Override
     public boolean isPlayerWon() {
 
@@ -194,6 +230,17 @@ public class Level2Screen extends GamePlayScreen {
         return reachedWithHammer || donkeyDefeated;
     }
 
+    /**
+     * Determines whether the game is over.
+     *
+     * The game ends if Mario collides with a living monkey while not holding a hammer;
+     * if Mario is hit by an active banana;
+     * if Mario collides with Donkey Kong while not holding a hammer;
+     * if Mario collides with a non-destroyed barrel while not holding a hammer;
+     * or if the game timer runs out.
+     *
+     * @return {@code true} if any end condition is met; {@code false} otherwise.
+     */
     @Override
     public boolean isGameOver() {
 
@@ -237,7 +284,10 @@ public class Level2Screen extends GamePlayScreen {
         return false;
     }
 
-
+    /**
+     * Initializes all objects needed for level 2 such as Mario, Donkey Kong, barrels, ladders, platforms, hammer
+     * blaster, bullet, monkey, and banana
+     */
     @Override
     public void initializeGameObjects() {
         this.barrels   = new ArrayList<>();
@@ -336,7 +386,6 @@ public class Level2Screen extends GamePlayScreen {
                 }
 
                 IntelligentMonkey monkey = new IntelligentMonkey(x, y, direction, patrolPath, platforms);
-//                intelligentMonkeys.add(monkey);
                 monkeys.add(monkey);
             }
         }
@@ -364,13 +413,11 @@ public class Level2Screen extends GamePlayScreen {
                 }
 
                 NormalMonkey monkey = new NormalMonkey(x, y, direction, patrolPath, platforms);
-//                normalMonkeys.add(monkey);
                 monkeys.add(monkey);
             }
         }
 
     }
-
 
 }
 

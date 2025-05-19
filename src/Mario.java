@@ -65,6 +65,11 @@ public class Mario extends GameEntity{
         this.hasHammer = status;
     }
 
+    /**
+     * Sets whether Mario has the blaster equipped.
+     *
+     * @param status {@code true} to equip the blaster, {@code false} to unequip
+     */
     public void setHasBlaster(boolean status) {
         this.hasBlaster = status;
     }
@@ -76,10 +81,6 @@ public class Mario extends GameEntity{
      */
     public boolean holdHammer() {
         return this.hasHammer;
-    }
-
-    public boolean holdBlaster() {
-        return this.hasBlaster;
     }
 
 
@@ -94,81 +95,80 @@ public class Mario extends GameEntity{
 
     public void updateLevel1(Input input, ArrayList<Ladder> ladders, Platform[] platforms) {
         handleHorizontalMovement(input); // 1) Horizontal movement
-//        updateLevel1Sprite(hammer); // 2) Update Mario’s current sprite (hammer or not, facing left or right)
-//        handleHammerCollection(hammer); // 3) If you just picked up the hammer:
-        updateLevel1Sprite(); // 4) Now replace sprite (since either isFacingRight or hasHammer could have changed)
+        updateLevel1Sprite(); // 2) Now replace sprite (since either isFacingRight or hasHammer could have changed)
 
-        // 5) Ladder logic – check if on a ladder
+        // 3) Ladder logic – check if on a ladder
         boolean isOnLadder;
         isOnLadder = handleLadders(input, ladders);
 
-        // 6) Jump logic: if on platform (we'll detect after we move) but let's queue jump if needed
+        // 4) Jump logic: if on platform (we'll detect after we move) but let's queue jump if needed
         boolean wantsToJump = input.wasPressed(Keys.SPACE);
 
-        // 7) If not on ladder, apply gravity, move Mario
+        // 5) If not on ladder, apply gravity, move Mario
         if (!isOnLadder) {
             velocityY += MARIO_GRAVITY;
             velocityY = Math.min(GravityEntity.TERMINAL_VELOCITY, velocityY);
         }
 
-        // 8) Actually move Mario vertically after gravity
+        // 6) Actually move Mario vertically after gravity
         setY(getY() + velocityY);
 
-        // 9) Check for platform collision AFTER Mario moves
+        // 7) Check for platform collision AFTER Mario moves
         boolean onPlatform;
         onPlatform = handlePlatforms(platforms);
 
-        // 10) If we are on the platform, allow jumping; Prevent Mario from falling below the ground
+        // 8) If we are on the platform, allow jumping; Prevent Mario from falling below the ground
         handleJumping(onPlatform, wantsToJump);
 
-        // 11) Enforce horizontal screen bounds
+        // 9) Enforce horizontal screen bounds
         enforceBoundaries();
 
-        // 12) Draw Mario
+        // 10) Draw Mario
         draw();
     }
 
+    /**
+     * Updates Mario for level 2: includes shooting logic on top of level 1 behavior.
+     *
+     * @param input     the current keyboard/mouse state
+     * @param ladders   list of all ladders in the level
+     * @param platforms array of all platforms in the level
+     * @param bullets   list of active bullets in the level
+     */
     public void updateLevel2(Input input, ArrayList<Ladder> ladders, Platform[] platforms, ArrayList<Bullet> bullets) {
         handleHorizontalMovement(input); // 1) Horizontal movement
-        updateLevel2Sprite();
-        handleShoot(input, bullets);
+        updateLevel2Sprite();// 4) Now replace sprite (since either isFacingRight or hasHammer or hasBlaster could have changed)
+        handleShoot(input, bullets); //3) mario shoot bullet use blaster
 
-        for (Bullet bullet : bullets) {
-            bullet.update();
-            bullet.draw();
-        }
-
-        // 4) Now replace sprite (since either isFacingRight or hasHammer could have changed)
-
-        // 5) Ladder logic – check if on a ladder
+        // 4) Ladder logic – check if on a ladder
         boolean isOnLadder;
         isOnLadder = handleLadders(input, ladders);
 
-        // 6) Jump logic: if on platform (we'll detect after we move) but let's queue jump if needed
+        // 5) Jump logic: if on platform (we'll detect after we move) but let's queue jump if needed
         boolean wantsToJump = input.wasPressed(Keys.SPACE);
 
-        // 7) If not on ladder, apply gravity, move Mario
+        // 6) If not on ladder, apply gravity, move Mario
         if (!isOnLadder) {
             velocityY += MARIO_GRAVITY;
             velocityY = Math.min(GravityEntity.TERMINAL_VELOCITY, velocityY);
         }
 
-        // 8) Actually move Mario vertically after gravity
+        // 7) Actually move Mario vertically after gravity
         setY(getY() + velocityY);
 
-        // 9) Check for platform collision AFTER Mario moves
+        // 8) Check for platform collision AFTER Mario moves
         boolean onPlatform;
         onPlatform = handlePlatforms(platforms);
 
 
-        // 10) If we are on the platform, allow jumping; Prevent Mario from falling below the ground
+        // 9) If we are on the platform, allow jumping; Prevent Mario from falling below the ground
         handleJumping(onPlatform, wantsToJump);
 
 
-        // 11) Enforce horizontal screen bounds
+        // 10) Enforce horizontal screen bounds
         enforceBoundaries();
 
-        // 12) Draw Mario
+        // 11) Draw Mario
         draw();
     }
 
@@ -288,30 +288,6 @@ public class Mario extends GameEntity{
         }
     }
 
-//    /** Handles collecting the hammer if Mario is in contact with it. */
-//    private void handleHammerCollection(Hammer hammer) {
-//        if (!hammer.isCollected() && collidesWith(hammer)) {
-//            setHasHammer(true);
-//            hammer.collect();
-//            System.out.println("Hammer collected!");
-//            hasHammer = true;
-//            hasBlaster = false;
-//        }
-//    }
-
-//    private void handleBlasterCollection(Blaster[] blasters) {
-//        for (Blaster blaster : blasters) {
-//            if (!blaster.isCollected() && collidesWith(blaster)) {
-//                blaster.collect();
-//                setHasBlaster(true);
-//                hasBlaster = true;
-//                hasHammer = false;
-//                bulletsCount += totalBullets;
-//                System.out.println("Blaster collected!");
-//            }
-//        }
-//    }
-
     /** Handles jumping if Mario is on a platform and jump is requested. */
     private void handleJumping(boolean onPlatform, boolean wantsToJump) {
         if (onPlatform && wantsToJump) {
@@ -393,6 +369,10 @@ public class Mario extends GameEntity{
         height = newHeight;
     }
 
+    /**
+     * Switch Mario's sprite (left/right, or hammer/no-hammer, or blaster/no-blaster).
+     * Adjust Mario's 'y' so that the bottom edge stays consistent.
+     */
     private void updateLevel2Sprite() {
 
         Image oldImage = marioImage;
@@ -415,7 +395,6 @@ public class Mario extends GameEntity{
         height = newHeight;
     }
 
-
     /**
      * Draws Mario on the screen.
      */
@@ -425,11 +404,21 @@ public class Mario extends GameEntity{
 //    drawBoundingBox(); // Uncomment for debugging
     }
 
+    /**
+     * Returns the current number of bullets Mario has available to fire.
+     * @return the number of remaining bullets
+     */
     public int getBulletsCount() {
         return bulletsCount;
     }
 
-
+    /**
+     * Attempts to fire a bullet if Mario has a blaster and ammunition.
+     *
+     * @param input   current input state
+     * @param bullets list into which new Bullet objects are added
+     * @return {@code true} if a shot was fired, {@code false} otherwise
+     */
     public boolean handleShoot(Input input, ArrayList<Bullet> bullets) {
         if (input.wasPressed(Keys.S) && hasBlaster && bulletsCount > 0) {
             boolean faceRight = isFacingRight;
@@ -459,24 +448,40 @@ public class Mario extends GameEntity{
                 - (JUMP_STRENGTH * JUMP_STRENGTH) / (2 * MARIO_GRAVITY) - height / 2));
     }
 
+    /** Handles collecting the hammer if Mario is in contact with it. */
+    private void collectHammer(Hammer hammer) {
+        setHasHammer(true);
+        hammer.collect();
+        hasHammer   = true;
+        hasBlaster  = false;
+        System.out.println("Hammer collected!");
+    }
+
+    /** Handles collecting the blaster if Mario is in contact with it. */
+    private void collectBlaster(Blaster blaster) {
+        setHasBlaster(true);
+        blaster.collect();
+        hasBlaster  = true;
+        hasHammer   = false;
+        bulletsCount += totalBullets;
+        System.out.println("Blaster collected!");
+    }
+
+    /**
+     * Responds to collisions with other GameEntity objects.
+     *   Collects hammer or blaster when colliding with them.
+     *   Additional collision‐based state changes can be added here.
+     *
+     * @param other the other GameEntity that Mario has collided with
+     */
     @Override
     public void changeState(GameEntity other) {
         if (other instanceof Hammer hammer && !hammer.isCollected()) {
-            setHasHammer(true);
-            hammer.collect();
-            hasHammer = true;
-            hasBlaster = false;
-            System.out.println("Hammer collected!");
+            collectHammer(hammer);
         }
 
         else if (other instanceof Blaster blaster && !blaster.isCollected()) {
-            setHasBlaster(true);
-            blaster.collect();
-            hasBlaster = true;
-            hasHammer = false;
-            bulletsCount += totalBullets;
-            System.out.println("Blaster collected!");
+            collectBlaster(blaster);
         }
     }
-
 }

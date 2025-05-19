@@ -27,7 +27,6 @@ public class GameEndScreen {
     private final double TIME_WEIGHT = 3.0;
     private double POINTS_WEIGHT = 1.0;
 
-
     // The final score from this playthrough
     private double finalScore = 0.0;
 

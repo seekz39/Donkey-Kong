@@ -4,7 +4,7 @@ import bagel.Image;
  * Represents a Hammer collectible in the game.
  * The hammer can be collected by the player, at which point it disappears from the screen.
  */
-public class Hammer extends GameEntity implements Equippable{
+public class Hammer extends GameEntity implements Collectable{
     private boolean isCollected = false;
     private static final Image HAMMER_IMAGE = new Image("res/hammer.png");
 
@@ -44,6 +44,15 @@ public class Hammer extends GameEntity implements Equippable{
         return isCollected;
     }
 
+
+    /**
+     * Handles state changes when this Hammer collides with another entity.
+     *
+     * If the other entity is a {@link Mario} and the hammer has not yet been collected,
+     * this method marks the hammer as collected and logs the event.
+     *
+     * @param other the entity that collided with this hammer
+     */
     @Override
     public void changeState(GameEntity other) {
         if (other instanceof Mario && !isCollected) {

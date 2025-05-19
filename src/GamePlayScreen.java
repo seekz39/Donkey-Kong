@@ -35,11 +35,16 @@ public abstract class GamePlayScreen {
         return score;
     }
 
-    public abstract int getLevel();
-
     public void addScore(int points) {
         score += points;
     }
+
+    /**
+     * Returns the configured level number for this screen.
+     *
+     * @return the level number
+     */
+    public abstract int getLevel();
 
     /**
      * Calculates the remaining time left in seconds.
@@ -84,10 +89,14 @@ public abstract class GamePlayScreen {
      * @param input The current player input.
      * @return {@code true} if the game ends, {@code false} otherwise.
      */
-
     public abstract boolean update(Input input);
 
-    Image getBackground() {
+    /**
+     * Returns the image used as the background.
+     *
+     * @return the background Image
+     */
+    public Image getBackground() {
         return background;
     }
 
@@ -105,13 +114,17 @@ public abstract class GamePlayScreen {
     }
 
     /**
-     * Checks whether the level is completed by determining if Mario has reached Donkey Kong
-     * while holding a hammer. This serves as the game's winning condition.
+     * Checks whether the player has met the win condition for this level.
      *
-     * @return {@code true} if Mario reaches Donkey Kong while holding a hammer,
-     *         indicating the level is completed; {@code false} otherwise.
+     * @return {@code true} if the player has won; {@code false} otherwise
      */
      public abstract boolean isPlayerWon();
+
+    /**
+     * Checks whether the player has met the loss condition for this level.
+     *
+     * @return {@code true} if the game is over (lost); {@code false} otherwise
+     */
      public abstract boolean isGameOver();
 
     /**
@@ -128,14 +141,29 @@ public abstract class GamePlayScreen {
     }
 
 
+    /**
+     * Returns the Font used to draw status information.
+     *
+     * @return the status Font
+     */
     public Font getStatusFont() {
         return STATUS_FONT;
     }
 
+    /**
+     * Returns the number of frames that have elapsed since this screen started.
+     *
+     * @return the current frame count
+     */
     public int getCurrFrame() {
         return currFrame;
     }
 
+    /**
+     * Sets the internal frame counter to the given value.
+     *
+     * @param frame the new frame count
+     */
     public void setCurrFrame(int frame) {
         this.currFrame = frame;
     }

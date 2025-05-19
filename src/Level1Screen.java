@@ -25,11 +25,28 @@ public class Level1Screen extends GamePlayScreen {
         initializeGameObjects();
     }
 
+    /**
+     * Returns the current level number for this gameplay screen.
+     *
+     * @return the integer constant LEVEL (1 for Level1Screen)
+     */
     @Override
     public int getLevel() {
         return LEVEL;
     }
 
+    /**
+     * Advances the game state by one frame for Level 1 gameplay.
+     *
+     * This method increments the frame counter, renders the background and platforms,
+     * updates ladders, barrels
+     * handles hammer's collection and Mario’s update
+     * then updates Donkey Kong, and finally displays the score.
+     * After all updates, it checks for end‐of‐game or victory conditions.
+     *
+     * @param input the current keyboard and mouse input state
+     * @return {@code true} if the game is over or the player has won; {@code false} otherwise
+     */
     @Override
     public boolean update(Input input) {
 //        currFrame++;
@@ -86,6 +103,9 @@ public class Level1Screen extends GamePlayScreen {
         return isGameOver() || isPlayerWon();
     }
 
+    /**
+     * Initializes game objects for level 1 such as Mario, Donkey Kong, barrels, ladders, platforms, and the hammer.
+     */
     @Override
     public void initializeGameObjects() {
         // 1) Create Mario
@@ -152,11 +172,27 @@ public class Level1Screen extends GamePlayScreen {
         this.hammer = new Hammer(hammerX, hammerY);
     }
 
+
+    /**
+     * Checks whether the player has won the level.
+     * The player wins if Mario reaches Donkey Kong while holding a hammer.
+     *
+     * @return {@code true} if the win condition is met; {@code false} otherwise.
+     */
     @Override
     public boolean isPlayerWon() {
         return mario.collidesWith(donkey) && mario.holdHammer();
     }
 
+    /**
+     * Determines whether the game is over.
+     *
+     * if Mario collides with Donkey Kong while not holding a hammer;
+     * if Mario collides with a non-destroyed barrel while not holding a hammer;
+     * or if the game timer runs out.
+     *
+     * @return {@code true} if any end condition is met; {@code false} otherwise.
+     */
     @Override
     public boolean isGameOver() {
 

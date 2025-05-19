@@ -15,6 +15,7 @@ public class ShadowDonkeyKong extends AbstractGame {
     private final Properties MESSAGE_PROPS;
     private int level1Score = 0;
 
+    private State state = State.HOME;
     private HomeScreen homeScreen;
     private GamePlayScreen gamePlayScreen;
     private GameEndScreen gameEndScreen;
@@ -55,56 +56,90 @@ public class ShadowDonkeyKong extends AbstractGame {
             Window.close();
         }
 
-        // Home Screen
-        if (gamePlayScreen == null && gameEndScreen == null) {
-            if (homeScreen.update(input)) {
-                int selectedLevel = homeScreen.getSelectedLevel();
-                if (selectedLevel == 1) {
-                    gamePlayScreen = new Level1Screen(GAME_PROPS);
-                }else if (selectedLevel == 2) {
-                    gamePlayScreen = new Level2Screen(GAME_PROPS, level1Score);
+        switch (state) {
+
+            case HOME -> {
+                if (homeScreen.update(input)) {
+                    int level = homeScreen.getSelectedLevel();
+                    if (level == 1) {
+                        startLevel1();
+                    } else {
+                        startLevel2();
+                    }
                 }
-
             }
-        }
 
-        // Gameplay Screen
-        else if (gamePlayScreen != null && gameEndScreen == null) {
-            // The gameplay ended
-            if (gamePlayScreen.update(input)) {
-                boolean isWon = gamePlayScreen.isPlayerWon();
-                boolean isLost = gamePlayScreen.isGameOver();
-
-                int level = gamePlayScreen.getLevel();
-                if (isWon && level == 1) {
-                    level1Score = gamePlayScreen.getScore();
-                    gamePlayScreen = new Level2Screen(GAME_PROPS, level1Score);
-                    return;
+            case PLAYING -> {
+                if (gamePlayScreen.update(input)) {
+                    handleEndOfPlay();
                 }
-
-//              1) GET THE SCORE
-                int finalScore = isLost ? 0 : gamePlayScreen.getScore();
-                int timeRemaining = isLost ? 0 : gamePlayScreen.getSecondsLeft();
-
-                // 2) CREATE THE END SCREEN
-                gameEndScreen = new GameEndScreen(GAME_PROPS, MESSAGE_PROPS);
-
-                // 3) PASS finalScore
-                gameEndScreen.setIsWon(isWon && !isLost);
-                gameEndScreen.setFinalScore(level, timeRemaining, finalScore);
-
-                // 4) Nullify gameplay
-                gamePlayScreen = null;
             }
 
-        }
-        // Game Over / Victory Screen
-        else if (gamePlayScreen == null ) {
-            if (gameEndScreen.update(input)) {
-                gamePlayScreen = null;
-                gameEndScreen = null;
+            case END -> {
+                if (gameEndScreen.update(input)) {
+                    resetToHome();
+                }
             }
         }
+
+    }
+
+    /**
+     * Initializes and starts Level 1 gameplay.
+     * Sets the gamePlayScreen to a new Level1Screen and transitions the state to PLAYING.
+     */
+    private void startLevel1() {
+        gamePlayScreen = new Level1Screen(GAME_PROPS);
+        state = State.PLAYING;
+    }
+
+    /**
+     * Initializes and starts Level 2 gameplay, carrying over the score from Level 1.
+     * Sets the gamePlayScreen to a new Level2Screen and transitions the state to PLAYING.
+     */
+    private void startLevel2() {
+        gamePlayScreen = new Level2Screen(GAME_PROPS, level1Score);
+        state = State.PLAYING;
+    }
+
+    /**
+     * Handles the end-of-play transition logic after a gameplay screen completes.
+     *
+     *   If Level 1 was won, captures its score and immediately starts Level 2.
+     *   Otherwise, computes final score and time remaining, creates the end screen,
+     *   and transitions the state to END.
+     *
+     */
+    private void handleEndOfPlay() {
+        boolean isWon = gamePlayScreen.isPlayerWon();
+        boolean isLost = gamePlayScreen.isGameOver();
+        int level = gamePlayScreen.getLevel();
+
+        if (isWon && level == 1) {
+            level1Score = gamePlayScreen.getScore();
+            startLevel2();
+            return;
+        }
+
+        int finalScore = isLost ? 0 : gamePlayScreen.getScore();
+        int timeRemaining = isLost ? 0 : gamePlayScreen.getSecondsLeft();
+
+        gameEndScreen = new GameEndScreen(GAME_PROPS, MESSAGE_PROPS);
+        gameEndScreen.setIsWon(isWon && !isLost);
+        gameEndScreen.setFinalScore(level, timeRemaining, finalScore);
+
+        gamePlayScreen = null;
+        state = State.END;
+    }
+
+    /**
+     * Resets the game back to the home screen.
+     * Clears the end screen, re-initializes the home screen, and sets the state to HOME.
+     */
+    private void resetToHome() {
+        gameEndScreen = null;
+        homeScreen = new HomeScreen(GAME_PROPS, MESSAGE_PROPS);
+        state = State.HOME;
     }
 
     /**
@@ -139,5 +174,4 @@ public class ShadowDonkeyKong extends AbstractGame {
         ShadowDonkeyKong game = new ShadowDonkeyKong(gameProps, messageProps);
         game.run();
     }
-
 }

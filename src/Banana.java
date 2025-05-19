@@ -1,7 +1,12 @@
 import bagel.Image;
 
 /**
- * Represents a banana projectile shot by IntelligentMonkey.
+ * Represents a banana projectile shot by an IntelligentMonkey.
+ *
+ * Bananas travel horizontally at a fixed speed until they reach a maximum range
+ * or collide with Mario, at which point they become inactive and disappear.
+ * Implements {@link Movable} for integration into the game’s movement loop.
+ *
  */
 public class Banana extends GameEntity implements Movable{
     private final static double SPEED = 1.8;
@@ -17,8 +22,11 @@ public class Banana extends GameEntity implements Movable{
 
     }
 
+    /**
+     * Moves the banana one step according to its speed and direction.
+     * Marks the banana inactive if it has reached its maximum travel distance.
+     */
     public void move() {
-
         double absDistance = goingRight ? SPEED : -SPEED;
         setX(getX() + absDistance);
         distanceTraveled += Math.abs(absDistance);
@@ -27,8 +35,9 @@ public class Banana extends GameEntity implements Movable{
         }
 
     }
+
     /**
-     * Updates banana position and status
+     * Updates the banana by moving it and rendering it if still active.
      */
     public void update() {
         if (!active) {
@@ -38,10 +47,21 @@ public class Banana extends GameEntity implements Movable{
         draw();
     }
 
+    /**
+     * Indicates whether this banana is still active (has not expired or collided).
+     *
+     * @return true if the banana is active; false otherwise
+     */
     public boolean isActive() {
         return active;
     }
 
+    /**
+     * Handles collision with another game entity.
+     * If the collider is Mario and the banana is active, the banana becomes inactive
+     *
+     * @param other the GameEntity that collided with this banana
+     */
     @Override
     public void changeState(GameEntity other) {
         if (other instanceof Mario & active) {

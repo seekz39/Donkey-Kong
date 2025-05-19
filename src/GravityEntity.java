@@ -1,5 +1,12 @@
 import bagel.Image;
 
+/**
+ * A super class for entities affected by gravity.
+ *
+ * Applies a constant downward acceleration each frame, enforces a terminal velocity,
+ * and handles vertical collision with platforms.
+ *
+ */
 public abstract class GravityEntity extends GameEntity {
     private double velocityY = 0;
     private final double gravity;
@@ -11,6 +18,17 @@ public abstract class GravityEntity extends GameEntity {
         this.gravity = gravity;
     }
 
+    /**
+     * Updates the entity’s vertical motion for one frame:
+     *
+     *   Applies gravity to vertical velocity.
+     *   Moves the entity down by the new velocity (capped at {@link #TERMINAL_VELOCITY}).
+     *   Checks for collisions with each platform;
+     *   if a collision is found, align the entity to stand on top of the platform and resets vertical velocity to zero.
+     *   Draws the entity at its updated position.
+     *
+     * @param platforms an array of platforms to test for vertical collisions
+     */
     public void update(Platform[] platforms) {
         // Apply gravity
         velocityY += this.gravity;

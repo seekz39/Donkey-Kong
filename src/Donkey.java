@@ -1,6 +1,5 @@
 import bagel.*;
 
-
 /**
  * Represents Donkey Kong in the game, affected by gravity and platform collisions.
  * The Donkey object moves downward due to gravity and lands on platforms when applicable.
@@ -22,10 +21,22 @@ public class Donkey extends GravityEntity {
         this.health = MAX_HEALTH;
     }
 
+    /**
+     * Returns Donkey Kong’s current health.
+     * @return the remaining health points
+     */
     public int getHealth() {
         return health;
     }
 
+
+    /**
+     * Handles collisions with other entities.
+     * When hit by a bullet, Donkey Kong loses one health point and logs the event.
+     * If health drops to zero or below, logs that Donkey Kong has been defeated.
+     *
+     * @param other the GameEntity that collided with Donkey Kong
+     */
     @Override
     public void changeState(GameEntity other) {
         if (other instanceof Bullet) {

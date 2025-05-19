@@ -21,10 +21,20 @@ public class Platform extends GameEntity{
         this.HEIGHT = PLATFORM_IMAGE.getHeight();
     }
 
+    /**
+     * Returns the width of this platform.
+     *
+     * @return the platform's width in pixels.
+     */
     public double getWidth() {
         return WIDTH;
     }
 
+    /**
+     * Returns the height of this platform.
+     *
+     * @return the platform's height in pixels.
+     */
     public double getHeight() {
         return HEIGHT;
     }

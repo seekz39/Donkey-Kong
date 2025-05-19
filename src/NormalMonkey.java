@@ -1,7 +1,11 @@
 import bagel.Image;
 
 /**
- * Represents an intelligent monkey that follows a specified patrol path.
+ * Represents a standard monkey enemy that patrols along a predefined route.
+ *
+ * A NormalMonkey moves back and forth across its patrol path,
+ * reversing direction when it reaches the end of a segment or a platform edge.
+ *
  */
 public class NormalMonkey extends Monkey {
 
