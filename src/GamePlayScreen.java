@@ -7,9 +7,8 @@ import java.util.Properties;
  * This class manages game objects, updates their states, and handles game logic.
  */
 public abstract class GamePlayScreen {
-    final Properties GAME_PROPS;
-
-    private Image background;   // Background image for the game
+    private final Properties GAME_PROPS;
+    private final Image BACKGROUND_IMAGE;   // Background image for the game
     // Frame tracking
     private int currFrame = 0;  // Tracks the number of frames elapsed
     // Game parameters
@@ -71,7 +70,7 @@ public abstract class GamePlayScreen {
         );
         this.SCORE_X = Integer.parseInt(gameProps.getProperty("gamePlay.score.x"));
         this.SCORE_Y = Integer.parseInt(gameProps.getProperty("gamePlay.score.y"));
-        this.background = new Image("res/background.png");
+        this.BACKGROUND_IMAGE = new Image("res/background.png");
 
 
         // Initialize game objects
@@ -97,7 +96,7 @@ public abstract class GamePlayScreen {
      * @return the background Image
      */
     public Image getBackground() {
-        return background;
+        return BACKGROUND_IMAGE;
     }
 
      /**
@@ -166,5 +165,9 @@ public abstract class GamePlayScreen {
      */
     public void setCurrFrame(int frame) {
         this.currFrame = frame;
+    }
+
+    protected Properties getGameProps() {
+        return GAME_PROPS;
     }
 }

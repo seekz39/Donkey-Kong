@@ -20,7 +20,14 @@ public class ShadowDonkeyKong extends AbstractGame {
     private GamePlayScreen gamePlayScreen;
     private GameEndScreen gameEndScreen;
 
+    /**
+     * The current width of the game window.
+     */
     public static double screenWidth;
+
+    /**
+     * The current height of the game window.
+     */
     public static double screenHeight;
 
     /**
@@ -36,6 +43,7 @@ public class ShadowDonkeyKong extends AbstractGame {
         super(Integer.parseInt(gameProps.getProperty("window.width")),
                 Integer.parseInt(gameProps.getProperty("window.height")),
                 messageProps.getProperty("home.title"));
+
 
         this.GAME_PROPS = gameProps;
         this.MESSAGE_PROPS = messageProps;
@@ -64,6 +72,7 @@ public class ShadowDonkeyKong extends AbstractGame {
                     if (level == 1) {
                         startLevel1();
                     } else {
+                        level1Score = 0;
                         startLevel2();
                     }
                 }

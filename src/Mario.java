@@ -14,7 +14,7 @@ public class Mario extends GameEntity{
     private boolean hasBlaster = false;// Whether Mario has collected a blaster
     private final int totalBullets = 5;
     private int bulletsCount = 0;
-    private boolean isFacingRight = true; // Mario's facing direction
+    private boolean isFacingRight = true;
 
     // Mario images for different states
     private Image marioImage;
@@ -367,6 +367,7 @@ public class Mario extends GameEntity{
         // 5) Update the recorded width/height to match the new image
         width  = marioImage.getWidth();
         height = newHeight;
+
     }
 
     /**
@@ -393,6 +394,7 @@ public class Mario extends GameEntity{
 
         width = marioImage.getWidth();
         height = newHeight;
+
     }
 
     /**
@@ -403,6 +405,7 @@ public class Mario extends GameEntity{
         marioImage.draw(getX(), getY());
 //    drawBoundingBox(); // Uncomment for debugging
     }
+
 
     /**
      * Returns the current number of bullets Mario has available to fire.

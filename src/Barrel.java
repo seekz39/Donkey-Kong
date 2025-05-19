@@ -33,14 +33,6 @@ public class Barrel extends GravityEntity {
     }
 
     /**
-     * Marks the barrel as destroyed, preventing it from being drawn or updated.
-     */
-    public void destroy() {
-        isDestroyed = true;
-        System.out.println("Barrel destroyed!");
-    }
-
-    /**
      * Checks if the barrel has been destroyed.
      *
      * @return {@code true} if the barrel is destroyed, {@code false} otherwise.

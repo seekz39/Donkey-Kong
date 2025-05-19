@@ -1,6 +1,4 @@
 import bagel.*;
-import bagel.util.Rectangle;
-import bagel.util.Point;
 
 
 /**
@@ -12,10 +10,10 @@ import bagel.util.Point;
  *
  */
 public class Bullet extends GameEntity implements Movable {
-    static private final double SPEED = 3.0;
+    private static final double SPEED = 3.8;
+    private static final int MAX_DISTANCE = 300;
     private double traveled = 0;
     private boolean isAlive = true;
-    static private final int MAX_DISTANCE = 300;
     private boolean isFacingRight;
     private static final Image BULLET_LEFT_IMAGE = new Image("res/bullet_left.png");
     private final Image BULLET_RIGHT_IMAGE = new Image("res/bullet_right.png");
@@ -38,7 +36,6 @@ public class Bullet extends GameEntity implements Movable {
         } else {
             isAlive = false;
         }
-
     }
 
     /**

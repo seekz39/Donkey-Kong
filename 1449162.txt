@@ -1,0 +1,22 @@
+cce5a94 - qingzhao2, 66 秒钟前 : add comprehensive Javadoc comments throughout codebase
+2902036 - qingzhao2, 2 小时前 : introduce GameState enum for managing screen transitions
+66434a1 - qingzhao2, 2 小时前 : add Equippable and Movable interfaces
+ce3756c - qingzhao2, 19 小时前 : make class attributes private to prevent information leakage
+f996290 - qingzhao2, 20 小时前 : refactor: replace arrays with ArrayList implementations
+09f685b - qingzhao2, 22 小时前 : refactor: pass entity-specific gravity into GravityEntity and unify gravity handling
+0fdc6fc - qingzhao2, 25 小时前 : inherit Level1 score for Level2 and exclude time bonus
+1a00765 - qingzhao2, 2 天前 : centralize all entity state change logic in LevelScreen for collision handling
+68f8107 - qingzhao2, 2 天前 : refactor all entities to extend GameEntity and and implemented collision-triggered state change method
+e6244e7 - qingzhao2, 2 天前 : refactor: centralize image management for game entities
+559cbe0 - qingzhao2, 2 天前 : centralize position management for gravity-affected entities in GameEntity
+038d402 - qingzhao2, 2 天前 : 'add auto-transition from Level1 to Level2 on game win condition
+458b569 - qingzhao2, 2 天前 : render bullet count on level2 game play screen
+383b0e9 - qingzhao2, 3 天前 : add collision detection between Mario and monkey & reset score to 0 when player loses
+8b9a882 - qingzhao2, 3 天前 : add logic for detecting collision between Mario and banana
+38677f4 - qingzhao2, 3 天前 : add bullet collision detection with platforms
+12303fa - qingzhao2, 3 天前 : add Mario shooting bullet functionality
+1c9ec22 - qingzhao2, 4 天前 : add walking route logic with direction flipping for Monkey
+1009c69 - qingzhao2, 5 天前 : Gravity application to all monkeys via GravityEntity
+2b56bf6 - qingzhao2, 5 天前 : implement rendering for all game entities including NormalMonkey, IntelligentMonkey, and Blaster
+6183793 - qingzhao2, 5 天前 : split gameplay into level1 and level2 stages
+bb7fbe4 - qingzhao2, 7 天前 : set up gitlab repository and build project using new resource file

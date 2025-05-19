@@ -25,6 +25,7 @@ public class Level2Screen extends GamePlayScreen {
     private double healthX;
     private double healthY;
 
+
     public Level2Screen(Properties gameProps, int startingScore) {
         super(gameProps);
         initializeGameObjects();
@@ -298,25 +299,26 @@ public class Level2Screen extends GamePlayScreen {
         this.blasters  = new ArrayList<>();
 
         // 1) Create Mario
-        String[] marioPos = GAME_PROPS.getProperty("mario.level2").split(",");
+        Properties gameProps = getGameProps();
+        String[] marioPos = gameProps.getProperty("mario.level2").split(",");
         double marioX = Double.parseDouble(marioPos[0]);
         double marioY = Double.parseDouble(marioPos[1]);
         this.mario = new Mario(marioX, marioY);
 
         // 2) Create Donkey Kong
-        String[] donkeyPos = GAME_PROPS.getProperty("donkey.level2").split(",");
+        String[] donkeyPos = gameProps.getProperty("donkey.level2").split(",");
         double donkeyX = Double.parseDouble(donkeyPos[0]);
         double donkeyY = Double.parseDouble(donkeyPos[1]);
         this.donkey = new Donkey(donkeyX, donkeyY);
 
-        String[] donkeyHealth = GAME_PROPS.getProperty("gamePlay.donkeyhealth.coords").split(",");
+        String[] donkeyHealth = gameProps.getProperty("gamePlay.donkeyhealth.coords").split(",");
         this.healthX = Double.parseDouble(donkeyHealth[0]);
         this.healthY = Double.parseDouble(donkeyHealth[1]);
 
         // 3) Create the Barrels array
-        int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level2.count"));
+        int barrelCount = Integer.parseInt(gameProps.getProperty("barrel.level2.count"));
         for (int i = 1; i <= barrelCount; i++) {
-            String data = GAME_PROPS.getProperty("barrel.level2." + i);
+            String data = gameProps.getProperty("barrel.level2." + i);
             if (data == null) continue;
             String[] coord = data.split(",");
             double x = Double.parseDouble(coord[0]);
@@ -325,9 +327,9 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         // 4) Create the Ladders array
-        int ladderCount = Integer.parseInt(GAME_PROPS.getProperty("ladder.level2.count"));
+        int ladderCount = Integer.parseInt(gameProps.getProperty("ladder.level2.count"));
         for (int i = 1; i <= ladderCount; i++) {
-            String data = GAME_PROPS.getProperty("ladder.level2." + i);
+            String data = gameProps.getProperty("ladder.level2." + i);
             if (data == null) continue;
             String[] coord = data.split(",");
             double x = Double.parseDouble(coord[0]);
@@ -336,7 +338,7 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         // 5) Create the Platforms array
-        String[] platformEntries = GAME_PROPS.getProperty("platforms.level2").split(";");
+        String[] platformEntries = gameProps.getProperty("platforms.level2").split(";");
         platforms = new Platform[platformEntries.length];
         for (int i = 0; i < platformEntries.length; i++) {
             String entry = platformEntries[i].trim();
@@ -347,15 +349,15 @@ public class Level2Screen extends GamePlayScreen {
         }
 
         // 6) Create Hammer
-        String[] hammerCoords = GAME_PROPS.getProperty("hammer.level2.1").split(",");
+        String[] hammerCoords = gameProps.getProperty("hammer.level2.1").split(",");
         double hammerX = Double.parseDouble(hammerCoords[0]);
         double hammerY = Double.parseDouble(hammerCoords[1]);
         this.hammer = new Hammer(hammerX, hammerY);
 
         // 9) Create the Blasters array
-        int blastCount = Integer.parseInt(GAME_PROPS.getProperty("blaster.level2.count"));
+        int blastCount = Integer.parseInt(gameProps.getProperty("blaster.level2.count"));
         for (int i = 1; i <= blastCount; i++) {
-            String data = GAME_PROPS.getProperty("blaster.level2." + i);
+            String data = gameProps.getProperty("blaster.level2." + i);
             if (data == null) continue;
             String[] coord = data.split(",");
             double x = Double.parseDouble(coord[0]);
@@ -363,9 +365,9 @@ public class Level2Screen extends GamePlayScreen {
             blasters.add(new Blaster(x, y, true));
         }
 
-        int intelligentCount = Integer.parseInt(GAME_PROPS.getProperty("intelligentMonkey.level2.count"));
+        int intelligentCount = Integer.parseInt(gameProps.getProperty("intelligentMonkey.level2.count"));
         for (int i = 1; i <= intelligentCount; i++) {
-            String monkeyData = GAME_PROPS.getProperty("intelligentMonkey.level2." + i);
+            String monkeyData = gameProps.getProperty("intelligentMonkey.level2." + i);
             if (monkeyData != null) {
                 String[] parts = monkeyData.split(";");
                 if (parts.length < 3) {
@@ -390,9 +392,9 @@ public class Level2Screen extends GamePlayScreen {
             }
         }
 
-        int normalCount = Integer.parseInt(GAME_PROPS.getProperty("normalMonkey.level2.count"));
+        int normalCount = Integer.parseInt(gameProps.getProperty("normalMonkey.level2.count"));
         for (int i = 1; i <= normalCount; i++) {
-            String monkeyData = GAME_PROPS.getProperty("normalMonkey.level2." + i);
+            String monkeyData = gameProps.getProperty("normalMonkey.level2." + i);
             if (monkeyData != null) {
                 String[] parts = monkeyData.split(";");
                 if (parts.length < 3) {

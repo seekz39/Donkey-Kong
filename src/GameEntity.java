@@ -13,17 +13,8 @@ public abstract class GameEntity {
     }
 
     /**
-     * Returns the bounding box of the ENTITY for collision detection.
-     * If the ENTITY has been collected, it returns an off-screen bounding box.
-     *
-     * @return A {@link Rectangle} representing the hammer's bounding box.
-     */
-
-    /**
      * Returns this entity’s bounding box for collision detection.
-     * <p>
      * Uses the entity’s current image and position to compute the rectangle.
-     * </p>
      *
      * @return a Rectangle representing the entity’s bounds
      */
@@ -90,7 +81,6 @@ public abstract class GameEntity {
 
     /**
      * Sets a new image for this entity.
-     *
      * @param image the Image to use for rendering
      */
     public void setImage(Image image) {

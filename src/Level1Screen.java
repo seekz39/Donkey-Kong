@@ -72,9 +72,12 @@ public class Level1Screen extends GamePlayScreen {
         // 3) Update barrels
         for (Barrel barrel : barrels) {
             if (barrel == null) continue;
+
             if (mario.jumpOver(barrel)) {
                 addScore(BARREL_CROSS_SCORE);
+                break;
             }
+
             if (!barrel.isDestroyed() && mario.collidesWith(barrel)) {
                 if (mario.holdHammer()) {
                     barrel.changeState(mario);
@@ -84,13 +87,12 @@ public class Level1Screen extends GamePlayScreen {
             barrel.update(platforms);
         }
 
-        // Mario touch Hammer
-        if (mario.collidesWith(hammer)) {
+
+        // update Hammer
+        if (!hammer.isCollected() && mario.collidesWith(hammer)) {
             mario.changeState(hammer);
         }
-
-        // 5) Draw hammer and donkey
-        hammer.draw();
+        hammer.update();
         donkey.update(platforms);
 
         // 6) Update Mario
@@ -108,22 +110,26 @@ public class Level1Screen extends GamePlayScreen {
      */
     @Override
     public void initializeGameObjects() {
+        this.barrels   = new ArrayList<>();
+        this.ladders   = new ArrayList<>();
+
         // 1) Create Mario
-        String[] marioPos = GAME_PROPS.getProperty("mario.level1").split(",");
+        Properties gameProps = getGameProps();
+        String[] marioPos = gameProps.getProperty("mario.level1").split(",");
         double marioX = Double.parseDouble(marioPos[0]);
         double marioY = Double.parseDouble(marioPos[1]);
         this.mario = new Mario(marioX, marioY);
 
         // 2) Create Donkey Kong
-        String[] donkeyPos = GAME_PROPS.getProperty("donkey.level1").split(",");
+        String[] donkeyPos = gameProps.getProperty("donkey.level1").split(",");
         double donkeyX = Double.parseDouble(donkeyPos[0]);
         double donkeyY = Double.parseDouble(donkeyPos[1]);
         this.donkey = new Donkey(donkeyX, donkeyY);
 
         // 3) Create the Barrels array
-        int barrelCount = Integer.parseInt(GAME_PROPS.getProperty("barrel.level2.count"));
+        int barrelCount = Integer.parseInt(gameProps.getProperty("barrel.level1.count"));
         for (int i = 1; i <= barrelCount; i++) {
-            String data = GAME_PROPS.getProperty("barrel.level2." + i);
+            String data = gameProps.getProperty("barrel.level1." + i);
             if (data == null) continue;
             String[] coord = data.split(",");
             double x = Double.parseDouble(coord[0]);
@@ -132,9 +138,9 @@ public class Level1Screen extends GamePlayScreen {
         }
 
         // 4) Create the Ladders array
-        int ladderCount = Integer.parseInt(GAME_PROPS.getProperty("ladder.level2.count"));
+        int ladderCount = Integer.parseInt(gameProps.getProperty("ladder.level2.count"));
         for (int i = 1; i <= ladderCount; i++) {
-            String data = GAME_PROPS.getProperty("ladder.level2." + i);
+            String data = gameProps.getProperty("ladder.level2." + i);
             if (data == null) continue;
             String[] coord = data.split(",");
             double x = Double.parseDouble(coord[0]);
@@ -143,7 +149,7 @@ public class Level1Screen extends GamePlayScreen {
         }
 
         // 5) Create the Platforms array
-        String platformData = GAME_PROPS.getProperty("platforms.level1");
+        String platformData = gameProps.getProperty("platforms.level1");
         if (platformData != null && !platformData.isEmpty()) {
             String[] platformEntries = platformData.split(";");
             this.platforms = new Platform[platformEntries.length];
@@ -166,7 +172,7 @@ public class Level1Screen extends GamePlayScreen {
         }
 
         // 6) Create Hammer
-        String[] hammerCoords = GAME_PROPS.getProperty("hammer.level1.1").split(",");
+        String[] hammerCoords = gameProps.getProperty("hammer.level1.1").split(",");
         double hammerX = Double.parseDouble(hammerCoords[0]);
         double hammerY = Double.parseDouble(hammerCoords[1]);
         this.hammer = new Hammer(hammerX, hammerY);

@@ -16,7 +16,7 @@ public abstract class Monkey extends GravityEntity implements Movable {
     private int directionSign = 1;
     private double distanceTravel = 0;
     private boolean isAlive = true;
-    private static final double DEFAULT_SPEED = 0.5;
+    private static final double MOVE_SPEED = 0.5;
     private final Image imageLeft;
     private final Image imageRight;
     private static final double MONKEY_GRAVITY = 0.4;
@@ -28,7 +28,7 @@ public abstract class Monkey extends GravityEntity implements Movable {
         this.imageRight = right;
         this.faceRight = direction.equals("right");
         this.directionSign = faceRight ? 1 : -1;
-        this.speed = DEFAULT_SPEED;
+        this.speed = MOVE_SPEED;
         for (String part : routeStr.split(",")) {
             this.route.add(Integer.parseInt(part));
         }
@@ -100,18 +100,10 @@ public abstract class Monkey extends GravityEntity implements Movable {
         return faceRight;
     }
 
-    /**
-     * @return the patrol route as a list of segment distances.
-     */
-    public ArrayList<Integer> getRoute() {
-        return route;
-    }
-
     /** Reverse the monkey's facing direction. */
     public void flipDirection() {
         faceRight = !faceRight;
     }
-
 
     /**
      * Updates the monkey each frame by applying gravity and then moving.

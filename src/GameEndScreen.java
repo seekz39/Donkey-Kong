@@ -8,7 +8,6 @@ import java.util.Properties;
  */
 public class GameEndScreen {
     private final Image BACKGROUND_IMAGE; // Background image for the end screen
-
     private final String GAME_WON_TXT;  // Message displayed when the player wins
     private final String GAME_LOST_TXT; // Message displayed when the player loses
     private final String CONTINUE_GAME_TXT;
@@ -66,9 +65,6 @@ public class GameEndScreen {
      */
     public void setIsWon(boolean isWon) {
         this.isWon = isWon;
-    }
-    public void setIsLost(boolean isLost) {
-        this.isLost = isLost;
     }
 
     /**

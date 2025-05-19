@@ -18,4 +18,8 @@
     - There is exactly one hammer collectible available in each play session. 
     - Once Mario picks it up, no other hammers will appear until the next game.
 
+
+4. **Carry-Over Score**
+   - At the start of Level 2, the final score from Level 1 is passed through and displayed immediately  in the top-left corner of the screen.
+
 ---
