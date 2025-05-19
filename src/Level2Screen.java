@@ -134,6 +134,9 @@ public class Level2Screen extends GamePlayScreen {
 
             //bullet collide with monkey
             for (Monkey monkey : monkeys) {
+                if (!monkey.isAlive()) {
+                    continue;
+                }
                 if (bullet.collidesWith(monkey)) {
                     monkey.changeState(bullet);
                     bullet.changeState(monkey);

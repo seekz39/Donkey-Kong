@@ -22,7 +22,7 @@ public abstract class Monkey extends GravityEntity implements Movable {
     private static final double MONKEY_GRAVITY = 0.4;
     private final Platform[] platforms;
 
-    public Monkey(double x, double y, String direction, String routeStr, Image left, Image right,  Platform[] platforms) {
+    public Monkey(double x, double y, String direction, String routeStr, Image left, Image right, Platform[] platforms) {
         super(left, x, y, MONKEY_GRAVITY);
         this.imageLeft  = left;
         this.imageRight = right;

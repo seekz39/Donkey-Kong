@@ -455,8 +455,9 @@ public class Mario extends GameEntity{
     private void collectHammer(Hammer hammer) {
         setHasHammer(true);
         hammer.collect();
-        hasHammer   = true;
-        hasBlaster  = false;
+        hasHammer = true;
+        hasBlaster = false;
+        bulletsCount = 0;
         System.out.println("Hammer collected!");
     }
 
@@ -464,8 +465,8 @@ public class Mario extends GameEntity{
     private void collectBlaster(Blaster blaster) {
         setHasBlaster(true);
         blaster.collect();
-        hasBlaster  = true;
-        hasHammer   = false;
+        hasBlaster = true;
+        hasHammer = false;
         bulletsCount += totalBullets;
         System.out.println("Blaster collected!");
     }
