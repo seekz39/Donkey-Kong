@@ -1,25 +1,53 @@
-# DonkeyKong
+# Donkey Kong 
+
+A remake of the classic **Donkey Kong** arcade game built with **Java + Bagel**.  
+Players control Mario to dodge barrels, climb ladders, collect hammers, and reach the princess.
 
 ---
 
-## Assumptions
+## 🎮 Gameplay
 
-1. **Terminal Velocity**
-    - All gravity‐affected entities (e.g. Mario, barrels, bananas, bullets, monkeys) have a fixed terminal velocity of **10 frame**.
-    - Once their downward speed due to gravity reaches 10, it will not increase further.
+- **Controls**
+   - `← / →`: Move left and right
+   - `↑ / ↓`: Climb ladders
+   - `Space`: Jump
+   - Pick up a **Hammer** to enter invincible mode and smash barrels for bonus points.
 
-
-2. **Platform‐Edge Collision Logic**
-    - When a monkey reaches the edge of a platform, we detect the collision using the entity’s **left** or **right** bounding‐box edge—not its horizontal center.
-    - As soon as the bounding‐box’s left `x` ≤ 0 (left screen edge) or its right `x` ≥ platform’s right boundary, the monkey immediately reverses direction.
-
-
-3. **Single Hammer per Game**  
-    - There is exactly one hammer collectible available in each play session. 
-    - Once Mario picks it up, no other hammers will appear until the next game.
-
-
-4. **Carry-Over Score**
-   - At the start of Level 2, the final score from Level 1 is passed through and displayed immediately  in the top-left corner of the screen.
+- **Objective**
+   - Avoid barrels and reach the top platform safely.
+   - Use jumping and hammers strategically to score points.
+   - Experience the nostalgic fun of the original arcade classic.
 
 ---
+
+## 🛠️ Project Structure
+
+- **Core Classes**
+   - `Mario`: Player character logic (movement, jumping, climbing, hammer collection, scoring)
+   - `Barrel`: Barrel generation and rolling behavior
+   - `Donkey`: Enemy character responsible for throwing barrels
+   - `Ladder`: Supports climbing mechanics
+   - `Score`: Records and displays points
+   - Other helper classes (platforms, object management, etc.)
+
+- **Features**
+   - Auto-generates platforms, ladders, and objects from config files
+   - Uses **inheritance and polymorphism** for cleaner design
+   - Implements collision detection, gravity, and landing logic
+
+---
+
+## 📦 Tech Stack
+
+- **Language**: Java
+- **Framework**: Bagel (Game Development Framework)
+- **Tools**: Git, VS Code / IntelliJ
+
+---
+
+## 🚀 Getting Started
+
+1. Clone the repo:
+   ```bash
+   git clone git@github.com:seekz39/Donkey-Kong.git
+   cd Donkey-Kong
