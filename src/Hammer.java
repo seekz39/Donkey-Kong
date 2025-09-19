@@ -5,8 +5,8 @@ import bagel.Image;
  * The hammer can be collected by the player, at which point it disappears from the screen.
  */
 public class Hammer extends GameEntity implements Collectable{
-    private boolean isCollected = false;
     private static final Image HAMMER_IMAGE = new Image("res/hammer.png");
+    private boolean isCollected = false;
 
     /**
      * Constructs a Hammer at the specified position.

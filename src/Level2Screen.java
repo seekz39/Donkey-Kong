@@ -6,12 +6,12 @@ import java.util.ArrayList;
  * Represents the gameplay screen for Level 2.
  */
 public class Level2Screen extends GamePlayScreen {
-
     private static final int LEVEL = 2;
     private static final int BARREL_SCORE = 100;
     private static final int BARREL_CROSS_SCORE = 30;
     private static final int MONKEY_SCORE = 100;
     private static final int BULLET_COUNT_DIFF_Y = 30;
+
     private Mario mario;
     private Hammer hammer;
     private Donkey donkey;
@@ -22,13 +22,14 @@ public class Level2Screen extends GamePlayScreen {
     private ArrayList<Blaster> blasters = new ArrayList<>();
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private ArrayList<Monkey> monkeys = new ArrayList<>();
+
     private double healthX;
     private double healthY;
 
 
     public Level2Screen(Properties gameProps, int startingScore) {
         super(gameProps);
-        initializeGameObjects();
+        initializeLevel2GameObjects();
         this.addScore(startingScore);
     }
 
@@ -73,30 +74,29 @@ public class Level2Screen extends GamePlayScreen {
      * @param input the current keyboard and mouse input state
      * @return {@code true} if the game is over or the player has won; {@code false} otherwise
      */
-    @Override
     public boolean update(Input input) {
 
-//        currFrame++;
+        // count current frame
         setCurrFrame(getCurrFrame() + 1);
 
-        // Draw background
+        // 1) Draw background
         getBackground().drawFromTopLeft(0, 0);
 
-        // Draw platforms
+        // 2) Draw platforms
         for (Platform platform : platforms) {
             if (platform != null) {
                 platform.draw();
             }
         }
 
-        // Update ladders
+        // 3) Update ladders
         for (Ladder ladder : ladders) {
             if (ladder != null) {
                 ladder.update(platforms);
             }
         }
 
-        // Update barrels and collisions
+        // 4) Update barrels and collisions
         for (Barrel barrel : barrels) {
             if (barrel == null) continue;
 
@@ -114,7 +114,7 @@ public class Level2Screen extends GamePlayScreen {
             barrel.update(platforms);
         }
 
-        // update bullets and collisions
+        // 5) update bullets and collisions
         for (int i = bullets.size() - 1; i >= 0; i--) {
 
             Bullet bullet = bullets.get(i);
@@ -124,7 +124,7 @@ public class Level2Screen extends GamePlayScreen {
                 continue;
             }
 
-            //bullet collide with donkey
+            // bullet collide with donkey
             if (bullet.collidesWith(donkey)) {
                 donkey.changeState(bullet);
                 bullet.changeState(donkey);
@@ -132,7 +132,7 @@ public class Level2Screen extends GamePlayScreen {
                 continue;
             }
 
-            //bullet collide with monkey
+            // bullet collide with monkey
             for (Monkey monkey : monkeys) {
                 if (!monkey.isAlive()) {
                     continue;
@@ -145,7 +145,7 @@ public class Level2Screen extends GamePlayScreen {
                 }
             }
 
-            //bullet collide with platform
+            // bullet collide with platform
             for (Platform platform : platforms) {
                 if (bullet.collidesWith(platform)) {
                     bullet.changeState(platform);
@@ -157,13 +157,13 @@ public class Level2Screen extends GamePlayScreen {
             bullet.update();
         }
 
-        //update monkey
+        // 6) update monkey
         for (Monkey monkey : monkeys) {
             if (!monkey.isAlive()) {
                 continue;
             }
 
-            //mario with hammer collide with monkey
+            // mario collide with monkey
             if (monkey.collidesWith(mario) && mario.holdHammer()) {
                 monkey.changeState(mario);
                 addScore(MONKEY_SCORE);
@@ -182,18 +182,18 @@ public class Level2Screen extends GamePlayScreen {
             }
         }
 
-        // update banana
+        // 7) update banana
         for (Banana banana : bananas) {
             banana.update();
         }
 
-        // update Hammer
+        // 8) update Hammer
         if (!hammer.isCollected() && mario.collidesWith(hammer)) {
             mario.changeState(hammer);
         }
         hammer.update();
 
-        // update blaster
+        // 9) update blaster
         for (Blaster blaster : blasters) {
 
             if (!blaster.isCollected() && mario.collidesWith(blaster)) {
@@ -202,10 +202,10 @@ public class Level2Screen extends GamePlayScreen {
             blaster.update();
         }
 
-        // Update Mario
+        // 10) Update Mario
         mario.updateLevel2(input, ladders, platforms, bullets);
 
-        // Update Donkey
+        // 11) Update Donkey
         donkey.update(platforms);
 
         // Display score and time left
@@ -292,8 +292,7 @@ public class Level2Screen extends GamePlayScreen {
      * Initializes all objects needed for level 2 such as Mario, Donkey Kong, barrels, ladders, platforms, hammer
      * blaster, bullet, monkey, and banana
      */
-    @Override
-    public void initializeGameObjects() {
+    public void initializeLevel2GameObjects() {
         this.barrels   = new ArrayList<>();
         this.ladders   = new ArrayList<>();
         this.monkeys   = new ArrayList<>();
@@ -368,6 +367,7 @@ public class Level2Screen extends GamePlayScreen {
             blasters.add(new Blaster(x, y, true));
         }
 
+        // 10) create intelligent monkey
         int intelligentCount = Integer.parseInt(gameProps.getProperty("intelligentMonkey.level2.count"));
         for (int i = 1; i <= intelligentCount; i++) {
             String monkeyData = gameProps.getProperty("intelligentMonkey.level2." + i);
@@ -395,6 +395,7 @@ public class Level2Screen extends GamePlayScreen {
             }
         }
 
+        // 11)  create normal monkey
         int normalCount = Integer.parseInt(gameProps.getProperty("normalMonkey.level2.count"));
         for (int i = 1; i <= normalCount; i++) {
             String monkeyData = gameProps.getProperty("normalMonkey.level2." + i);

@@ -1,11 +1,12 @@
-ba901d0 - qingzhao2, 20 秒钟前 : add Javadoc comments to all public attributes
-cce5a94 - qingzhao2, 4 小时前 : add comprehensive Javadoc comments throughout codebase
-2902036 - qingzhao2, 5 小时前 : introduce GameState enum for managing screen transitions
-66434a1 - qingzhao2, 6 小时前 : add Equippable and Movable interfaces
-ce3756c - qingzhao2, 23 小时前 : make class attributes private to prevent information leakage
-f996290 - qingzhao2, 24 小时前 : refactor: replace arrays with ArrayList implementations
-09f685b - qingzhao2, 25 小时前 : refactor: pass entity-specific gravity into GravityEntity and unify gravity handling
-0fdc6fc - qingzhao2, 28 小时前 : inherit Level1 score for Level2 and exclude time bonus
+fc197f4 - qingzhao2, 2 小时前 : fixed bugs: reset bullet count to 0 when picking up hammer
+ba901d0 - qingzhao2, 2 小时前 : add Javadoc comments to all public attributes
+cce5a94 - qingzhao2, 6 小时前 : add comprehensive Javadoc comments throughout codebase
+2902036 - qingzhao2, 8 小时前 : introduce GameState enum for managing screen transitions
+66434a1 - qingzhao2, 8 小时前 : add Equippable and Movable interfaces
+ce3756c - qingzhao2, 26 小时前 : make class attributes private to prevent information leakage
+f996290 - qingzhao2, 26 小时前 : refactor: replace arrays with ArrayList implementations
+09f685b - qingzhao2, 28 小时前 : refactor: pass entity-specific gravity into GravityEntity and unify gravity handling
+0fdc6fc - qingzhao2, 31 小时前 : inherit Level1 score for Level2 and exclude time bonus
 1a00765 - qingzhao2, 2 天前 : centralize all entity state change logic in LevelScreen for collision handling
 68f8107 - qingzhao2, 2 天前 : refactor all entities to extend GameEntity and and implemented collision-triggered state change method
 e6244e7 - qingzhao2, 2 天前 : refactor: centralize image management for game entities

@@ -6,7 +6,6 @@ import java.util.Properties;
  * This screen displays the game title, a prompt for the player, and a background image.
  */
 public class HomeScreen {
-
     private final Image BACKGROUND_IMAGE;  // Background image for the home screen
     private final String TITLE;            // Title text displayed at the top
     private final String PROMPT;           // Instruction prompt (e.g., "PRESS ENTER TO START")

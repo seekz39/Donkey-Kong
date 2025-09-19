@@ -7,8 +7,9 @@ import bagel.*;
 public class Donkey extends GravityEntity {
     private static final Image DONKEY_IMAGE = new Image("res/donkey_kong.png");
     private static final double DONKEY_GRAVITY = 0.4;
-    private int health;
     private final int MAX_HEALTH = 5;
+    private int health;
+
 
     /**
      * Constructs a new Donkey at the specified starting position.

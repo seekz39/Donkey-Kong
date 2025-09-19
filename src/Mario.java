@@ -23,6 +23,7 @@ public class Mario extends GameEntity{
     private final Image MARIO_HAMMER_RIGHT_IMAGE;
     private final Image MARIO_BLASTER_LEFT_IMAGE;
     private final Image MARIO_BLASTER_RIGHT_IMAGE;
+    private static final Image MARIO_RIGHT_IMAGE = new Image("res/mario_right.png");
 
     // Movement physics constants
     private static final double JUMP_STRENGTH = -5;
@@ -31,7 +32,7 @@ public class Mario extends GameEntity{
     private static final double MARIO_GRAVITY = 0.2;
     private static double height;
     private static double width;
-    private static final Image MARIO_RIGHT_IMAGE = new Image("res/mario_right.png");
+
 
     /**
      * Constructs a Mario character at the specified starting position.
@@ -349,7 +350,6 @@ public class Mario extends GameEntity{
         double oldBottom = getY() + (oldHeight / 2);
 
         // 2) Assign the new image based on facing & hammer
-        //    (Whatever logic you currently use in update())
         if (hasHammer) {
             marioImage = isFacingRight ? MARIO_HAMMER_RIGHT_IMAGE : MARIO_HAMMER_LEFT_IMAGE;
         } else {

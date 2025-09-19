@@ -8,9 +8,8 @@ import bagel.Image;
  *
  */
 public class IntelligentMonkey extends Monkey {
-
-    private int shootTimer = 0;
     private static final int SHOOT_FREQ = 5; // shooting interval in seconds
+    private int shootTimer = 0;
 
     public IntelligentMonkey(double x, double y, String direction, int[] patrolPath, Platform[] platforms) {
         super(

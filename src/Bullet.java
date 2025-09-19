@@ -12,11 +12,12 @@ import bagel.*;
 public class Bullet extends GameEntity implements Movable {
     private static final double SPEED = 3.8;
     private static final int MAX_DISTANCE = 300;
+    private static final Image BULLET_LEFT_IMAGE = new Image("res/bullet_left.png");
+    private final Image BULLET_RIGHT_IMAGE = new Image("res/bullet_right.png");
+
     private double traveled = 0;
     private boolean isAlive = true;
     private boolean isFacingRight;
-    private static final Image BULLET_LEFT_IMAGE = new Image("res/bullet_left.png");
-    private final Image BULLET_RIGHT_IMAGE = new Image("res/bullet_right.png");
 
 
     public Bullet(double x, double y, boolean isFacingRight) {

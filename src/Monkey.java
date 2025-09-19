@@ -9,18 +9,20 @@ import bagel.Image;
  * Implements {@link Movable} to advance its position each frame.
  */
 public abstract class Monkey extends GravityEntity implements Movable {
-    private boolean faceRight;
+    private static final double MOVE_SPEED = 0.5;
+    private static final double MONKEY_GRAVITY = 0.4;
+    private final Image imageLeft;
+    private final Image imageRight;
+    private final Platform[] platforms;
+
     private ArrayList<Integer> route = new ArrayList<>();
+    private boolean faceRight;
     private double speed;
     private int routeIndex = 0;
     private int directionSign = 1;
     private double distanceTravel = 0;
     private boolean isAlive = true;
-    private static final double MOVE_SPEED = 0.5;
-    private final Image imageLeft;
-    private final Image imageRight;
-    private static final double MONKEY_GRAVITY = 0.4;
-    private final Platform[] platforms;
+
 
     public Monkey(double x, double y, String direction, String routeStr, Image left, Image right, Platform[] platforms) {
         super(left, x, y, MONKEY_GRAVITY);
@@ -52,13 +54,12 @@ public abstract class Monkey extends GravityEntity implements Movable {
             return;
         }
 
-
+        // Flip direction at the current platform edges.
         Platform currentPlatform = getCurrentPlatform(platforms);
         if (currentPlatform != null) {
             double platformLeft = currentPlatform.getBoundingBox().left();
             double platformRight = currentPlatform.getBoundingBox().right();
 
-            // let monkey walk only in the current platform
             if ((this.getBoundingBox().right() >= platformRight) || (this.getBoundingBox().left() <= platformLeft)) {
                 flipDirection();
                 directionSign *= -1;
@@ -68,9 +69,11 @@ public abstract class Monkey extends GravityEntity implements Movable {
             }
         }
 
+        // Move along the route and accumulate distance.
         setX(getX() + directionSign * speed);
         distanceTravel += speed;
 
+        // When the current segment is complete, advance and flip.
         if (distanceTravel >= route.get(routeIndex)) {
             distanceTravel = 0;
             routeIndex++;
@@ -166,9 +169,6 @@ public abstract class Monkey extends GravityEntity implements Movable {
      */
     @Override
     public void changeState(GameEntity other) {
-        if (!isAlive) {
-            return;
-        }
         if (other instanceof Bullet && isAlive) {
             isAlive = false;
             System.out.println("Monkey hit by bullet and disappeared.");

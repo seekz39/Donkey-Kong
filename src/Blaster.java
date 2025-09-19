@@ -11,10 +11,10 @@ import bagel.Image;
  */
 
 public class Blaster extends GameEntity implements Collectable {
-    private boolean isPicked;
     private static final Image BLASTER_IMAGE = new Image("res/blaster.png");
     private boolean isCollected = false;
     private boolean isFacingRight;
+
 
     public Blaster(double x, double y, boolean isFacingRight){
         super(BLASTER_IMAGE, x, y);

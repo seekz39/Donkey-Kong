@@ -8,14 +8,12 @@ import bagel.Image;
  *
  */
 public abstract class GravityEntity extends GameEntity {
-    private double velocityY = 0;
-    private final double GRAVITY;
-
     /**
      * The maximum downward speed an entity can reach due to gravity (pixels per frame).
      */
     public static final double TERMINAL_VELOCITY = 10.0;
-
+    private double velocityY = 0;
+    private final double GRAVITY;
 
     public GravityEntity(Image initialImage, double startX, double startY, double gravity) {
         super(initialImage, startX, startY);

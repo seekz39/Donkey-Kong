@@ -73,14 +73,7 @@ public abstract class GamePlayScreen {
         this.BACKGROUND_IMAGE = new Image("res/background.png");
 
 
-        // Initialize game objects
-        initializeGameObjects();
     }
-
-    /**
-     * Initializes game objects such as Mario, Donkey Kong, barrels, ladders, platforms, and the hammer.
-     */
-    public abstract void initializeGameObjects();
 
     /**
      * Updates game state each frame.

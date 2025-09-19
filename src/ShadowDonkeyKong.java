@@ -13,9 +13,10 @@ public class ShadowDonkeyKong extends AbstractGame {
 
     private final Properties GAME_PROPS;
     private final Properties MESSAGE_PROPS;
-    private int level1Score = 0;
 
+    private int level1Score = 0;
     private State state = State.HOME;
+
     private HomeScreen homeScreen;
     private GamePlayScreen gamePlayScreen;
     private GameEndScreen gameEndScreen;
@@ -43,7 +44,6 @@ public class ShadowDonkeyKong extends AbstractGame {
         super(Integer.parseInt(gameProps.getProperty("window.width")),
                 Integer.parseInt(gameProps.getProperty("window.height")),
                 messageProps.getProperty("home.title"));
-
 
         this.GAME_PROPS = gameProps;
         this.MESSAGE_PROPS = messageProps;

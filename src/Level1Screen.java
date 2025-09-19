@@ -7,22 +7,21 @@ import java.util.Properties;
  * Represents the gameplay screen for Level 1.
  */
 public class Level1Screen extends GamePlayScreen {
-
     private static final int LEVEL = 1;
     private static final int BARREL_SCORE = 100;
     private static final int BARREL_CROSS_SCORE = 30;
+
     private Mario mario;
     private ArrayList<Ladder> ladders = new ArrayList<>();
     private ArrayList<Barrel> barrels = new ArrayList<>();
     private Hammer hammer;
     private Donkey donkey;
     private Platform[] platforms;
-    private boolean isGameOver = false;
 
 
     public Level1Screen(Properties gameProps) {
         super(gameProps);
-        initializeGameObjects();
+        initializeLevel1GameObjects();
     }
 
     /**
@@ -47,9 +46,9 @@ public class Level1Screen extends GamePlayScreen {
      * @param input the current keyboard and mouse input state
      * @return {@code true} if the game is over or the player has won; {@code false} otherwise
      */
-    @Override
     public boolean update(Input input) {
-//        currFrame++;
+
+        // count current frame
         setCurrFrame(getCurrFrame() + 1);
 
         // Draw background
@@ -88,11 +87,13 @@ public class Level1Screen extends GamePlayScreen {
         }
 
 
-        // update Hammer
+        // 4) update Hammer
         if (!hammer.isCollected() && mario.collidesWith(hammer)) {
             mario.changeState(hammer);
         }
         hammer.update();
+
+        // 5) update donkey
         donkey.update(platforms);
 
         // 6) Update Mario
@@ -108,8 +109,7 @@ public class Level1Screen extends GamePlayScreen {
     /**
      * Initializes game objects for level 1 such as Mario, Donkey Kong, barrels, ladders, platforms, and the hammer.
      */
-    @Override
-    public void initializeGameObjects() {
+    public void initializeLevel1GameObjects() {
         this.barrels   = new ArrayList<>();
         this.ladders   = new ArrayList<>();
 

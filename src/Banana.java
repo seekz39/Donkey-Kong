@@ -9,9 +9,10 @@ import bagel.Image;
  *
  */
 public class Banana extends GameEntity implements Movable{
+    private static final Image BANANA_IMAGE = new Image("res/banana.png");
     private final static double SPEED = 1.8;
     private final static int TRAVEL_MAX = 300;
-    private static final Image BANANA_IMAGE = new Image("res/banana.png");
+
     private double distanceTraveled = 0;
     private boolean active = true;
     private final boolean goingRight;
